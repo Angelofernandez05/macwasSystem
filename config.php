@@ -6,7 +6,7 @@ define('DB_PASSWORD', '1Macwas_pass');
 define('DB_NAME', 'u510162695_macwas');
 
 /* Attempt to connect to MySQL database */
-$link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+$link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, 3306);
 
 // Check connection
 if ($link === false) {
