@@ -9,7 +9,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 include_once "config.php";
 
 if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
-    $id =  trim($_GET["id"]);
+    $id = trim($_GET["id"]);
     
     $sql = "SELECT *, (present - previous) as used, readings.status as reading_status FROM readings LEFT JOIN consumers ON consumers.id = readings.consumer_id WHERE readings.id = ?";
     if($stmt = mysqli_prepare($link, $sql)){
@@ -36,8 +36,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     }
     mysqli_stmt_close($stmt);
 
-    
-}  else{
+} else {
     header("location: consumer.php");
     exit();
 }
@@ -73,8 +72,6 @@ function getMinimumRates($link, $type){
 </head>
 <body>
     <div class="container pt-5">
-        <!-- <?php include 'includes/bill-template.php'; ?> -->
-
         <div class="text-center">
             <img class="img-fluid" src="logo.png" alt="" width=150>
             <p class="text-uppercase text-center mb-0">madridejos community waterworks system</p>
@@ -88,17 +85,18 @@ function getMinimumRates($link, $type){
 
         <div>
             <?php
+            // Check if $myObj is an object before accessing its properties
             if (is_object($myObj)) {
-                $rate_x = $myObj->rate_x;
-                $rate_y = $myObj->rate_y;
-                $rate_z = $myObj->rate_z;
+                $rate_x = isset($myObj->rate_x) ? $myObj->rate_x : 0;
+                $rate_y = isset($myObj->rate_y) ? $myObj->rate_y : 0;
+                $rate_z = isset($myObj->rate_z) ? $myObj->rate_z : 0;
             } else {
-                // handle the case where $obj is not an object
+                // Handle the case where $myObj is not an object
+                $rate_x = 0;
+                $rate_y = 0;
+                $rate_z = 0;
             }
             
-            // $rate_y = $row['type'] === 'Commercial' ? 20 : 15;
-            // $rate_z = $row['type'] === 'Commercial' ? 25 : 18;
-
             $x = 10;
             $y = 0;
             $z = 0;
@@ -134,7 +132,7 @@ function getMinimumRates($link, $type){
                         echo '<thead>';
                             echo '<tr>';
                                 echo '<th class="text-center">Date</th>';
-                                echo '<th class="text-center"colspan="2">Reading</th>';
+                                echo '<th class="text-center" colspan="2">Reading</th>';
                                 echo '<th class="text-center">Used (cu.m.)</th>';
                             echo '</tr>';
                         echo '</thead>';

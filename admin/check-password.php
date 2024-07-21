@@ -3,34 +3,40 @@ session_start();
 require_once "config.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $password = $_POST['password'];
+    $password = trim($_POST['password']); // Trim whitespace
 
     $id = 1;
     $stmt = $link->prepare("SELECT password FROM security WHERE id = ?");
+    
+    if ($stmt === false) {
+        die('Database query preparation failed: ' . $link->error);
+    }
+    
     $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
 
-    if ($result->num_rows == 1) {
-        $row = $result->fetch_assoc();
-        $hash = $row['password'];
+        if ($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            $hash = $row['password'];
 
-        // echo "Hashed password in database: $hash<br>";
-        // echo "Password entered by user: $password<br>";
-
-        if ($password == $hash) {
-
-            echo '<div class="alert alert-success" role="alert">Access granted.</div>';
-            include('settings.php');
-            exit();
+            if (password_verify($password, $hash)) {
+                $_SESSION['login_message'] = '<div class="alert alert-success" role="alert">Access granted.</div>';
+                header('Location: dashboard.php');
+                exit();
+            } else {
+                $_SESSION['login_message'] = '<div class="alert alert-danger" role="alert">Incorrect password.</div>';
+                header('Location: login.php');
+                exit();
+            }
         } else {
-            echo '<div class="alert alert-success" role="alert">Incorrect password.</div>';
-            include('index.php');
+            $_SESSION['login_message'] = '<div class="alert alert-danger" role="alert">User not found.</div>';
+            header('Location: login.php');
             exit();
         }
-
     } else {
-        // handle user not found case
+        die('Database query execution failed: ' . $stmt->error);
     }
 }
 ?>

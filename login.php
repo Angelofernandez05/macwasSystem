@@ -6,17 +6,17 @@ session_start();
 require_once 'config.php';
 
 // Define variables and initialize with empty values
-$meter_num = $password = "";
-$meter_num_err = $password_err = $login_err = "";
+$email = $password = "";
+$email_err = $password_err = $login_err = "";
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
-    // Check if meter_num is empty
-    if (empty(trim($_POST["meter_num"]))) {
-        $meter_num_err = "Please enter meter number.";
+    // Check if email is empty
+    if (empty(trim($_POST["email"]))) {
+        $email_err = "Please enter your email.";
     } else {
-        $meter_num = trim($_POST["meter_num"]);
+        $email = trim($_POST["email"]);
     }
 
     // Check if password is empty
@@ -27,26 +27,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     }
 
     // Validate credentials
-    if (empty($meter_num_err) && empty($password_err)) {
+    if (empty($email_err) && empty($password_err)) {
         // Prepare a select statement
-        $sql = "SELECT id, status, password, isUpdated FROM consumers WHERE meter_num = ?";
+        $sql = "SELECT id, status, password FROM consumers WHERE email = ?";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_meter_num);
+            mysqli_stmt_bind_param($stmt, "s", $param_email);
 
             // Set parameters
-            $param_meter_num = $meter_num;
+            $param_email = $email;
 
             // Attempt to execute the prepared statement
             if (mysqli_stmt_execute($stmt)) {
                 // Store result
                 mysqli_stmt_store_result($stmt);
 
-                // Check if meter_num exists, if yes then verify password
+                // Check if email exists, if yes then verify password
                 if (mysqli_stmt_num_rows($stmt) == 1) {
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $isUpdated);
+                    mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password);
                     if (mysqli_stmt_fetch($stmt)) {
                         if (password_verify($password, $hashed_password)) {
                             if ($status === 0) {
@@ -55,8 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                 // Password is correct, so start a new session
                                 $_SESSION["loggedin"] = true;
                                 $_SESSION["id"] = $id;
-                                $_SESSION["meter_num"] = $meter_num;
-                                $_SESSION["isUpdated"] = $isUpdated;
+                                $_SESSION["email"] = $email;
 
                                 // Redirect user to welcome page
                                 header("location: index.php");
@@ -64,12 +63,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                             }
                         } else {
                             // Password is not valid, display a generic error message
-                            $login_err = "Invalid meter number or password.";
+                            $login_err = "Invalid email or password.";
                         }
                     }
                 } else {
-                    // meter_num doesn't exist, display a generic error message
-                    $login_err = "Invalid meter number or password.";
+                    // Email doesn't exist, display a generic error message
+                    $login_err = "Invalid email or password.";
                 }
             } else {
                 // Error executing statement
@@ -96,20 +95,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 }
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style2.css">
     <link rel="icon" href="logo.png" type="image/icon type">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script> <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script>
         function togglePassword() {
             const passwordField = document.getElementById('login_password');
@@ -131,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         }
 
         .input-group .form-control {
-            padding-right: 2.5rem; /* Adjust this value if needed */
+            padding-right: 2.5rem;
         }
 
         .input-group .input-group-text {
@@ -181,11 +177,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">User Login</p>
                         <p class="text-center">Please fill in your credentials to login.</p>
 
-                        <!-- Meter Number input -->
+                        <!-- Email input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="login_meter_num"><i class="bi bi-person-circle"></i> Meter No.</label>
-                            <input type="text" id="login_meter_num" class="form-control form-control-lg py-3 <?php echo (!empty($meter_num_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $meter_num; ?>" name="meter_num" autocomplete="off" placeholder="Enter meter no." style="border-radius:25px;">
-                            <span class="invalid-feedback"><?php echo $meter_num_err; ?></span>
+                            <label class="form-label" for="login_email"><i class="bi bi-person-circle"></i> Email</label>
+                            <input type="email" id="login_email" class="form-control form-control-lg py-3 <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" name="email" autocomplete="off" placeholder="Enter your email" style="border-radius:25px;">
+                            <span class="invalid-feedback"><?php echo $email_err; ?></span>
                         </div>
 
                         <!-- Password input -->
@@ -216,5 +212,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
 </body>
 </html>
-
-

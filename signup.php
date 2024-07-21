@@ -1,8 +1,8 @@
 <?php
+// Database connection
 session_start();
-include 'config.php'; // Make sure this includes your database connection
+include 'config.php';
 
-// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = mysqli_real_escape_string($link, $_POST['name']);
     $barangay = mysqli_real_escape_string($link, $_POST['barangay']);
@@ -15,88 +15,102 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = mysqli_real_escape_string($link, $_POST['password']);
     $status = mysqli_real_escape_string($link, $_POST['status']);
 
+    // Handle empty meter_num
+    if (empty($meter_num)) {
+        $meter_num = NULL;
+    }
+
     // Validate phone number
     if (!preg_match('/^\d{1,11}$/', $phone)) {
         $error_msg = "Phone number must be up to 11 digits.";
-        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-        echo '<script>
-        window.onload = function() {
-            Swal.fire({
-                title: "Error!",
-                text: "' . $error_msg . '",
-                icon: "error",
-                toast: true,
-                position: "center",
-                showConfirmButton: false,
-                timer: 3000
-            });
-        };
-        </script>';
+        $alert_type = 'error';
+    } elseif (!preg_match('/^\d+$/', $registration_num)) {
+        $error_msg = "Registration number must be numeric.";
+        $alert_type = 'error';
+    } elseif (strlen($password) <= 8) {
+        $error_msg = "Password must be greater than 8 characters.";
+        $alert_type = 'error';
     } else {
-        // Check if meter number already exists
-        $sql = "SELECT id FROM consumers WHERE meter_num = '$meter_num'";
+        // Check if email already exists
+        $sql = "SELECT id FROM consumers WHERE email = '$email'";
         $result = mysqli_query($link, $sql);
 
         if (mysqli_num_rows($result) > 0) {
-            $error_msg = "Error: Meter number already exists.";
-            echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-            echo '<script>
-            window.onload = function() {
-                Swal.fire({
-                    title: "Error!",
-                    text: "' . $error_msg . '",
-                    icon: "error",
-                    toast: true,
-                    position: "center",
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-            };
-            </script>';
+            $error_msg = "Error: Email already exists.";
+            $alert_type = 'error';
         } else {
             // Insert the new user
             $password_hashed = password_hash($password, PASSWORD_DEFAULT);
             $sql = "INSERT INTO consumers (name, barangay, account_num, registration_num, meter_num, type, email, phone, password, status) 
-                    VALUES ('$name', '$barangay', '$account_num', '$registration_num', '$meter_num', '$type', '$email', '$phone', '$password_hashed', '$status')";
+                    VALUES ('$name', '$barangay', '$account_num', '$registration_num', " . ($meter_num === NULL ? 'NULL' : "'$meter_num'") . ", '$type', '$email', '$phone', '$password_hashed', '$status')";
 
             if (mysqli_query($link, $sql)) {
-                echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-                echo '<script>
-                window.onload = function() {
-                    Swal.fire({
-                        title: "Success!",
-                        text: "Registration successful. Redirecting to login page.",
-                        icon: "success",
-                        toast: true,
-                        position: "center",
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then(function() {
-                        window.location.href = "login.php";
-                    });
-                };
-                </script>';
-                exit();
+                $error_msg = "Registration successful. Redirecting to login page.";
+                $alert_type = 'success';
+                $redirect = 'login.php';
             } else {
                 $error_msg = "Error: " . mysqli_error($link);
-                echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-                echo '<script>
+                $alert_type = 'error';
+            }
+        }
+        mysqli_close($link);
+    }
+
+    // Output JavaScript for SweetAlert
+    if (isset($alert_type)) {
+        echo '<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Signup</title>
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+            <style>
+                .custom-swal {
+                    max-width: 800px;
+                    width: 90%;
+                    height: auto;
+                }
+                .custom-swal .swal2-popup {
+                    border-radius: 80px;
+                    padding: 70px;
+                    box-sizing: border-box;
+                }
+                .custom-swal .swal2-title {
+                    font-size: 1.5rem;
+                }
+                .custom-swal .swal2-content {
+                    font-size: 1.2rem;
+                }
+                .custom-swal .swal2-icon {
+                    font-size: 3rem;
+                }
+                .custom-swal .swal2-confirm {
+                    height: 50px;
+                }
+            </style>
+        </head>
+        <body>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
                 window.onload = function() {
                     Swal.fire({
-                        title: "Error!",
+                        title: "' . ($alert_type == 'success' ? 'Success!' : 'Error!') . '",
                         text: "' . $error_msg . '",
-                        icon: "error",
+                        icon: "' . $alert_type . '",
                         toast: true,
                         position: "center",
                         showConfirmButton: false,
-                        timer: 2000
+                        timer: 3000
+                    }).then(function() {
+                        ' . (isset($redirect) ? 'window.location.href = "' . $redirect . '";' : '') . '
                     });
                 };
-                </script>';
-            }
-        }
-
-        mysqli_close($link);
+            </script>
+        </body>
+        </html>';
+        exit();
     }
 }
 ?>
@@ -137,28 +151,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .btn-primary {
             height: 50px; /* Increased height */
             font-size: 18px;
-        }
-        .custom-swal {
-            max-width: 800px; /* Set the maximum width */
-            width: 90%; /* Make it responsive */
-            height: auto; /* Auto height based on content */
-        }
-        .custom-swal .swal2-popup {
-            border-radius: 80px; /* Rounded corners */
-            padding: 70px; /* Adjust padding */
-            box-sizing: border-box; /* Include padding and border in the width and height */
-        }
-        .custom-swal .swal2-title {
-            font-size: 1.5rem; /* Adjust title font size */
-        }
-        .custom-swal .swal2-content {
-            font-size: 1.2rem; /* Adjust content font size */
-        }
-        .custom-swal .swal2-icon {
-            font-size: 3rem; /* Adjust icon size */
-        }
-        .custom-swal .swal2-confirm {
-            height: 50px; /* Adjust button height */
         }
         .toggle-password {
             cursor: pointer;
@@ -202,15 +194,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="form-group">
                             <label for="account_num">Account Number:</label>
-                            <input type="text" class="form-control" id="account_num" name="account_num" required>
+                            <input type="text" class="form-control" id="account_num" name="account_num" value="" readonly>
                         </div>
                         <div class="form-group">
                             <label for="registration_num">Registration Number:</label>
-                            <input type="text" class="form-control" id="registration_num" name="registration_num" required>
+                            <input type="text" class="form-control" id="registration_num" name="registration_num" required oninput="validateRegistrationNum(this)">
                         </div>
                         <div class="form-group">
                             <label for="meter_num">Meter Number:</label>
-                            <input type="text" class="form-control" id="meter_num" name="meter_num" required>
+                            <input type="text" class="form-control" id="meter_num" name="meter_num" value="" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -232,11 +224,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="form-group position-relative">
                             <label for="password">Password:</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input type="password" class="form-control" id="password" name="password" required minlength="8">
                             <span class="toggle-password" onclick="togglePassword()">
                                 <i class="fas fa-eye" id="toggle-icon"></i>
                             </span>
-
                         </div>
                         <div class="form-group">
                             <label for="status">Status:</label>
@@ -259,29 +250,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-
-
     <script>
         function togglePassword() {
-        const passwordField = document.getElementById('password');
-        const toggleIcon = document.getElementById('toggle-icon');
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleIcon.classList.remove('fa-eye');
-            toggleIcon.classList.add('fa-eye-slash');
-        } else {
-            passwordField.type = 'password';
-            toggleIcon.classList.remove('fa-eye-slash');
-            toggleIcon.classList.add('fa-eye');
+            const passwordField = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggle-icon');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
         }
-    }
 
         function validatePhone(input) {
-        if (input.value.length > 11) {
-            input.value = input.value.slice(0, 11); // Truncate input to 11 characters
+            if (input.value.length > 11) {
+                input.value = input.value.slice(0, 11); // Truncate input to 11 characters
+            }
         }
-    }
+
+        function validateRegistrationNum(input) {
+            input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+        }
     </script>
 </body>
 </html>
