@@ -1,15 +1,19 @@
 <?php
-$servername = "127.0.0.1";
-$port = "3306";
-$username = "macwas";
-$password = "1Macwas_pass";
-$dbname = "macwas";
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Database connection parameters
+$servername = '127.0.0.1';
+$username = 'u510162695_macwas';
+$password = '1Macwas_pass'; // Ensure to set a proper password here
+$dbname = 'u510162695_macwas';
+$port = 3306;
 
 // Create connection
-$link = new mysqli($servername, $username, $password, $dbname, $port);
+$conn = new mysqli($servername, $username, $password, $dbname, $port);
 
 // Check connection
-if ($link->connect_error) {
-    die("Connection failed: " . $link->connect_error);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
-?>
