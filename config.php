@@ -1,15 +1,19 @@
 <?php
-/* Database credentials */
-define('DB_SERVER', '127.0.0.1'); // Use '127.0.0.1' instead of 'localhost' if necessary
-define('DB_USERNAME', 'u510162695_macwas');
-define('DB_PASSWORD', '1Macwas_pass');
-define('DB_NAME', 'u510162695_macwas');
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-/* Attempt to connect to MySQL database */
-$link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, 3306);
+// Database connection parameters
+$servername = '127.0.0.1';
+$username = 'u510162695_macwas';
+$password = '1Macwas_pass'; // Ensure to set a proper password here
+$dbname = 'u510162695_macwas';
+$port = 3306;
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname, $port);
 
 // Check connection
-if ($link === false) {
-    die("ERROR: Could not connect. " . mysqli_connect_error());
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
-?>
