@@ -14,6 +14,6 @@ $port = 3306;
 $link = new mysqli($servername, $username, $password, $dbname, $port);
 
 // Check connection
-if ($conn->connect_error) {
+if ($link->connect_error) {
     die("Connection failed: " . $link->connect_error);
 }
