@@ -3,13 +3,8 @@
 // Initialize the session
 session_start();
 
-<<<<<<< HEAD
-// Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-=======
 // Check if the user is already logged in, if yes then redirect him to the welcome page
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
->>>>>>> 2c85653ee524d9cb68cbe3deb7dba9794825a66d
     header("location: index.php");
     exit;
 }
@@ -21,20 +16,6 @@ require_once "config.php";
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
-<<<<<<< HEAD
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-
-    // Check if username is empty
-    if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter username.";
-    } else{
-        $username = trim($_POST["username"]);
-    }
-    
-    // Check if password is empty
-    if(empty(trim($_POST["password"]))){
-=======
 // Processing form data when the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -47,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check if the password is empty
     if (empty(trim($_POST["password"]))) {
->>>>>>> 2c85653ee524d9cb68cbe3deb7dba9794825a66d
         $password_err = "Please enter your password.";
     } else{
         $password = trim($_POST["password"]);
@@ -56,15 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-<<<<<<< HEAD
-        $sql = "SELECT id, username, password FROM users WHERE username = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
-=======
         $sql = "SELECT id, username, password FROM admins WHERE username = ?";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
->>>>>>> 2c85653ee524d9cb68cbe3deb7dba9794825a66d
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $param_username);
 
@@ -75,15 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if(mysqli_stmt_execute($stmt)){
                 // Store result
                 mysqli_stmt_store_result($stmt);
-<<<<<<< HEAD
-                
-                // Check if username exists, if yes then verify password
-                if(mysqli_stmt_num_rows($stmt) == 1){                    
-=======
 
                 // Check if the username exists, if yes then verify the password
                 if (mysqli_stmt_num_rows($stmt) == 1) {
->>>>>>> 2c85653ee524d9cb68cbe3deb7dba9794825a66d
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
                     if(mysqli_stmt_fetch($stmt)){
@@ -221,35 +189,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<<<<<<< HEAD
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
-    <script>
-        // Hide the alert after 3 seconds
-        setTimeout(function(){
-            var alert = document.querySelector('.alert');
-            if (alert) {
-            alert.style.display = 'none';
-            }
-        }, 3000);
-
-        // Toggle password visibility
-        const togglePassword = document.querySelector("#togglePassword");
-        const password = document.querySelector("#password");
-
-        togglePassword.addEventListener("click", function () {
-            // Toggle the type attribute using getAttribute() method
-            const type = password.getAttribute("type") === "password" ? "text" : "password";
-            password.setAttribute("type", type);
-
-            // Toggle the eye slash icon
-            this.classList.toggle("fa-eye");
-            this.classList.toggle("fa-eye-slash");
-        });
-    </script>
-=======
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdj0DJmHpC+9597tG" crossorigin="anonymous"></script>
     <!-- SweetAlert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
->>>>>>> 2c85653ee524d9cb68cbe3deb7dba9794825a66d
 </body>
 </html>
