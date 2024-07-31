@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -20,6 +21,7 @@ $port = 3306;
 
 // Create connection
 $link = new mysqli($servername, $username, $password, $dbname, $port);
+>>>>>>> 2c85653ee524d9cb68cbe3deb7dba9794825a66d
 
 // Check connection
 if ($link->connect_error) {

@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -15,7 +14,6 @@ $username = 'u510162695_macwas';
 $password = '1Macwas_pass'; // Ensure to set a proper password here
 $dbname = 'u510162695_macwas';
 $port = 3306;
->>>>>>> 2c85653ee524d9cb68cbe3deb7dba9794825a66d
 
 // Create connection
 $link = new mysqli($servername, $username, $password, $dbname);
