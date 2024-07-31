@@ -5,7 +5,6 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 require_once "config.php";
-
 // Fetch pending users
 $pending_sql = "SELECT id, name, email, phone, barangay, account_num, registration_num, meter_num, type FROM pending_users";
 $pending_result = mysqli_query($link, $pending_sql);
