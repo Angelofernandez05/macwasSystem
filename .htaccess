@@ -13,3 +13,8 @@ RewriteRule ^(.*)$ /public/$1
 #RewriteRule ^ index.php [L]
 RewriteRule ^(/)?$ public/index.php [L] 
 </IfModule>
+
+
+# HTID:23422420: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
+php_value display_errors 1
+# DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:23422420:
