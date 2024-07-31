@@ -2,21 +2,23 @@
 // Include PHPMailer library
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
 // Include config file
 require_once "config.php";
 
 if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     // Get URL parameter
-    $id =  trim($_GET["id"]);
-    // $consumer_id =  trim($_GET["consumer_id"]);
+    $id = trim($_GET["id"]);
 
     $sql = "SELECT *, (present - previous) as used, readings.status as reading_status FROM readings LEFT JOIN consumers ON consumers.id = readings.consumer_id WHERE readings.id = ?";
     if($stmt = mysqli_prepare($link, $sql)){
-        
         mysqli_stmt_bind_param($stmt, "i", $param_id);
-
         $param_id = $id;
-        
+
         if(mysqli_stmt_execute($stmt)){
             $result = mysqli_stmt_get_result($stmt);
 
@@ -24,17 +26,9 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
                 $myObj = getMinimumRates($link, $row['type']);
 
-                if (is_object($myObj)) {
-                    $rate_x = $myObj->rate_x;
-                    $rate_y = $myObj->rate_y;
-                    $rate_z = $myObj->rate_z;
-                } else {
-                    // handle the case where $obj is not an object
-                }
-
-                // $rate_x = $row['type'] === 'Commercial' ? 180 : 130;
-                // $rate_y = $row['type'] === 'Commercial' ? 20 : 15;
-                // $rate_z = $row['type'] === 'Commercial' ? 25 : 18;
+                $rate_x = property_exists($myObj, 'rate_x') ? $myObj->rate_x : 0;
+                $rate_y = property_exists($myObj, 'rate_y') ? $myObj->rate_y : 0;
+                $rate_z = property_exists($myObj, 'rate_z') ? $myObj->rate_z : 0;
 
                 $x = 10;
                 $y = 0;
@@ -50,7 +44,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 if((int)$row['used'] >= 20){
                     $y = 10;
                     $z = (int)$row['used'] - 20;
-                }else if((int)$row['used'] >= 10){
+                } else if((int)$row['used'] >= 10){
                     $z = (int)$row['used'] - 10;
                 }
                 
@@ -62,65 +56,81 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                     $to_email = $row['email'];
                     $subject = "MACWAS Billing Statement";
 
-                    $headers = array(
-                        "MIME-Version" => "1.0",
-                        "Content-type" => "text/html;charset=UTF-8",
-                        "From" => "MACWAS"
-                    );
-
                     ob_start();
                     include("templates/billing-statement.php");
                     $message = ob_get_contents();
-                    ob_get_clean();
+                    ob_end_clean();
 
-                    $send = mail($to_email, $subject, $message, $headers);
-                    
-                    // echo ($send ? '<div class="alert alert-success" role="alert">Email sent successfully.</div>' : '<div class="alert alert-danger" role="alert">There was an error.</div>');
-                    if($send){
-                        include('index.php');
+                    $mail = new PHPMailer(true);
+                    try {
+                        // Server settings
+                        $mail->isSMTP();                                           // Send using SMTP
+                        $mail->Host       = 'smtp.gmail.com';                      // Gmail SMTP server
+                        $mail->SMTPAuth   = true;                                  // Enable SMTP authentication
+                        $mail->Username   = 'your_email@gmail.com';                // Your Gmail address
+                        $mail->Password   = 'your_gmail_password';                 // Your Gmail password or App password
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          // Use TLS
+                        $mail->Port       = 587;                                   // Port for TLS
+
+                        // Recipients
+                        $mail->setFrom('your_email@gmail.com', 'MACWAS');
+                        $mail->addAddress($to_email);
+
+                        // Content
+                        $mail->isHTML(true);
+                        $mail->Subject = $subject;
+                        $mail->Body    = $message;
+
+                        $mail->send();
+
+                        // Output SweetAlert and redirect
                         echo '<script>
                         Swal.fire({
-                        title: "Success!",
-                        text: "Email sent successfully.",
-                        icon: "success",
-                        toast: true,
-                        position: "top-right",
-                        showConfirmButton: false,
-                        timer: 3000
-                        })
+                            title: "Success!",
+                            text: "Email sent successfully.",
+                            icon: "success",
+                            toast: true,
+                            position: "top-right",
+                            showConfirmButton: false,
+                            timer: 3000
+                        }).then(function() {
+                            window.location.href = "index.php";
+                        });
                         </script>';
                         exit();
-                    }else{
+                    } catch (Exception $e) {
                         echo '<script>
                         Swal.fire({
-                        title: "Error!",
-                        text: "There was an error.",
-                        icon: "error",
-                        toast: true,
-                        position: "top-right",
-                        showConfirmButton: false,
-                        timer: 3000
-                        })
+                            title: "Error!",
+                            text: "There was an error: ' . $mail->ErrorInfo . '",
+                            icon: "error",
+                            toast: true,
+                            position: "top-right",
+                            showConfirmButton: false,
+                            timer: 3000
+                        }).then(function() {
+                            window.location.href = "index.php";
+                        });
                         </script>';
                     }
                 }
-            } else{
+            } else {
                 header("location: index.php");
                 exit();
             }
-        } else{
-            // echo '<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>';
-            include('index.php');
+        } else {
             echo '<script>
             Swal.fire({
-            title: "Error!",
-            text: "Oops! Something went wrong. Please try again later.",
-            icon: "error",
-            toast: true,
-            position: "top-right",
-            showConfirmButton: false,
-            timer: 3000
-            })
+                title: "Error!",
+                text: "Oops! Something went wrong. Please try again later.",
+                icon: "error",
+                toast: true,
+                position: "top-right",
+                showConfirmButton: false,
+                timer: 3000
+            }).then(function() {
+                window.location.href = "index.php";
+            });
             </script>'; 
             exit();
         }
@@ -128,14 +138,14 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     
     // Close statement
     mysqli_stmt_close($stmt);
-}else{
+} else {
     header("location: index.php");
     exit();
 }
 
 function getMinimumRates($link, $type){
     $myObj = new stdClass;
-    $query = "Select * from minimum_rates where type=?";
+    $query = "SELECT * FROM minimum_rates WHERE type=?";
     if($stmt = mysqli_prepare($link, $query)){
         mysqli_stmt_bind_param($stmt, "s", $param_type);
         $param_type = $type;
@@ -152,3 +162,4 @@ function getMinimumRates($link, $type){
     }
     return $myObj;
 }
+?>

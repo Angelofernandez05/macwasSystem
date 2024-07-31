@@ -52,7 +52,7 @@
             </div>
             <div class="col-md-6">
                 <?php
-                    $rate_first_ten = $type === 'Commercial' ? 180 : 130;
+                    $rate_first_ten = $type === 'Commercial' ? 180 : 160;
                     $rate_second_ten = $type === 'Commercial' ? 20 : 15;
                     $rate = $type === 'Commercial' ? 25 : 18;
 

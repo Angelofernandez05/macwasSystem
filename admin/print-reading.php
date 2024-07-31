@@ -87,7 +87,7 @@ function getMinimumRates($link, $type){
             <?php
             // Check if $myObj is an object before accessing its properties
             if (is_object($myObj)) {
-                $rate_x = isset($myObj->rate_x) ? $myObj->rate_x : 0;
+                $rate_x = isset($myObj->rate_x) ? $myObj->rate_x : 160;
                 $rate_y = isset($myObj->rate_y) ? $myObj->rate_y : 0;
                 $rate_z = isset($myObj->rate_z) ? $myObj->rate_z : 0;
             } else {
@@ -106,7 +106,7 @@ function getMinimumRates($link, $type){
             $z_value = 0;
 
             $date_now = date("Y-m-d");
-            $over_due = $row['reading_status'] == 0 && $row['due_date'] < $date_now ? 20 : 0;
+            $over_due = $row['reading_status'] == 0.00 && $row['due_date'] < $date_now ? 20 : 0;
 
             if((float)$row['used'] >= 20){
                 $y = 10;
@@ -171,9 +171,15 @@ function getMinimumRates($link, $type){
                     if($over_due > 0){
                         echo '<div class="row mt-3">';
                             echo '<div class="col-md-9">Overdue:</div>';
-                            echo '<div class="col-md-3 text-right">'.number_format($over_due, 2, '.', '').'</div>';
+                            echo '<div class="col-md-3 text-right">'.number_format('0.00').'</div>';
                         echo '</div>';
                     }
+                    // if($over_due > 0){
+                    //     echo '<div class="row mt-3">';
+                    //         echo '<div class="col-md-9">Overdue:</div>';
+                    //         echo '<div class="col-md-3 text-right">'.number_format($over_due, 2, '.', '').'</div>';
+                    //     echo '</div>';
+                    // }
                     echo '<div class="row mt-3">';
                         echo '<div class="col-md-9">TOTAL CURRENT CHARGES:</div>';
                         echo '<div class="col-md-3 text-right">'.number_format($total, 2, '.', '').'</div>';

@@ -1,15 +1,14 @@
 <?php
-/* Database credentials */
-define('DB_SERVER', '127.0.0.1'); // Use '127.0.0.1' instead of 'localhost' if necessary
-define('DB_USERNAME', 'u510162695_macwas');
-define('DB_PASSWORD', '1Macwas_pass');
-define('DB_NAME', 'u510162695_macwas');
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "macwas";
 
-/* Attempt to connect to MySQL database */
-$link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, 3306);
+// Create connection
+$link = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
-if ($link === false) {
-    die("ERROR: Could not connect. " . mysqli_connect_error());
+if ($link->connect_error) {
+    die("Connection failed: " . $link->connect_error);
 }
 ?>

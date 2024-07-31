@@ -66,37 +66,10 @@ $user_row = mysqli_fetch_assoc($user_result);
             <?php include 'includes/userMenu.php'; ?>
         </nav>
 
-        <div class="container py-5">
+        <br>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <h4 class="mb-0">Hi, <?php echo htmlspecialchars($user_row['name']); ?></h4>
-                            <small class="mb-0">Name</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-secondary text-white">
-                        <div class="card-body">
-                            <h4 class="mb-0"><?php echo htmlspecialchars($user_row['email']); ?></h4>
-                            <small class="mb-0">Email</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-info text-white">
-                        <div class="card-body">
-                            <h4 class="mb-0"><?php echo date('F j, Y', strtotime($user_row['registration_date'])); ?></h4>
-                            <small class="mb-0">Registered On</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card bg-warning text-white">
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white ml-3">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -108,74 +81,12 @@ $user_row = mysqli_fetch_assoc($user_result);
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card bg-danger text-white">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <h4 class="mb-0"><?php echo $total_due; ?></h4>
-                                    <small class="mb-0">Total Due</small>
-                                </div>
-                                <i class='bx bxs-credit-card bx-md'></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-            <div class="mt-5">
-                <h4>Complaints Over Time</h4>
-                <canvas id="complaintsChart" width="400" height="200"></canvas>
-            </div>
-        </div>
     </section>
 
     <?php include 'includes/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        // Chart.js Configuration
-        $(document).ready(function() {
-            var ctx = document.getElementById('complaintsChart').getContext('2d');
-            var complaintsChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [], // You might want to fetch and include the actual data here
-                    datasets: [{
-                        label: 'Complaints Over Time',
-                        data: [], // Fetch and include complaint data here
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        fill: true
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // SweetAlert for logout confirmation
-            function confirmLogout() {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You will be logged out.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, log me out!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'logout.php';
-                    }
-                });
-                return false; // Prevent the default link behavior
-            }
-        });
-    </script>
+   
 </body>
 </html>

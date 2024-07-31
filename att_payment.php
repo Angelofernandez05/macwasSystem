@@ -64,6 +64,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
      <link rel="stylesheet" href="harry.css">
       <link rel="icon" href="logo.png" type="image/icon type">
 </head>
+<body>
 <div class="container">
 
 <div class="card-container">
@@ -72,29 +73,23 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         <div class="image">
             <img src="image/gcashtext.png" alt="">
             <img src="image/gcashlogo.png" alt="">
-            
-            
         </div>
-        <div class="card-number-box">
-
-        </div>
+        <div class="card-number-box"></div>
         <div class="flexbox">
             <div class="box">
                 <h2>GCASH Details:</h2>
-                <span>ROQUE C. ZAPA JR.</span>
-                <div class="card-holder-name">09309631219</div>
+                <span>Samuel Mulle</span>
+                <div class="card-holder-name">09309683269</div>
             </div>
         </div>
     </div>
-
-
 </div>
 
 <form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="POST" enctype="multipart/form-data">
-<input type="hidden" name="id" value="<?php echo $id ?>">
+    <input type="hidden" name="id" value="<?php echo $id ?>">
     <div class="inputBox">
         <span>Reference Number</span>
-        <input class="form-control" type="text" name="ref" maxlength="13">
+        <input class="form-control" type="text" name="ref" maxlength="13" required oninput="validateRef(this)">
     </div>
     <div class="inputBox">
         <span>Screenshot</span>
@@ -106,10 +101,14 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
 
 </div>    
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
-  </script>
+<script>
+    function validateRef(input) {
+        // Allow only numbers and limit to 13 characters
+        input.value = input.value.replace(/\D/g, '').substring(0, 13);
+    }
+</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     // Validate credentials
     if (empty($email_err) && empty($password_err)) {
         // Prepare a select statement
-        $sql = "SELECT id, status, password FROM consumers WHERE email = ?";
+        $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
@@ -46,18 +46,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                 // Check if email exists, if yes then verify password
                 if (mysqli_stmt_num_rows($stmt) == 1) {
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password);
+                    mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
                     if (mysqli_stmt_fetch($stmt)) {
+                        // Debugging output
+                        error_log("Hashed Password: $hashed_password");
+                        error_log("Entered Password: $password");
+
                         if (password_verify($password, $hashed_password)) {
-                            if ($status === 0) {
-                                $login_err = "Invalid account. Please contact the system administrator.";
+                            if ($is_approved == 0) {
+                                $login_err = "Your account is awaiting approval. Please contact the system administrator.";
+                            } elseif ($status === 'inactive') {
+                                $login_err = "Your account is inactive. Please contact the system administrator.";
                             } else {
                                 // Password is correct, so start a new session
                                 $_SESSION["loggedin"] = true;
                                 $_SESSION["id"] = $id;
                                 $_SESSION["email"] = $email;
 
-                                // Redirect user to welcome page
+                                // Redirect user to the dashboard or welcome page
                                 header("location: index.php");
                                 exit;
                             }
@@ -72,6 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                 }
             } else {
                 // Error executing statement
+                error_log('Error executing statement.');
                 echo '<script>
                 Swal.fire({
                     title: "Error!",
@@ -87,6 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
             // Close statement
             mysqli_stmt_close($stmt);
+        } else {
+            error_log('Error preparing statement.');
         }
     }
 
@@ -94,6 +103,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     mysqli_close($link);
 }
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">

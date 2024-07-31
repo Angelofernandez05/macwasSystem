@@ -75,7 +75,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
 
         <div>
             <?php
-            $rate_x = $row['type'] === 'Commercial' ? 180 : 130;
+            $rate_x = $row['type'] === 'Commercial' ? 180 : 160;
             $rate_y = $row['type'] === 'Commercial' ? 20 : 15;
             $rate_z = $row['type'] === 'Commercial' ? 25 : 18;
 
@@ -153,9 +153,15 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                     if($over_due > 0){
                         echo '<div class="row mt-3">';
                             echo '<div class="col-md-9">Overdue:</div>';
-                            echo '<div class="col-md-3 text-right">'.number_format($over_due, 2, '.', '').'</div>';
+                            echo '<div class="col-md-3 text-right">'.number_format('0.00').'</div>';
                         echo '</div>';
                     }
+                    // if($over_due > 0){
+                    //     echo '<div class="row mt-3">';
+                    //         echo '<div class="col-md-9">Overdue:</div>';
+                    //         echo '<div class="col-md-3 text-right">'.number_format($over_due, 2, '.', '').'</div>';
+                    //     echo '</div>';
+                    // }
                     echo '<div class="row mt-3">';
                         echo '<div class="col-md-9">TOTAL CURRENT CHARGES:</div>';
                         echo '<div class="col-md-3 text-right">'.number_format($total, 2, '.', '').'</div>';

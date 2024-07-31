@@ -16,18 +16,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = mysqli_real_escape_string($link, $_POST['status']);
 
     // Handle empty meter_num
-    if (empty($meter_num)) {
+    if (empty($meter_num) && empty($account_num) && empty($registration_num)) {
         $meter_num = NULL;
+        $account_num = NULL;
+        $registration_num = NULL;
     }
 
     // Validate phone number
     if (!preg_match('/^\d{1,11}$/', $phone)) {
         $error_msg = "Phone number must be up to 11 digits.";
         $alert_type = 'error';
-    } elseif (!preg_match('/^\d+$/', $registration_num)) {
-        $error_msg = "Registration number must be numeric.";
-        $alert_type = 'error';
-    } elseif (strlen($password) <= 8) {
+    }elseif (strlen($password) <= 8) {
         $error_msg = "Password must be greater than 8 characters.";
         $alert_type = 'error';
     } else {
@@ -39,15 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_msg = "Error: Email already exists.";
             $alert_type = 'error';
         } else {
-            // Insert the new user
-            $password_hashed = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO consumers (name, barangay, account_num, registration_num, meter_num, type, email, phone, password, status) 
-                    VALUES ('$name', '$barangay', '$account_num', '$registration_num', " . ($meter_num === NULL ? 'NULL' : "'$meter_num'") . ", '$type', '$email', '$phone', '$password_hashed', '$status')";
+            // Insert the new user into pending_users table
+            $sql = "INSERT INTO pending_users (name, barangay, account_num, registration_num, meter_num, type, email, phone, password, status) 
+                    VALUES ('$name', '$barangay', '$account_num', '$registration_num', " . ($meter_num === NULL ? 'NULL' : "'$meter_num'") . ", '$type', '$email', '$phone', '$password', '$status')";
 
             if (mysqli_query($link, $sql)) {
-                $error_msg = "Registration successful. Redirecting to login page.";
+                $error_msg = "Registration successful. Awaiting admin approval.";
                 $alert_type = 'success';
-                $redirect = 'login.php';
             } else {
                 $error_msg = "Error: " . mysqli_error($link);
                 $alert_type = 'error';
@@ -104,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         showConfirmButton: false,
                         timer: 3000
                     }).then(function() {
-                        ' . (isset($redirect) ? 'window.location.href = "' . $redirect . '";' : '') . '
+                         window.location.href = "login.php";
                     });
                 };
             </script>
@@ -114,6 +111,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -140,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #000; /* Black text color */
             max-width: 800px; /* Adjust as needed */
             width: 100%;
-            height: 75vh;
+            height: 77vh;
         }
         .form-group {
             margin-bottom: 15px;
@@ -149,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: 600;
         }
         .btn-primary {
-            height: 50px; /* Increased height */
+            height: 40px; /* Increased height */
             font-size: 18px;
         }
         .toggle-password {
@@ -198,7 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="form-group">
                             <label for="registration_num">Registration Number:</label>
-                            <input type="text" class="form-control" id="registration_num" name="registration_num" required oninput="validateRegistrationNum(this)">
+                            <input type="text" class="form-control" id="registration_num" name="registration_num" oninput="validateRegistrationNum(this)" value="" readonly>
                         </div>
                         <div class="form-group">
                             <label for="meter_num">Meter Number:</label>
@@ -219,8 +218,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="form-group position-relative">
-                            <label for="phone">Phone:</label>
-                            <input type="text" class="form-control" id="phone" name="phone" required oninput="validatePhone(this)">
+                            <label>Contact No. <small class="text-muted">(9123456789)</small></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="phone">+63</span>
+                                </div>
+                                <input type="text" class="form-control" id="phone" name="phone" required pattern="[9][0-9]{9}" maxlength="10" oninput="validatePhone(this)" aria-describedby="phone">
+                            </div>
                         </div>
                         <div class="form-group position-relative">
                             <label for="password">Password:</label>
@@ -265,15 +269,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
+       
+                        
         function validatePhone(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
             if (input.value.length > 11) {
                 input.value = input.value.slice(0, 11); // Truncate input to 11 characters
             }
         }
 
         function validateRegistrationNum(input) {
-            input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+            input.value = input.value.replace(/[^0-9]/g, '');
         }
     </script>
 </body>
 </html>
+`
