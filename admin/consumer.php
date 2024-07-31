@@ -4,9 +4,9 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-// Check if the user is logged in, if not then redirect him to consumer page
+// Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location:  consumer.php");
+    header("location: login.php");
     exit;
 }
 ?>
