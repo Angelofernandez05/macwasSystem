@@ -77,7 +77,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             <?php
             $rate_x = $row['type'] === 'Commercial' ? 180 : 160;
             $rate_y = $row['type'] === 'Commercial' ? 20 : 15;
-            $rate_z = $row['type'] === 'Commercial' ? 25 : 18;
+            $rate_z = $row['type'] === 'Commercial' ? 18 : 16;
 
             $x = 10;
             $y = 0;
@@ -99,7 +99,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             
             $y_value = (float)$rate_y * $y;
             $z_value = (float)$rate_z * $z;
-            $total = $x_value + $y_value + $z_value + $over_due;
+            $total = $x_value + $y_value + $z_value;
             
             echo '<div class="row">';
                 echo '<div class="col-md-6">';

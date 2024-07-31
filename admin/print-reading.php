@@ -96,6 +96,9 @@ function getMinimumRates($link, $type){
                 $rate_y = 0;
                 $rate_z = 0;
             }
+            $rate_x = $row['type'] === 'Commercial' ? 180 : 160;
+            $rate_y = $row['type'] === 'Commercial' ? 20 : 15;
+            $rate_z = $row['type'] === 'Commercial' ? 18 : 16;
             
             $x = 10;
             $y = 0;
@@ -117,7 +120,7 @@ function getMinimumRates($link, $type){
             
             $y_value = (float)$rate_y * $y;
             $z_value = (float)$rate_z * $z;
-            $total = $x_value + $y_value + $z_value + $over_due;
+            $total = $x_value + $y_value + $z_value;
             
             echo '<div class="row">';
                 echo '<div class="col-md-6">';

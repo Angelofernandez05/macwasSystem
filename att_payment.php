@@ -1,5 +1,5 @@
 <?php
-$id =  trim($_GET["id"]);
+$id = trim($_GET["id"]);
 
 if(isset($_POST["id"]) && !empty($_POST["id"])){
     require_once "config.php";
@@ -20,7 +20,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     
         // Verify MYME type of the file
         if(in_array($filetype, $allowed)){
-            $sql2 = "UPDATE readings SET ref=?, shot=?, status=? WHERE id=?";
+            $sql2 = "UPDATE readings SET ref=?, screenshot=?, status=? WHERE id=?";
         
             if($stmt2 = mysqli_prepare($link, $sql2)){
                 $id =  trim($_POST["id"]);
@@ -39,16 +39,17 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                 } else{
                     echo "Oops! Something went wrong. Please try again later.";
                 }
-            }
-                
-            // Close statement
-            mysqli_stmt_close($stmt2);
 
+                // Close statement
+                mysqli_stmt_close($stmt2);
+            } else {
+                echo "Oops! Something went wrong with the SQL prepare statement. Error: " . mysqli_error($link); 
+            }
             
-        } else{
+        } else {
             echo "Error: There was a problem uploading your file. Please try again."; 
         }
-    } else{
+    } else {
         echo "Error: " . $_FILES["photo"]["error"];
     }
 }

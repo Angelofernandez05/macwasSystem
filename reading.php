@@ -88,8 +88,8 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
                             echo "<td>" . $row['ref'] . "</td>";
                             ?>
                             <td>
-                                <?php if (!empty($row["shot"])) {
-                                    echo '<img width="100px" height="150px" src="uploads/' . $row["shot"] . '">';
+                                <?php if (!empty($row["screenshot"])) {
+                                    echo '<img width="100px" height="100px" src="uploads/' . $row["screenshot"] . '">';
                                 } ?>
                             </td>
                             <?php
