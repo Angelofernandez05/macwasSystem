@@ -41,6 +41,10 @@ if (!$user_result) {
 }
 
 $user_row = mysqli_fetch_assoc($user_result);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Your PHP code for userMenu.php
 ?>
 
 <!DOCTYPE html>
