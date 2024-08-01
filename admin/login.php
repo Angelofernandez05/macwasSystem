@@ -208,8 +208,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             password.setAttribute("type", type);
 
             // Toggle the eye slash icon
-            this.classList.toggle("fa-eye");
             this.classList.toggle("fa-eye-slash");
+            this.classList.toggle("fa-eye");
         });
     </script>
 </body>
