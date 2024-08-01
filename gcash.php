@@ -29,8 +29,8 @@
             <div class="flexbox">
                 <div class="box">
                     <h2>GCASH Details:</h2>
-                    <span>Samuel Mulle Jr.</span>
-                    <div class="card-holder-name">09309683269</div>
+                    <span>Angelo Fernandez</span>
+                    <div class="card-holder-name">09454351571</div>
                 </div>
             </div>
         </div>
