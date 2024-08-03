@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container">
         <div class="form-container">
-            <h2 class="text-center mb-5">Signup</h2>
+            <h2 class="text-center mb-5">Sign up</h2>
             <form action="signup.php" method="post">
                 <div class="row">
                     <div class="col-md-6">
