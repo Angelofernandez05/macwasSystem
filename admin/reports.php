@@ -95,7 +95,7 @@ mysqli_close($link);
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h4 class="mb-0"><?php echo $yearly_paid_total !== null ? $yearly_paid_total : '12'; ?></h4>
+                                    <h4 class="mb-0"><?php echo "0"; !== null ? $yearly_paid_total : '0'; ?></h4>
                                     <small class="mb-0">Total Paid Yearly</small>
                                 </div>
                                 <i class='bx bxs-calendar-star bx-md'></i>
