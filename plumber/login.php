@@ -35,7 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = ?";
+        $sql = "SELECT id, username, password, name FROM plumbers WHERE username = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -52,7 +52,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if username exists, if yes then verify password
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password, $name);
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
@@ -61,7 +61,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;                      
+                            $_SESSION["username"] = $username;
+                            $_SESSION["name"] = $name; // Store the user's name in session
                             
                             // Redirect user to welcome page
                             header("location: index.php");
@@ -97,6 +98,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($link);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -160,7 +162,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
-                                <img src="software-engineer.png" alt="Accountant Icon" style="width: 70px; height: 70px;">
+                                <img src="plumber.png" alt="Accountant Icon" style="width: 70px; height: 70px;">
                         </p>
                         <!-- Email input -->
                         <div class="form-outline mb-4">
@@ -182,7 +184,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <input type="submit" value="Sign in" name="login" class="btn btn-primary btn-lg text-light my-2 py-3" style="width:100% ; border-radius: 30px; font-weight:600;" />
                         </div>
                         <br>
+                        
                     </form>
+                    <p align="center">Don't have an account? Sign up<a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
+                    
                 </div>
             </div>
         </div>

@@ -67,7 +67,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         </nav>
 
         <div class="container-fluid py-5">
-            <a href="new-consumer.php" class="btn btn-primary btn-sm mb-3"><i class='bx bx-plus'></i> New</a>
+            <!-- <a href="new-consumer.php" class="btn btn-primary btn-sm mb-3"><i class='bx bx-plus'></i> New</a> -->
             
             <?php
             // Include config file
@@ -126,15 +126,11 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                 echo "<td>" . $row['meter_num'] . "</td>";
                                 echo "<td>" . $row['type'] . "</td>";
                                 echo "<td>";
-                                    echo '<a href="update-consumer.php?id='. $consumer_id.'" class="mr-2" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil btn btn-success btn-sm mb-3"></i></a>';
-                                    echo '<a href="delete-consumer.php" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-id="'.$consumer_id.'"><i class="bx bxs-trash-alt btn btn-danger btn-sm mb-3"></i></a>';
-                                    if($row['status'] == 0){
-                                        echo '<a href="#" class="viewButton" title="Enable Record" data-toggle="tooltip" data-id="'.$consumer_id.'" data-status="1"><i class="bx bx-show btn btn-success btn-sm mb-3 btn-sm ml-2"></i></a>';
-                                    }else{
-                                        echo '<a href="#" class="viewButton" title="Disable Record"  data-toggle="tooltip" data-id="'.$consumer_id.'" data-status="0"><i class="bx bx-hide btn btn-warning btn-sm mb-3 btn-sm ml-2"></i></a>';
-                                    }
+                                  //  echo '<a href="update-consumer.php?id='. $consumer_id.'" class="mr-2" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil btn btn-success btn-sm mb-3"></i></a>';
+                                    //echo '<a href="delete-consumer.php" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-id="'.$consumer_id.'"><i class="bx bxs-trash-alt btn btn-danger btn-sm mb-3"></i></a>';
+                                    
                                     // Added action for reading
-                                    //echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-2" title="Reading  " data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-3 ml-2"></i></a>';
+                                    echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-2" title="Reading  " data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-3 ml-2"></i></a>';
                                 echo "</td>";
                             echo "</tr>";
                         }
@@ -187,53 +183,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         }
     }, 3000);
 
-    document.querySelectorAll('.deleteButton').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const id = this.getAttribute('data-id');
-            Swal.fire({
-                title: `Are you sure you want to delete this record?`,
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `delete-consumer.php?id=${id}`;
-                }
-            });
-        });
-    });
+   
 
-    document.querySelectorAll('.viewButton').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const id = this.getAttribute('data-id');
-            const status = this.getAttribute('data-status');
-            const action = status === '0' ? 'disable' : 'enable';
-
-            Swal.fire({
-                title: `Are you sure you want to ${action} this record?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: `Yes, ${action} it!`,
-                cancelButtonText: 'No, cancel',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `view-consumer.php?id=${id}&status=${status}`;
-                }
-            });
-        });
-    });
+   
     </script>
 </body>
 </html>
