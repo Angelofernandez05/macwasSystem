@@ -31,7 +31,7 @@
                 </ul>
             </li>
 
-            <li>
+            <!-- <li>
                 <a href="complaint.php">
                     <i class='bx bx-message-rounded-dots'></i>
                     <span class="link_name">Complaints</span>
@@ -39,7 +39,7 @@
                 <ul class="sub-menu blank">
                     <li><a class="link_name" href="complaint.php">Complaints</a></li>
                 </ul>
-            </li>
+            </li> -->
 
         </ul>
     </div>

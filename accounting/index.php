@@ -71,6 +71,14 @@ $user_row = mysqli_fetch_assoc($user_result);
             color: white;
             border-bottom: 2px solid black !important;
         }
+        .bg-paid-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .bg-unpaid-gradient {
+            background: linear-gradient(#ff66cc 0%, #9999ff 100%);  /* Pink gradient */
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +96,7 @@ $user_row = mysqli_fetch_assoc($user_result);
         <br>
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card bg-warning text-white ml-3">
+                    <div class="card bg-paid-gradient text-white ml-3">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -102,7 +110,7 @@ $user_row = mysqli_fetch_assoc($user_result);
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card bg-success text-white">
+                    <div class="card bg-unpaid-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -115,7 +123,7 @@ $user_row = mysqli_fetch_assoc($user_result);
                     </div>
                 </div>
             </div>
-            
+       
     </section>
 
     <?php include 'includes/scripts.php'; ?>
