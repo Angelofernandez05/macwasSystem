@@ -86,7 +86,6 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
             color: black;
             border-bottom: 2px solid black !important;
         }
-
     </style>
 </head>
 <body>
@@ -94,6 +93,7 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
+        <nav class="navbar navbar-light bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Bill

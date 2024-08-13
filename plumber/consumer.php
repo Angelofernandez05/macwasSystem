@@ -68,6 +68,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
+        <nav class="navbar navbar-light bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Consumers
@@ -191,9 +192,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             alert.style.display = 'none';
         }
     }, 3000);
-
-   
-
    
     </script>
 </body>

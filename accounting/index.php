@@ -31,13 +31,10 @@ if (!$unpaid_count_result) {
 
 $unpaid_count_row = mysqli_fetch_assoc($unpaid_count_result);
 $unpaid_count = $unpaid_count_row['unpaid_count'] ? intval($unpaid_count_row['unpaid_count']) : 0;
-
-
 // Fetch count of consumer
 $consumers_sql = "SELECT * FROM consumers;";
 $consumers_result = mysqli_query($link, $consumers_sql);
 $consumers_total = mysqli_num_rows($consumers_result);
-
 
 // Fetch count of paid readings
 $paid_count_sql = "SELECT COUNT(*) AS paid_count FROM readings WHERE consumer_id = $id AND status = 1;";
@@ -97,6 +94,7 @@ $user_row = mysqli_fetch_assoc($user_result);
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
+        <nav class="navbar navbar-light bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Dashboard
@@ -109,6 +107,9 @@ $user_row = mysqli_fetch_assoc($user_result);
             <div class="row">
                 <div class="col-md-3">
                     <div class="card bg-primary-gradient text-white ml-3">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white ml-3">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -123,6 +124,7 @@ $user_row = mysqli_fetch_assoc($user_result);
 
                 <div class="col-md-3">
                     <div class="card bg-unpaid-gradient text-white">
+                    <div class="card bg-success text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
