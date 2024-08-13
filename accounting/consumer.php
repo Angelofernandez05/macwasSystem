@@ -20,14 +20,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <style>
-         body{
-            background: linear-gradient(135deg, #e0eafc, #cfdef3);
-        }
-        .navbar-light-gradient {
-            background: linear-gradient(135deg, #36d1dc, #5b86e5);
-            color: white;
-            border-bottom: 2px solid black !important;
-        }       
         .alert {
             font-size: 14px;
             padding: 8px 12px;
@@ -38,6 +30,14 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             top: 40px;
             right: 10px;
             z-index: 9999;
+        }
+        body{
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        }
+        .navbar-light-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: white;
+            border-bottom: 2px solid black !important;
         }
     </style>
 </head>
@@ -67,7 +67,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
-        <nav class="navbar navbar-light bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Consumers
@@ -191,6 +190,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             alert.style.display = 'none';
         }
     }, 3000);
+
+   
+
+   
     </script>
 </body>
 </html>

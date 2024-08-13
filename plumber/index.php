@@ -55,19 +55,10 @@ $user_row = mysqli_fetch_assoc($user_result);
         body{
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
         }
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-        }   
-        .bg-success-gradient {
-            background: linear-gradient(135deg, #43cea2, #185a9d);
-            color: white;
         }
     </style>
 </head>
@@ -76,7 +67,6 @@ $user_row = mysqli_fetch_assoc($user_result);
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
-        <nav class="navbar navbar-light bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Dashboard
@@ -87,7 +77,6 @@ $user_row = mysqli_fetch_assoc($user_result);
         <br>
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card bg-success-gradient text-white ml-3">
                     <div class="card bg-warning text-white ml-3">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">

@@ -1,6 +1,9 @@
 <?php
 // Initialize the session
 session_start();
+ 
+
+
 require_once "config.php";
 ?>
  
@@ -10,23 +13,22 @@ require_once "config.php";
     <meta charset="UTF-8">
     <title>Complaints</title>
     <?php include 'includes/links.php'; ?>
-</head>
-<style>
-     body{
+    <style>
+    body{
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
         }
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-        }   
-</style>
+        }
+    </style>
+</head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
-        <nav class="navbar navbar-light bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Complaints

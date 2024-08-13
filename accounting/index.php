@@ -31,10 +31,6 @@ if (!$unpaid_count_result) {
 
 $unpaid_count_row = mysqli_fetch_assoc($unpaid_count_result);
 $unpaid_count = $unpaid_count_row['unpaid_count'] ? intval($unpaid_count_row['unpaid_count']) : 0;
-// Fetch count of consumer
-$consumers_sql = "SELECT * FROM consumers;";
-$consumers_result = mysqli_query($link, $consumers_sql);
-$consumers_total = mysqli_num_rows($consumers_result);
 
 // Fetch count of paid readings
 $paid_count_sql = "SELECT COUNT(*) AS paid_count FROM readings WHERE consumer_id = $id AND status = 1;";
@@ -74,18 +70,6 @@ $user_row = mysqli_fetch_assoc($user_result);
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-        }   
-        .bg-primary-gradient {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-        .bg-unpaid-gradient {
-            background: linear-gradient(135deg, #ff9a9e, #fda085);  /* Pink gradient */
-            color: white;
-        }
-        .bg-success-gradient {
-            background: linear-gradient(135deg, #43cea2, #185a9d);
-            color: white;
         }
     </style>
 </head>
@@ -94,7 +78,6 @@ $user_row = mysqli_fetch_assoc($user_result);
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
-        <nav class="navbar navbar-light bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Dashboard
@@ -103,10 +86,6 @@ $user_row = mysqli_fetch_assoc($user_result);
         </nav>
 
         <br>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card bg-primary-gradient text-white ml-3">
             <div class="row">
                 <div class="col-md-3">
                     <div class="card bg-warning text-white ml-3">
@@ -123,27 +102,12 @@ $user_row = mysqli_fetch_assoc($user_result);
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card bg-unpaid-gradient text-white">
                     <div class="card bg-success text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h4 class="mb-0"><?php echo $unpaid_count; ?></h4>
                                     <small class="mb-0">Unpaid</small>
-                                </div>
-                                <i class='bx bx-message-rounded-dots bx-md'></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-3">
-                    <div class="card bg-success-gradient text-white">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <h4 class="mb-0"><?php echo $consumers_total; ?></h4>
-                                    <small class="mb-0">Consumers</small>
                                 </div>
                                 <i class='bx bx-message-rounded-dots bx-md'></i>
                             </div>

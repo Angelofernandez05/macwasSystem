@@ -161,7 +161,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
                                 <img src="software-engineer.png" alt="Admin-Icon" style="width: 75px; height: 75px;">
-                                <img src="software-engineer.png" alt="Accountant Icon" style="width: 70px; height: 70px;">
+
                         </p>
                         <!-- Email input -->
                         <div class="form-outline mb-4">
