@@ -60,6 +60,10 @@ $user_row = mysqli_fetch_assoc($user_result);
             color: white;
             border-bottom: 2px solid black !important;
         }
+        .bg-success-gradient {
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -77,7 +81,7 @@ $user_row = mysqli_fetch_assoc($user_result);
         <br>
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card bg-warning text-white ml-3">
+                    <div class="card bg-success-gradient text-white ml-3">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
