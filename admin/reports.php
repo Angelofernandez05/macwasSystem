@@ -60,14 +60,34 @@ mysqli_close($link);
     <link rel="icon" href="logo.png" type="image/icon type">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Your CSS styles */
+           body{
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        }
+
+        .navbar-light-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: white;
+            border-bottom: 2px solid black !important;
+        }
+
+        .bg-warning-gradient {
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            color: white;
+        }
+
+        .bg-danger-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
     </style>
+    
 </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
-        <nav class="navbar navbar-light bg-white border-bottom">
+        <nav class="navbar navbar-light-gradient bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Reports
@@ -78,7 +98,7 @@ mysqli_close($link);
         <div class="container-fluid py-5">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="card bg-warning text-white">
+                    <div class="card bg-warning-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -91,7 +111,7 @@ mysqli_close($link);
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-danger text-white">
+                    <div class="card bg-danger-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>

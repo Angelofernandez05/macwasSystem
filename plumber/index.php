@@ -55,15 +55,21 @@ $user_row = mysqli_fetch_assoc($user_result);
         body{
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
         }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-        }
+        }   
         .bg-success-gradient {
             background: linear-gradient(135deg, #43cea2, #185a9d);
             color: white;
         }
+        
     </style>
 </head>
 <body>

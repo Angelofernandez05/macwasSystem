@@ -1,3 +1,12 @@
+<?php
+// Ensure the session is already started before including this file
+// You don't need to call session_start() here if it's already started elsewhere
+// session_start(); // Comment this out or remove it if it's already called elsewhere
+
+// Ensure that user data is available
+// For example, fetch from session variables
+$user_name = isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : 'Guest';
+?>
 <style>
     .dropdown-toggle {
         color: white !important;
@@ -7,9 +16,11 @@
         color: white;
     }
 </style>
+
+<!-- userMenu.php -->
 <div class="dropdown">
     <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <h6 class="mb-0">Hi, <?php echo htmlspecialchars($user_row['name']); ?></h6>
+        <h6 class="mb-0">Hi, <?php echo $user_name; ?></h6>
     </button>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="reset_password.php">Reset Your Password</a>

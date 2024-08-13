@@ -26,7 +26,10 @@
 }
 .sidebar {
   width: 270px; /* Width when sidebar is open */
+  
 }
+
+
 
 
 

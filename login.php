@@ -186,8 +186,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     ?>
                     <!-- Login Form -->
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                        <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">User Login</p>
-                        <p class="text-center">Please fill in your credentials to login.</p>
+                        <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
+                                <img src="users.png" alt="Accountant Icon" style="width: 100px; height: 100px;">
+                        </p>
+                        <!-- <p class="text-center">Please fill in your credentials to login.</p> -->
 
                         <!-- Email input -->
                         <div class="form-outline mb-4">

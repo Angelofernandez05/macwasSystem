@@ -54,7 +54,61 @@ mysqli_close($link);
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js CDN -->
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        /* Your CSS styles */
+        body{
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+         .bg-primary-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .bg-success-gradient {
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            color: white;
+        }
+
+        .bg-dark-gradient {
+            background: linear-gradient(135deg, #232526, #414345);
+            color: white;
+        }
+
+        .bg-info-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: white;
+        }
+
+        .bg-warning-gradient {
+            background: linear-gradient(135deg, #f09819, #edde5d);
+            color: white;
+        }
+
+        .bg-unpaid-gradient {
+            background: linear-gradient(#ff66cc 0%, #9999ff 100%);  /* Pink gradient */
+            color: white;
+        }
+
+        .bg-red-gradient {
+           background: linear-gradient(135deg, #ff4b1f, #ff9068);  /* Red gradient */
+            color: white;
+        }
+            
+        .navbar-light-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: white;
+            border-bottom: 2px solid black !important;
+        }
+        .bxs-printer {
+            color: black;
+        }
+        .bx-mail-send {
+            color: black;
+        }
+    
     </style>
 </head>
 <body>
@@ -62,7 +116,7 @@ mysqli_close($link);
     
 
     <section class="home-section">
-        <nav class="navbar navbar-light bg-white border-bottom">
+        <nav class="navbar navbar-light-gradient bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Dashboard
@@ -73,7 +127,7 @@ mysqli_close($link);
         <div class="container-fluid py-5">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="card bg-primary text-white">
+                    <div class="card bg-primary-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -87,7 +141,7 @@ mysqli_close($link);
                 </div>
                 
                 <div class="col-md-4">
-                    <div class="card bg-success text-white">
+                    <div class="card bg-success-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -100,7 +154,7 @@ mysqli_close($link);
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-dark text-white">
+                    <div class="card bg-unpaid-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -116,7 +170,7 @@ mysqli_close($link);
             <br>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="card bg-info text-white">
+                    <div class="card bg-info-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -129,7 +183,7 @@ mysqli_close($link);
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-warning text-white">
+                    <div class="card bg-warning-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -142,7 +196,7 @@ mysqli_close($link);
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-danger text-white">
+                    <div class="card bg-red-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
