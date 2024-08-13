@@ -59,6 +59,7 @@ $user_row = mysqli_fetch_assoc($user_result);
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
+            height: 60px;
         }
         .bg-success-gradient {
             background: linear-gradient(135deg, #43cea2, #185a9d);
@@ -79,21 +80,21 @@ $user_row = mysqli_fetch_assoc($user_result);
         </nav>
 
         <br>
+            <div class="container-fluid py-3">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card bg-success-gradient text-white ml-3">
+                    <div class="card bg-success-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h4 class="mb-0"><?php echo $complaints_total; ?></h4>
                                     <small class="mb-0">Complaints</small>
                                 </div>
-                                <i class='bx bx-message-rounded-dots bx-md'></i>
+                                <i class='bx bx-user bx-md'></i>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
     </section>
 
     <?php include 'includes/scripts.php'; ?>

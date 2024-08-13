@@ -67,6 +67,29 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
     <title>Bill</title>
     <?php include 'includes/links.php'; ?>
     <style>
+         .table-responsive {
+    overflow-x: auto;
+    /* Ensure the container is responsive */
+}
+
+.table-custom {
+    width: 100%; /* Ensure the table takes full width */
+    max-width: 1300px; /* You can adjust this value */
+    margin: 0 auto; /* Center the table */
+    margin-left: 140px;
+}
+
+.table thead th {
+            background-color: #f8f9fa; /* Light background color for table header */
+            border-bottom: 2px solid #dee2e6; /* Slightly thicker border for header bottom */
+        }
+
+.table-custom th,
+.table-custom td {
+    white-space: nowrap; /* Prevents content from wrapping */
+    text-align: center; /* Center align text */
+}
+
         .alert {
             font-size: 14px;
             padding: 8px 12px;
@@ -89,6 +112,7 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
+            height: 60px;
         }
     </style>
 </head>
@@ -119,7 +143,7 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                     $sql = "SELECT *, (present - previous) as used FROM readings WHERE consumer_id = $id ";
                     if($result = mysqli_query($link, $sql)){
                         if(mysqli_num_rows($result) > 0){
-                            echo '<table class="table table-striped">';
+                            echo '<table class="table table-striped table-custom">';
                             echo '<div class="table-responsive">';
                                 echo "<thead>";
                                     echo "<tr>";

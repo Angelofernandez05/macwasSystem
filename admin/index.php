@@ -101,6 +101,7 @@ mysqli_close($link);
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
+                
         }
         .bxs-printer {
             color: black;
@@ -311,7 +312,7 @@ mysqli_close($link);
                             'rgba(153, 102, 255, 1)',
                             'rgba(255, 159, 64, 1)'
                         ],
-                        borderWidth: 1
+                        borderWidth: 1.5
                     }]
                 },
                 options: {

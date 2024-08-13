@@ -53,9 +53,9 @@ mysqli_close($link);
             }
 
             .table-container {
-    margin: 20px auto;
-    max-width: 1200px;
-}
+            margin: 20px auto;
+            max-width: 1200px;
+        }
 
         .table {
             width: 100%;
