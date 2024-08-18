@@ -67,6 +67,16 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
     <title>Bill</title>
     <?php include 'includes/links.php'; ?>
     <style>
+         body{
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        }
+        .navbar-light-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: white;
+            border-bottom: 2px solid black !important;
+            height: 60px;
+            /* margin-left: 15px; */
+        }
         .alert {
             font-size: 14px;
             padding: 8px 12px;
@@ -78,22 +88,14 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
             right: 10px;
             z-index: 9999;
         }
-        body{
-            background: linear-gradient(135deg, #e0eafc, #cfdef3);
-        }
-        .navbar-light-gradient {
-            background: linear-gradient(135deg, #e0eafc, #cfdef3);
-            color: black;
-            border-bottom: 2px solid black !important;
-        }
+      
     </style>
-</head>
+    </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
-        <nav class="navbar navbar-light bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Bill

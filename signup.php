@@ -124,23 +124,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .form-container {
-            padding: 20px;
-            border: 1px solid #dee2e6;
-            border-radius: 15px;
-            background-color: rgba(173, 216, 230, 0.6); /* Light blue with transparency */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
-            color: #000; /* Black text color */
-            max-width: 800px; /* Adjust as needed */
-            width: 100%;
-            height: 77vh;
-        }
+         body {
+            background-image: url("waters.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: 200vh;
+        }   
         .form-group {
             margin-bottom: 15px;
         }
@@ -159,12 +149,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transform: translateY(-50%);
             margin-top: 15px;
         }
+        .card {
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(173, 216, 230, 0.0); /* Light blue with some transparency */
+            padding: 20px; /* Add padding for content inside the card */
+            backdrop-filter: blur(5px); /* Optional: Adds a blur effect to the background of the card */
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+        }
+
+        .form-control {
+            border-radius: 20px;
+        }
+
+        .btn {
+            border-radius: 30px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="form-container">
-            <h2 class="text-center mb-5">Sign up</h2>
+<section class="vh-100 d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="card">
+                <div class="card-body text-center">
+                    <?php 
+                    if(!empty($login_err)){
+                        echo '<script>
+                        Swal.fire({
+                        title: "Error!",
+                        text: "' . $login_err . '",
+                        icon: "error",
+                        toast: true,
+                        position: "top-right",
+                        showConfirmButton: false,
+                        timer: 3000
+                        })
+                        </script>';
+                    }        
+                    ?>
+                    <p class="text-center mb-4">
+                            <img src="logo.png" alt="Admin-Icon" style="width: 200px; height: 150px;">
+                        </p>   
+            <h2 class="text-center mb-4"><strong>Sign up</strong></h2>
             <form action="signup.php" method="post">
                 <div class="row">
                     <div class="col-md-6">

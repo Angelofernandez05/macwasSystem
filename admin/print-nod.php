@@ -61,22 +61,25 @@ if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
                     <small class="text-muted">Municipality of Madridejos</small><br>
                     <small class="text-muted">Madridejos, Cebu</small>
                 </p>
-                <h5>NOTICE OF DISCONNECTION</h5>
+                <br>
+                <h5><strong>NOTICE OF DISCONNECTION</strong></h5>
             </div>
 
             <div class="mt-3">
                 <p class="mb-0"><small class="text-muted mr-2">Name:</small><?php echo htmlspecialchars($row['name']); ?></p>
                 <p class="mb-0"><small class="text-muted mr-2">Address:</small><?php echo htmlspecialchars($row['barangay']); ?></p>
                 <p class="mb-0"><small class="text-muted mr-2">Meter No.:</small><?php echo htmlspecialchars($row['meter_num']); ?></p>
+                <p class="mb-0"><small class="text-muted mr-2">Class:</small><?php echo htmlspecialchars($row['type']); ?></p>
             </div>
             <div class="mt-3">
-                <p><small class="text-muted mr-2">Remarks:</small>NO PAYMENT</p>
+                <p><small class="text-muted mr-2">Remarks:</small><strong>NO PAYMENT:</strong></p>
             </div>
-            <div class="mt-3">
+            <div class="mt-4">
                 <p class="font-weight-bold">Date of Disconnection: <?php echo date("F j, Y", strtotime($row['due_date'] . " +15 days")); ?></p>
             </div>
-            <div class="mt-3">
+            <div class="mt-4">
                 <p>Please pay the above billing month/s before the disconnection date. Thank you.</p>
+                <div class="col-md-11 text-right"><strong>M C W S</strong></div>
             </div>
         </div>
     </div>

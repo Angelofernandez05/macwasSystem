@@ -201,7 +201,7 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                                             <?php
                                             // echo '<a target="_blank" href="sendMail.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" class="mr-2" title="Send Billing Statement" data-toggle="tooltip"><i class="bx bx-sm bx-mail-send"></i></a>';
                                             //echo '<a target="_blank" href="print-reading.php?id='. $row['id'] .'" title="Print Billing Statement" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
-                                            echo '<a target="_blank" href="print-reading.php?id='. $row['id'] .'" title="Print Billing Statement" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
+                                            // echo '<a target="_blank" href="print-reading.php?id='. $row['id'] .'" title="Print Billing Statement" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
                                            // echo '<a href="reading.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil" ></i></a>';
                                             // echo '<a onclick="javascript:confirmationDelete($(this));return false;" href="delete-reading.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" title="Delete Record" data-toggle="tooltip"><i class="bx bxs-trash-alt" ></i></a>';
                                            // echo '<a href="#" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-cid="'.$_GET["consumer_id"].'" data-id="'. $row['id'] .'"><i class="bx bxs-trash-alt"></i></a>';

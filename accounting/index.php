@@ -90,7 +90,6 @@ $user_row = mysqli_fetch_assoc($user_result);
         .bg-paid-gradient {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            width: 295px;
         }
         .bg-consumer-gradient {
             background: linear-gradient(#ff66cc 0%, #9999ff 100%);  /* Pink gradient */

@@ -111,6 +111,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link rel="icon" href="logo.png" type="image/icon type">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
+        body {
+            background-image: url("account.webp");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: 200vh;
+        }
         .alert {
             font-size: 14px;
             padding: 8px 12px;
@@ -132,18 +139,41 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             cursor: pointer;
             margin-top: 10px;
         }
+        .card {
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(173, 216, 230, 0.0); /* Light blue with some transparency */
+            padding: 20px; /* Add padding for content inside the card */
+            backdrop-filter: blur(3px); /* Optional: Adds a blur effect to the background of the card */
+        }
+
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 550px;
+            margin-left: 50px; /* Adjust this value to move the form further left */
+    
+        }
+
+        .form-control {
+            border-radius: 20px;
+        }
+
+        .btn {
+            border-radius: 30px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="bg-light">
 
-    <section class="vh-100">
-        <div class="container py-5 h-100">
-            <div class="row d-flex align-items-center justify-content-center h-100">
-                <div class="col-md-8 col-lg-7 col-xl-6">
-                    <img src="logo.png" class="img-fluid" alt="Phone image" height="300px" width="600px">
-                </div>
-                <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-
+<section class="vh-100 d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="card">
+                <div class="card-body text-center">
                     <?php 
                     if(!empty($login_err)){
                         echo '<script>
@@ -161,19 +191,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     ?>
 
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                        <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
-                                <img src="accountant.png" alt="Accountant Icon" style="width: 70px; height: 70px;">
+                    <p class="text-center mb-3">
+                            <img src="logo.png" alt="Admin-Icon" style="width: 250px; height: 200px;">
+                        </p>   
+                    <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
+                                <img src="accountant.png" alt="Accountant Icon" style="width: 55px; height: 55px;">
                         </p>
                         <!-- Email input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i> Username</label>
+                            <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i><strong> Username</strong></label>
                             <input type="text" id="form1Example13" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
                             <span class="invalid-feedback"><?php echo $username_err; ?></span>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i> Password</label>
+                            <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i><strong>Password</strong></label>
                             <input type="password" id="password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" style="border-radius:25px ;">
                             <i class="fa fa-eye-slash" id="togglePassword"></i>
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
@@ -186,7 +219,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <br>
                         
                     </form>
-                    <p align="center">Don't have an account? Sign up<a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
+                    <p align="center"><strong>Don't have an account? Sign up</storng><a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
                     
                 </div>
             </div>

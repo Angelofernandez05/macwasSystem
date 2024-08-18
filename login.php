@@ -134,6 +134,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         }
     </script>
     <style>
+         body {
+            background-image: url("tank.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: 200vh;
+        }
         .input-group {
             position: relative;
         }
@@ -159,48 +166,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             color: #000;
             font-size: 1.2rem;
         }
+        .card {
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(173, 216, 230, 0.0); /* Light blue with some transparency */
+            padding: 20px; /* Add padding for content inside the card */
+            backdrop-filter: blur(3px); /* Optional: Adds a blur effect to the background of the card */
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 550px;
+            margin-left: 50px; /* Adjust this value to move the form further left */
+        }
+
+        .form-control {
+            border-radius: 20px;
+        }
+
+        .btn {
+            border-radius: 30px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
-    <section class="vh-100">
-        <div class="container py-5 h-100">
-            <div class="row d-flex align-items-center justify-content-center h-100">
-                <div class="col-md-8 col-lg-7 col-xl-6">
-                    <img src="logo2.jpg" class="img-fluid" alt="Logo" height="300px" width="600px">
-                </div>
-                <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-                    <?php
-                    if (!empty($login_err)) {
+    <section class="vh-100 d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="card">
+                <div class="card-body text-center">
+                    <?php 
+                    if(!empty($login_err)){
                         echo '<script>
                         Swal.fire({
-                            title: "Error!",
-                            text: "' . $login_err . '",
-                            icon: "error",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
+                        title: "Error!",
+                        text: "' . $login_err . '",
+                        icon: "error",
+                        toast: true,
+                        position: "top-right",
+                        showConfirmButton: false,
+                        timer: 3000
+                        })
                         </script>';
-                    }
+                    }        
                     ?>
                     <!-- Login Form -->
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                        <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
-                                <img src="users.png" alt="Accountant Icon" style="width: 100px; height: 100px;">
+                    <p class="text-center mb-4">
+                            <img src="logo.png" alt="Admin-Icon" style="width: 300px; height: 200px;">
+                        </p>   
+                    <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
+                                <img src="users.png" alt="Accountant Icon" style="width: 60px; height: 60px;">
                         </p>
                         <!-- <p class="text-center">Please fill in your credentials to login.</p> -->
 
                         <!-- Email input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="login_email"><i class="bi bi-person-circle"></i> Email</label>
+                            <label class="form-label" for="login_email"><i class="bi bi-person-circle"></i><strong> Email</strong></label>
                             <input type="email" id="login_email" class="form-control form-control-lg py-3 <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" name="email" autocomplete="off" placeholder="Enter your email" style="border-radius:25px;">
                             <span class="invalid-feedback"><?php echo $email_err; ?></span>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="login_password"><i class="bi bi-chat-left-dots-fill"></i> Password</label>
+                            <label class="form-label" for="login_password"><i class="bi bi-chat-left-dots-fill"></i><strong>Password</strong></label>
                             <div class="input-group">
                                 <input type="password" id="login_password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" style="border-radius:25px;">
                                 <span class="input-group-text" onclick="togglePassword()">
@@ -215,7 +247,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                             <input type="submit" value="Login" name="login" class="btn btn-primary btn-lg text-light my-2 py-3" style="width:100%; border-radius: 30px; font-weight:600;">
                         </div>
                     </form>
-                    <p align="center">Don't have an account? Sign up<a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
+                    <p align="center"><strong>Don't have an account? Sign up</strong><a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
                 </div>
             </div>
         </div>

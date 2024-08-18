@@ -71,14 +71,13 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             </p>
         </div>
         <p class="text-right">Due Date: <?php echo date_format(date_create($row['due_date']), 'F j, Y'); ?></p>
-        
-
+    
         <div>
             <?php
             $rate_x = $row['type'] === 'Commercial' ? 180 : 160;
-            $rate_y = $row['type'] === 'Commercial' ? 20 : 15;
+            $rate_y = $row['type'] === 'Commercial' ? 20 : 16;
             $rate_z = $row['type'] === 'Commercial' ? 18 : 16;
-
+            
             $x = 10;
             $y = 0;
             $z = 0;
@@ -88,7 +87,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             $z_value = 0;
 
             $date_now = date("Y-m-d");
-            $over_due = $row['reading_status'] == 0 && $row['due_date'] < $date_now ? 20 : 0;
+            $over_due = $row['reading_status'] == 0.00 && $row['due_date'] < $date_now ? 20 : 0;
 
             if((float)$row['used'] >= 20){
                 $y = 10;
@@ -101,30 +100,31 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             $z_value = (float)$rate_z * $z;
             $total = $x_value + $y_value + $z_value;
             
+            
             echo '<div class="row">';
                 echo '<div class="col-md-6">';
-                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">Name:</small>'.$row['name'].'</p>';
-                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">Address:</small>'.$row['barangay'].'</p>';
-                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">Account No:</small>'.$row['account_num'].'</p>';
-                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">Registration No:</small>'.$row['registration_num'].'</p>';
-                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">Meter No:</small>'.$row['meter_num'].'</p>';
-                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">Type:</small>'.$row['type'].'</p>';
+                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">NAME:</small>'.$row['name'].'</p>';
+                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">ADDRESS:</small>'.$row['barangay'].'</p>';
+                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">ACCOUNT NO.</small>'.$row['account_num'].'</p>';
+                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">REGISTRATION NO.</small>'.$row['registration_num'].'</p>';
+                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">METER NO.</small>'.$row['meter_num'].'</p>';
+                    echo '<p class="mb-0 flex-grow-1"><small class="text-muted mr-2">TYPE:</small>'.$row['type'].'</p>';
 
                     echo '<table class="mt-3 table table-bordered table-sm">';
                         echo '<thead>';
                             echo '<tr>';
-                                echo '<th class="text-center">Date</th>';
-                                echo '<th class="text-center"colspan="2">Reading</th>';
-                                echo '<th class="text-center">Used (cu.m.)</th>';
+                                echo '<th class="text-center">MONTH</th>';
+                                echo '<th class="text-center"colspan="2">READING</th>';
+                                echo '<th class="text-center">USED (cu.m.)</th>';
                             echo '</tr>';
                         echo '</thead>';
                         echo '<tbody>';
                             echo '<tr><td></td><td class="text-center">Present</td><td class="text-center">Previous</td><td></td></tr>';
                             echo '<tr>';
-                                echo '<td class="text-uppercase">'.date_format(date_create($row['reading_date']), "F").'</td>';
-                                echo '<td>'.$row['present'].'</td>';
-                                echo '<td>'.$row['previous'].'</td>';
-                                echo '<td>'.number_format((float)$row['used'], 2, '.', '').'</td>';
+                                echo '<td class="text-center">'.date_format(date_create($row['reading_date']), "F").'</td>';
+                                echo '<td class="text-center">'.$row['present'].'</td>';
+                                echo '<td class="text-center">'.$row['previous'].'</td>';
+                                echo '<td class="text-center">'.number_format((float)$row['used'], 2, '.', '').'</td>';
                             echo '</tr>';
                         echo '</tbody>';
                     echo '</table>';
@@ -133,7 +133,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 echo '<div class="col-md-6">';
                     echo '<div class="row">';
                         echo '<div class="col-md-4">First '.(float)$x.' cu.m.</div>';
-                        echo '<div class="col-md-4">P'.number_format($rate_x, 2, '.', '').'</div>';
+                        echo '<div class="col-md-4">P'.number_format($rate_x, 2, '.', '').'/cu.m</div>';
                         echo '<div class="col-md-4 text-right">'.number_format($x_value, 2, '.', '').'</div>';
                     echo '</div>';
                     if($y_value > 0){
@@ -151,9 +151,9 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                         echo '</div>';
                     }
                     if($over_due > 0){
-                        echo '<div class="row mt-3">';
+                        echo '<div class="row mt-1">';
                             echo '<div class="col-md-9">Overdue:</div>';
-                            echo '<div class="col-md-3 text-right">'.number_format('0.00').'</div>';
+                            echo '<div class="col-md-3 text-right">'.number_format($over_due, 2, '.', '').'</div>';
                         echo '</div>';
                     }
                     // if($over_due > 0){
@@ -171,6 +171,8 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             ?>
             <p>Paying this bill after due date will be charge P20.00. Failure to pay (15) days after the due date is subject for disconnection without prior notice.</p>
             <p><strong>Note: Authorized collector of payments will be at MCC every 17th day of the month</strong></p>
+            <p class="text-right"><strong>(SGD)ENGR. GUIDO C. DELA PENA</strong></p>
+            <div class="col-md-11 text-right"><strong>MACWAS</strong></div>
         </div>
     </div>
     

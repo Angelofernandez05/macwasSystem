@@ -7,7 +7,6 @@
             <small class="text-muted">madridejos, cebu</small>
         </p>
     </div>
-
     <ul class="nav-links">
         <li>
             <a href="index.php">

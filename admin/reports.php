@@ -102,7 +102,7 @@ mysqli_close($link);
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h4 class="mb-0"><?php echo $monthly_paid_total !== null ? $monthly_paid_total : '0'; ?></h4>
+                                    <h4 class="mb-0"><?php echo $monthly_paid_total !== null ? $monthly_paid_total : '0'; ?><large class="ml-2">cu. m.</large></h4>
                                     <small class="mb-0">Total Paid Monthly</small>
                                 </div>
                                 <i class='bx bxs-calendar-check bx-md'></i>
@@ -115,7 +115,7 @@ mysqli_close($link);
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h4 class="mb-0"><?php echo $yearly_paid_total !== null ? $yearly_paid_total : '0'; ?></h4>
+                                    <h4 class="mb-0"><?php echo $yearly_paid_total !== null ? $yearly_paid_total : '0'; ?><large class="ml-2">cu. m.</large></h4>
                                     <small class="mb-0">Total Paid Yearly</small>
                                 </div>
                                 <i class='bx bxs-calendar-star bx-md'></i>

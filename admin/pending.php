@@ -69,7 +69,7 @@ mysqli_close($link);
 
         .table thead th {
             background-color: #f8f9fa; /* Light background color for table header */
-            border-bottom: 2px solid #dee2e6; /* Slightly thicker border for header bottom */
+            border-bottom: 4px solid #dee2e6; /* Slightly thicker border for header bottom */
         }
 
         .table tbody tr:nth-child(even) {
