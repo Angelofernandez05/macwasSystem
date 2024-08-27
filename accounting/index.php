@@ -15,6 +15,14 @@ $consumers_sql = "SELECT * FROM consumers;";
 $consumers_result = mysqli_query($link, $consumers_sql);
 $consumers_total = mysqli_num_rows($consumers_result);
 
+$unpaid_sql = "SELECT * FROM readings WHERE status = 0;";
+$unpaid_result = mysqli_query($link, $unpaid_sql);
+$unpaid_total = mysqli_num_rows($unpaid_result);
+
+$paid_sql = "SELECT * FROM readings WHERE status = 1;";
+$paid_result = mysqli_query($link, $paid_sql);
+$paid_total = mysqli_num_rows($paid_result);
+
 // Fetch user-specific data
 $complaints_sql = "SELECT * FROM complaints WHERE consumer_id = $id;";
 $complaints_result = mysqli_query($link, $complaints_sql);
@@ -76,8 +84,7 @@ $user_row = mysqli_fetch_assoc($user_result);
     <?php include 'includes/links.php'; ?>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        /* Your CSS styles */
-        body{
+        body {
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
         }
         .navbar-light-gradient {
@@ -85,7 +92,6 @@ $user_row = mysqli_fetch_assoc($user_result);
             color: white;
             border-bottom: 2px solid black !important;
             height: 60px;
-            /* margin-left: 15px; */
         }
         .bg-paid-gradient {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -98,6 +104,33 @@ $user_row = mysqli_fetch_assoc($user_result);
         .bg-unpaid-gradient {
             background: linear-gradient(135deg, #f09819, #edde5d);
             color: white;
+        }
+        .card-custom {
+            min-height: 80px; /* Further reduced minimum height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px; /* Further reduced padding */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slightly lighter shadow */
+            border-radius: 8px; /* Maintain slight rounding */
+            transition: transform 0.3s ease-in-out;
+        }
+        .card-custom:hover {
+            transform: translateY(-3px); /* Less lift on hover */
+        }
+        .card-body {
+            text-align: center;
+        }
+        .card-body h4 {
+            font-size: 16px; /* Further reduced font size */
+            margin-bottom: 3px;
+        }
+        .card-body small {
+            font-size: 10px; /* Further reduced label size */
+            letter-spacing: 0.5px;
+        }
+        .bx {
+            font-size: 24px; /* Further reduced icon size */
         }
     </style>
 </head>
@@ -115,56 +148,43 @@ $user_row = mysqli_fetch_assoc($user_result);
 
         <br>
 
-            <div class="container-fluid py-3">
+        <div class="container-fluid py-4">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card bg-paid-gradient text-white">
+                    <div class="card bg-paid-gradient text-white card-custom">
                         <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <h4 class="mb-0"><?php echo $paid_count; ?></h4>
-                                    <small class="mb-0">Paid</small>
-                                </div>
-                                <i class='bx bx-user bx-md'></i>
-                            </div>
+                            <h4 class="mb-0"><?php echo $paid_total; ?></h4>
+                            <small class="mb-0">Paid Bills</small>
+                            <i class='bx bxs-check-circle bx-md'></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-3">
-                    <div class="card bg-unpaid-gradient text-white">
+                    <div class="card bg-unpaid-gradient text-white card-custom">
                         <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <h4 class="mb-0"><?php echo $unpaid_count; ?></h4>
-                                    <small class="mb-0">Unpaid</small>
-                                </div>
-                                <i class='bx bx-message-rounded-dots bx-md'></i>
-                            </div>
+                            <h4 class="mb-0"><?php echo $unpaid_total; ?></h4>
+                            <small class="mb-0">Unpaid Bills</small>
+                            <i class='bx bxs-credit-card bx-md'></i>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-3">
-                    <div class="card bg-consumer-gradient text-white">
+                    <div class="card bg-consumer-gradient text-white card-custom">
                         <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <h4 class="mb-0"><?php echo $consumers_total; ?></h4>
-                                    <small class="mb-0">Consumers</small>
-                                </div>
-                                <i class='bx bxs-credit-card bx-md'></i>
-                            </div>
+                            <h4 class="mb-0"><?php echo $consumers_total; ?></h4>
+                            <small class="mb-0">Consumers</small>
+                            <i class='bx bx-user bx-md'></i>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            
+        </div>
     </section>
 
     <?php include 'includes/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   
 </body>
 </html>

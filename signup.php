@@ -125,11 +125,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
          body {
-            background-image: url("waters.jpg");
+            background-image: url("tank.jpg");
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
-            background-size: 200vh;
+            background-size: cover;
         }   
         .form-group {
             margin-bottom: 15px;
@@ -151,8 +151,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .card {
             border-radius: 25px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(173, 216, 230, 0.0); /* Light blue with some transparency */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: rgba(173, 216, 230, 0.2); /* Light blue with some transparency */
             padding: 20px; /* Add padding for content inside the card */
             backdrop-filter: blur(5px); /* Optional: Adds a blur effect to the background of the card */
         }
@@ -163,6 +163,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .container {
             max-width: 900px;
+            margin-left: 30px; /* Adjust this value to move the form further left */
+             margin-top: 70px;
         }
 
         .form-control {
@@ -245,6 +247,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <select class="form-control" id="type" name="type" required>
                                 <option value="commercial">Commercial</option>
                                 <option value="residential">Residential</option>
+                                <option value="residential">Institution</option>
                             </select>
                         </div>
                         <div class="form-group position-relative">

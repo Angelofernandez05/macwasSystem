@@ -10,6 +10,9 @@ require_once "config.php";
 $pending_sql = "SELECT id, name, email, phone, barangay, account_num, registration_num, meter_num, type FROM pending_users";
 $pending_result = mysqli_query($link, $pending_sql);
 
+// Count pending users
+$pending_count = mysqli_num_rows($pending_result);
+
 // Close connection
 mysqli_close($link);
 ?>
@@ -23,11 +26,9 @@ mysqli_close($link);
     <link rel="icon" href="logo.png" type="image/icon type">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
-
-     body{
+        body {
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
         }
-
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
@@ -39,51 +40,57 @@ mysqli_close($link);
         .table-container {
             margin: 20px auto;
             max-width: 1200px;
-          
         }
-        
         .action-buttons {
-           display: flex;
-           gap: 5px;
-            }
-
-        .action-buttons button {
-           margin: 0; /* Remove any default margin */
-           flex: none; /* Prevent buttons from stretching */
-            }
-
-            .table-container {
-            margin: 20px auto;
-            max-width: 1200px;
+            display: flex;
+            gap: 5px;
         }
-
+        .action-buttons button {
+            margin: 0; /* Remove any default margin */
+            flex: none; /* Prevent buttons from stretching */
+        }
+        .table-container {
+            margin: 20px auto;
+            max-width: 1500px;
+        }
         .table {
             width: 100%;
             border-collapse: collapse; /* Ensures borders between cells are merged */
         }
-
         .table th, .table td {
             border: 1px solid #dee2e6; /* Light gray border color for table cells */
             padding: 8px; /* Add padding to table cells */
         }
-
         .table thead th {
             background-color: #f8f9fa; /* Light background color for table header */
             border-bottom: 4px solid #dee2e6; /* Slightly thicker border for header bottom */
         }
-
         .table tbody tr:nth-child(even) {
             background-color: #f2f2f2; /* Light gray background for even rows */
         }
-
         .table tbody tr:hover {
             background-color: #e9ecef; /* Slightly darker background on hover */
         }
-
         .table-container h2 {
             margin-bottom: 20px;
         }
-
+        /* Notification badge styles */
+        .notification-icon {
+            position: relative;
+            display: inline-block;
+            font-size: 1.5rem; /* Adjust the size of the icon */
+        }
+        .notification-icon .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 3px 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -93,7 +100,12 @@ mysqli_close($link);
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
-                Pending Consumers
+                <span class="notification-icon">
+                    Pending Consumers
+                    <?php if ($pending_count > 0): ?>
+                        <span class="badge"><?php echo $pending_count; ?></span>
+                    <?php endif; ?>
+                </span>
             </span>
             <?php include 'includes/userMenu.php'; ?>
         </nav>
@@ -116,7 +128,7 @@ mysqli_close($link);
                         </tr>
                     </thead>
                     <tbody id="pendingUsersTable">
-                        <?php if (mysqli_num_rows($pending_result) > 0): ?>
+                        <?php if ($pending_count > 0): ?>
                             <?php while ($row = mysqli_fetch_assoc($pending_result)): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($row['name']); ?></td>

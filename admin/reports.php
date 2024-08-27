@@ -79,6 +79,14 @@ mysqli_close($link);
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
         }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
 
     </style>
     

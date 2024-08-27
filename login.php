@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
-            background-size: 200vh;
+            background-size: cover;
         }
         .input-group {
             position: relative;
@@ -180,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
         .container {
             max-width: 550px;
-            margin-left: 50px; /* Adjust this value to move the form further left */
+            margin-left: 30px; /* Adjust this value to move the form further left */
         }
 
         .form-control {
@@ -216,7 +216,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     <!-- Login Form -->
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <p class="text-center mb-4">
-                            <img src="logo.png" alt="Admin-Icon" style="width: 300px; height: 200px;">
+                            <img src="logo.png" alt="Admin-Icon" style="width: 200px; height: 100px;">
                         </p>   
                     <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
                                 <img src="users.png" alt="Accountant Icon" style="width: 60px; height: 60px;">
@@ -248,6 +248,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         </div>
                     </form>
                     <p align="center"><strong>Don't have an account? Sign up</strong><a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
+                    <p align="center"><strong>Forgot your password?</strong> <a href="forgot_password.php" class="text-primary" style="font-weight:600;text-decoration:none;">Click here</a></p>
+
                 </div>
             </div>
         </div>

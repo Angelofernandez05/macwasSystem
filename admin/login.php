@@ -114,7 +114,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
-            background-size: 200vh;
+            background-size: cover;
         }
 
         .alert {
@@ -154,7 +154,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
         .container {
             max-width: 550px;
-            margin-left: 50px; /* Adjust this value to move the form further left */
+            margin-left: 30px; /* Adjust this value to move the form further left */
         }
         .form-control {
             border-radius: 20px;
@@ -190,7 +190,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <!-- Logo -->
                         <p class="text-center mb-4">
-                            <img src="logo.png" alt="Admin-Icon" style="width: 300px; height: 200px;">
+                            <img src="logo.png" alt="Admin-Icon" style="width: 250px; height: 200px;">
                         </p>
                         <p class="text-center mb-4">
                             <img src="software-engineer.png" alt="Admin-Icon" style="width: 60px; height: 60px;">

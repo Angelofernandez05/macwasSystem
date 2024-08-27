@@ -11,33 +11,47 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 require_once "config.php";
 $id = intval($_SESSION["id"]); // Ensure $id is an integer
 
-// Fetch user-specific data
-$complaints_sql = "SELECT * FROM complaints WHERE consumer_id = $id;";
+$consumers_sql = "SELECT * FROM consumers;";
+$consumers_result = mysqli_query($link, $consumers_sql);
+$consumers_total = mysqli_num_rows($consumers_result);
+
+$complaints_sql = "SELECT * FROM complaints;";
 $complaints_result = mysqli_query($link, $complaints_sql);
 
 if (!$complaints_result) {
-    die("Error executing query: " . mysqli_error($link));
+    die("Error executing complaints query: " . mysqli_error($link));
 }
 
 $complaints_total = mysqli_num_rows($complaints_result);
 
-// Fetch billing information
-$billing_sql = "SELECT SUM(present - previous) AS total_due FROM readings WHERE consumer_id = $id AND status = 0;";
-$billing_result = mysqli_query($link, $billing_sql);
+// Fetch count of unpaid readings
+$unpaid_count_sql = "SELECT COUNT(*) AS unpaid_count FROM readings WHERE consumer_id = $id AND status = 0;";
+$unpaid_count_result = mysqli_query($link, $unpaid_count_sql);
 
-if (!$billing_result) {
-    die("Error executing query: " . mysqli_error($link));
+if (!$unpaid_count_result) {
+    die("Error executing unpaid readings query: " . mysqli_error($link));
 }
 
-$billing_row = mysqli_fetch_assoc($billing_result);
-$total_due = $billing_row['total_due'] ? number_format((float)$billing_row['total_due'], 2, '.', '') : '0.00';
+$unpaid_count_row = mysqli_fetch_assoc($unpaid_count_result);
+$unpaid_count = $unpaid_count_row['unpaid_count'] ? intval($unpaid_count_row['unpaid_count']) : 0;
+
+// Fetch count of paid readings
+$paid_count_sql = "SELECT COUNT(*) AS paid_count FROM readings WHERE consumer_id = $id AND status = 1;";
+$paid_count_result = mysqli_query($link, $paid_count_sql);
+
+if (!$paid_count_result) {
+    die("Error executing paid readings query: " . mysqli_error($link));
+}
+
+$paid_count_row = mysqli_fetch_assoc($paid_count_result);
+$paid_count = $paid_count_row['paid_count'] ? intval($paid_count_row['paid_count']) : 0;
 
 // Fetch user info
 $user_sql = "SELECT name, email, registration_date FROM consumers WHERE id = $id;"; // Adjust column names as needed
 $user_result = mysqli_query($link, $user_sql);
 
 if (!$user_result) {
-    die("Error executing query: " . mysqli_error($link));
+    die("Error executing user query: " . mysqli_error($link));
 }
 
 $user_row = mysqli_fetch_assoc($user_result);
@@ -51,8 +65,7 @@ $user_row = mysqli_fetch_assoc($user_result);
     <?php include 'includes/links.php'; ?>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        /* Your CSS styles */
-        body{
+        body {
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
         }
         .navbar-light-gradient {
@@ -61,9 +74,44 @@ $user_row = mysqli_fetch_assoc($user_result);
             border-bottom: 2px solid black !important;
             height: 60px;
         }
-        .bg-success-gradient {
+        .bg-paid-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .bg-consumer-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);  /* Pink gradient */
+            color: white;
+        }
+        .bg-unpaid-gradient {
             background: linear-gradient(135deg, #43cea2, #185a9d);
             color: white;
+        }
+        .card-custom {
+            min-height: 80px; /* Further reduced minimum height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px; /* Further reduced padding */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slightly lighter shadow */
+            border-radius: 8px; /* Maintain slight rounding */
+            transition: transform 0.3s ease-in-out;
+        }
+        .card-custom:hover {
+            transform: translateY(-3px); /* Less lift on hover */
+        }
+        .card-body {
+            text-align: center;
+        }
+        .card-body h4 {
+            font-size: 16px; /* Further reduced font size */
+            margin-bottom: 3px;
+        }
+        .card-body small {
+            font-size: 10px; /* Further reduced label size */
+            letter-spacing: 0.5px;
+        }
+        .bx {
+            font-size: 24px; /* Further reduced icon size */
         }
     </style>
 </head>
@@ -80,26 +128,34 @@ $user_row = mysqli_fetch_assoc($user_result);
         </nav>
 
         <br>
-            <div class="container-fluid py-3">
+
+        <div class="container-fluid py-4">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card bg-success-gradient text-white">
+                    <div class="card bg-consumer-gradient text-white card-custom">
                         <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div>
-                                    <h4 class="mb-0"><?php echo $complaints_total; ?></h4>
-                                    <small class="mb-0">Complaints</small>
-                                </div>
-                                <i class='bx bx-user bx-md'></i>
-                            </div>
+                            <h4 class="mb-0"><?php echo $consumers_total; ?></h4>
+                            <small class="mb-0">Consumers</small>
+                            <i class='bx bx-user bx-md'></i>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-3">
+                    <div class="card bg-unpaid-gradient text-white card-custom">
+                        <div class="card-body">
+                            <h4 class="mb-0"><?php echo $complaints_total; ?></h4> <!-- Corrected line -->
+                            <small class="mb-0">Complaints</small>
+                            <i class='bx bxs-credit-card bx-md'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <?php include 'includes/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   
 </body>
 </html>

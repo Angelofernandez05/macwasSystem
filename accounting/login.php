@@ -199,14 +199,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </p>
                         <!-- Email input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i><strong> Username</strong></label>
+                            <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i>  <strong>Username</strong></label>
                             <input type="text" id="form1Example13" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
                             <span class="invalid-feedback"><?php echo $username_err; ?></span>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i><strong>Password</strong></label>
+                            <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i> <strong>Password</strong></label>
                             <input type="password" id="password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" style="border-radius:25px ;">
                             <i class="fa fa-eye-slash" id="togglePassword"></i>
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
@@ -219,7 +219,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <br>
                         
                     </form>
-                    <p align="center"><strong>Don't have an account? Sign up</storng><a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
+                    <p align="center"><strong>Don't have an account? Sign up</strong><a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
                     
                 </div>
             </div>

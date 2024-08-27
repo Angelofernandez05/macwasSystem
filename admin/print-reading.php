@@ -94,10 +94,18 @@ function getMinimumRates($link, $type){
                 $rate_y = 0;
                 $rate_z = 0;
             }
-            $rate_x = $row['type'] === 'Commercial' ? 180 : 160;
-            $rate_y = $row['type'] === 'Commercial' ? 20 : 16;
-            $rate_z = $row['type'] === 'Commercial' ? 18 : 16;
-            
+
+            // Set the rates based on the consumer type
+            if ($row['type'] === 'Commercial') {
+                $rate_x = 200; // Rate for first 10 cubic meters
+                $rate_y = 20;  // Rate for next 10 cubic meters
+                $rate_z = 18;  // Rate for cubic meters above 20
+            } else { // Residential
+                $rate_x = 160; // Rate for first 10 cubic meters
+                $rate_y = 16;  // Rate for next 10 cubic meters
+                $rate_z = 16;  // Rate for cubic meters above 20
+            }
+
             $x = 10;
             $y = 0;
             $z = 0;
@@ -109,16 +117,19 @@ function getMinimumRates($link, $type){
             $date_now = date("Y-m-d");
             $over_due = $row['reading_status'] == 0.00 && $row['due_date'] < $date_now ? 20 : 0;
 
-            if((float)$row['used'] >= 20){
+            if ((float)$row['used'] >= 20) {
                 $y = 10;
                 $z = (float)$row['used'] - 20;
-            }else if((float)$row['used'] >= 10){
+            } else if ((float)$row['used'] >= 10) {
                 $z = (float)$row['used'] - 10;
             }
-            
+
             $y_value = (float)$rate_y * $y;
             $z_value = (float)$rate_z * $z;
-            $total = $x_value + $y_value + $z_value;
+
+            // Calculate total charges including overdue charge
+            $total = $x_value + $y_value + $z_value + $over_due;
+
             
             echo '<div class="row">';
                 echo '<div class="col-md-6">';
