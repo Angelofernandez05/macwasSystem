@@ -134,7 +134,7 @@ mysqli_close($link);
             position: relative;
             white-space: nowrap;
             box-sizing: border-box;
-            height: 50px; /* Adjust the height */
+            height: 40px; /* Adjust the height */
             display: flex;
             align-items: center;    
         }   
@@ -143,7 +143,7 @@ mysqli_close($link);
             display: inline-block;
             padding-left: 100%;
             animation: marquee 15s linear infinite;
-            font-size: 50px; /* Adjust the text size */
+            font-size: 30px; /* Adjust the text size */
             color: darkblue;
             font-weight: bold;
         }

@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($email_err)) {
         // Prepare a select statement
         $sql = "SELECT id FROM consumers WHERE email = ?";
-        
+
         // Initialize statement
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
@@ -42,10 +42,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $sql = "INSERT INTO password_resets (email, token, expiry) VALUES (?, ?, ?)";
 
                     // Initialize statement
-                    if ($stmt = mysqli_prepare($link, $sql)) {
-                        mysqli_stmt_bind_param($stmt, "sss", $param_email, $token, $expiry);
+                    if ($stmt2 = mysqli_prepare($link, $sql)) {
+                        mysqli_stmt_bind_param($stmt2, "sss", $param_email, $token, $expiry);
 
-                        if (mysqli_stmt_execute($stmt)) {
+                        if (mysqli_stmt_execute($stmt2)) {
                             // Send reset email
                             $reset_link = "http://yourdomain.com/reset_password.php?token=" . $token;
 
@@ -61,15 +61,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         } else {
                             $msg = "Error executing statement: " . mysqli_error($link);
                         }
-                        // Close the statement
-                        mysqli_stmt_close($stmt);
+                        // Close the second statement
+                        mysqli_stmt_close($stmt2);
                     } else {
                         $msg = "Error preparing statement: " . mysqli_error($link);
                     }
                 } else {
                     $email_err = "No account found with that email address.";
                 }
-                // Close the statement
+                // Close the first statement
                 mysqli_stmt_close($stmt);
             } else {
                 $msg = "Error executing statement: " . mysqli_stmt_error($stmt);
@@ -100,20 +100,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
-            background-size: cover; /* Adjusted to cover the entire viewport */
+            background-size: cover;
         }
 
         .card {
             border-radius: 25px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(173, 216, 230, 0.2); /* Light blue with some transparency */
-            padding: 20px; /* Add padding for content inside the card */
-            backdrop-filter: blur(3px); /* Optional: Adds a blur effect to the background of the card */
+            background-color: rgba(173, 216, 230, 0.2);
+            padding: 20px;
+            backdrop-filter: blur(3px);
         }
 
         .container {
             max-width: 490px;
-            margin-top: 70px; /* Center vertically with some margin from the top */
+            margin-top: 70px;
             margin-left: 50px;
         }
 
@@ -133,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="card">
                 <div class="card-body text-center">
                     <?php 
-                    if(!empty($msg)){
+                    if (!empty($msg)) {
                         echo '<script>
                         Swal.fire({
                             title: "Info",
@@ -151,10 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <p class="text-center mb-4">
                             <img src="logo.png" alt="Logo" style="width: 200px; height: 100px;">
-                        </p>   
-                        <!-- <p class="text-center h2 fw-bold mb-4 mx-1 mx-md-3 mt-3">
-                            <img src="forgot-password.png" alt="Forgot Password Icon" style="width: 60px; height: 60px;">
-                        </p> -->
+                        </p>
                         <!-- Email input -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="email"><i class="bi bi-envelope"></i><strong> Email</strong></label>
