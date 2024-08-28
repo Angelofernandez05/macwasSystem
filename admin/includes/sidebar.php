@@ -27,7 +27,7 @@
                       style="transform: translate(130%, -50%); font-size: 0.60rem;">
                     <!-- Pending badge count will be updated by JavaScript -->
                 </span>
-                <span class="link_name">Pending Consumers</span>
+                <span class="link_name">Pending Consumer</span>
             </a>
         </li>
         <li>
