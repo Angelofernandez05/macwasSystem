@@ -1,7 +1,15 @@
 Admin Panel
-User: admin
-Password: admin
+User: Macwasbilling
+Password: samuelellum30
 
 Consumer Panel
-Meter Number: 12345616
-Password: 111111
+Email: samuel@gmail.com
+Password: samuelsamuel
+
+accounting Panel
+Username: accounting24
+pass: samuelsamuel
+
+plumber Panel
+Username: Plumber12
+pass: samuelsamuel

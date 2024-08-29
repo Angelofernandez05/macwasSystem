@@ -100,8 +100,9 @@ mysqli_close($link);
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: linear-gradient(135deg, #f09819, #edde5d);
-            border-bottom: 2px solid black !important;
+            border-bottom: 1px solid black !important;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            margin-left: 10px;
         }
         .navbar-header {
             display: flex;
@@ -112,12 +113,12 @@ mysqli_close($link);
             position: relative;
         }
         .clock {
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-family: 'Verdana', sans-serif;
             font-weight: 550;
-            color: darkblue;
+            color: black;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-            margin-left: 1310px;
+            margin-left: 15px;
         }
         .bxs-printer, .bx-mail-send {
             color: black;
@@ -142,10 +143,10 @@ mysqli_close($link);
         .marquee-content {
             display: inline-block;
             padding-left: 100%;
-            animation: marquee 15s linear infinite;
+            animation: marquee 8s linear infinite;
             font-size: 30px; /* Adjust the text size */
             color: darkblue;
-            font-weight: bold;
+        
         }
 
         @keyframes marquee {
@@ -379,18 +380,36 @@ mysqli_close($link);
             });
         });
 
-        // JavaScript for Clock
-        function updateClock() {
-            var now = new Date();
-            var hours = now.getHours().toString().padStart(2, '0');
-            var minutes = now.getMinutes().toString().padStart(2, '0');
-            var seconds = now.getSeconds().toString().padStart(2, '0');
-            var timeString = hours + ':' + minutes + ':' + seconds;
-            document.getElementById('clock').textContent = timeString;
-        }
+       // JavaScript for Clock
+function updateClock() {
+    var now = new Date();
+    
+    // Time
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    var timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+    
+    // Date
+    var day = now.getDate();
+    var month = now.getMonth() + 1; // January is 0!
+    var year = now.getFullYear();
+    var dateString = day + '/' + month + '/' + year;
 
-        setInterval(updateClock, 1000);
-        updateClock();  // Initialize the clock immediately
+    // Set both date and time
+    document.getElementById('clock').textContent = timeString + ' | ' + dateString;
+}
+
+setInterval(updateClock, 1000);
+updateClock();  // Initialize the clock immediately
+
+
+
     </script>
 </body>
 </html>

@@ -13,19 +13,19 @@ require_once "config.php";
     <meta charset="UTF-8">
     <title>Complaints</title>
     <?php include 'includes/links.php'; ?>
+</head>
+<body>
     <style>
-    body{
+          body{
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
         }
+
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-            height: 60px;
         }
     </style>
-</head>
-<body>
     <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
