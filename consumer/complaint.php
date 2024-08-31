@@ -8,6 +8,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: login.php");
     exit;
 }
+
 require_once "config.php";
 
 // Fetch the user ID from the session
@@ -52,8 +53,6 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
     mysqli_stmt_close($stmt);
 }
 
-// Close connection
-// mysqli_close($link);
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +72,7 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
             border-bottom: 2px solid black !important;
             height: 60px;
         }
-   </style> 
+    </style> 
 </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
@@ -106,36 +105,60 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active py-3" id="new" role="tabpanel" aria-labelledby="new-tab">
                             <?php
-                                if ($new_com_total > 0) {
-                                    echo '<div class="row">';
-                                    while ($row = mysqli_fetch_array($new_com_result, MYSQLI_ASSOC)) {
-                                        include '../includes/complaint-list.php';
+                            if ($new_com_total > 0) {
+                                echo '<div class="row">';
+                                while ($row = mysqli_fetch_array($new_com_result, MYSQLI_ASSOC)) {
+                                    // Check if complaint-list.php exists before including it
+                                    if (file_exists('includes/complaint-list.php')) {
+                                        include 'includes/complaint-list.php';
+                                    } else {
+                                        echo '<p>Error: complaint-list.php not found.</p>';
                                     }
-                                    echo '</div>';
                                 }
+                                echo '</div>';
+                            }
                             ?>
                         </div>
                         <div class="tab-pane fade py-3" id="resolved" role="tabpanel" aria-labelledby="resolved-tab">
                             <?php
-                                if ($resolved_com_total > 0) {
-                                    echo '<div class="row">';
-                                    while ($row = mysqli_fetch_array($resolved_com_result, MYSQLI_ASSOC)) {
+                            if ($resolved_com_total > 0) {
+                                echo '<div class="row">';
+                                while ($row = mysqli_fetch_array($resolved_com_result, MYSQLI_ASSOC)) {
+                                    // Check if complaint-list.php exists before including it
+                                    if (file_exists('includes/complaint-list.php')) {
                                         include 'includes/complaint-list.php';
+                                    } else {
+                                        echo '<p>Error: complaint-list.php not found.</p>';
                                     }
-                                    echo '</div>';
                                 }
+                                echo '</div>';
+                            }
                             ?>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <?php include 'forms/complaint-form.php'; ?>
+                    <?php 
+                    // Check if complaint-form.php exists before including it
+                    if (file_exists('forms/complaint-form.php')) {
+                        include 'forms/complaint-form.php'; 
+                    } else {
+                        echo '<p>Error: complaint-form.php not found.</p>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>
     </section>
 
-    <?php include 'includes/scripts.php'; ?>
+    <?php 
+    // Check if scripts.php exists before including it
+    if (file_exists('includes/scripts.php')) {
+        include 'includes/scripts.php'; 
+    } else {
+        echo '<p>Error: scripts.php not found.</p>';
+    }
+    ?>
 </body>
 </html>
 
