@@ -62,7 +62,7 @@ $user_row = mysqli_fetch_assoc($user_result);
 <head>
     <meta charset="UTF-8">
     <title>User Dashboard</title>
-    <?php include '../includes/links.php'; ?>
+    <?php include 'includes/links.php'; ?>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>
         body {
@@ -108,7 +108,7 @@ $user_row = mysqli_fetch_assoc($user_result);
     </style>
 </head>
 <body>
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
@@ -116,7 +116,7 @@ $user_row = mysqli_fetch_assoc($user_result);
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Dashboard
             </span>
-            <?php include '../includes/userMenu.php'; ?>
+            <?php include 'includes/userMenu.php'; ?>
         </nav>
 
         <br>
@@ -151,7 +151,7 @@ $user_row = mysqli_fetch_assoc($user_result);
                 </div>
     </section>
 
-    <?php include '../ncludes/scripts.php'; ?>
+    <?php include 'includes/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </body>
