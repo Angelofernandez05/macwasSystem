@@ -68,6 +68,7 @@
                 background: linear-gradient(135deg, #36d1dc, #5b86e5);
                 color: white;
                 border-bottom: 2px solid black !important;
+                margin-left: 10px;
             }
 
             .bg-warning-gradient {

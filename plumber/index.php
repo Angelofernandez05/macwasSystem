@@ -72,17 +72,13 @@ $user_row = mysqli_fetch_assoc($user_result);
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-            height: 60px;
-        }
-        .bg-paid-gradient {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            height: 70px;
         }
         .bg-consumer-gradient {
             background: linear-gradient(135deg, #667eea, #764ba2);  /* Pink gradient */
             color: white;
         }
-        .bg-unpaid-gradient {
+        .bg-complaints-gradient {
             background: linear-gradient(135deg, #43cea2, #185a9d);
             color: white;
         }
@@ -102,12 +98,8 @@ $user_row = mysqli_fetch_assoc($user_result);
         .card-body {
             text-align: center;
         }
-        .card-body h4 {
-            font-size: 16px; /* Further reduced font size */
-            margin-bottom: 3px;
-        }
         .card-body small {
-            font-size: 10px; /* Further reduced label size */
+            font-size: 15px; /* Further reduced label size */
             letter-spacing: 0.5px;
         }
         .bx {
@@ -128,30 +120,35 @@ $user_row = mysqli_fetch_assoc($user_result);
         </nav>
 
         <br>
-
-        <div class="container-fluid py-4">
+        <div class="container-fluid py-5">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="card bg-consumer-gradient text-white card-custom">
+                <div class="col-md-4">
+                    <div class="card bg-consumer-gradient text-white">
                         <div class="card-body">
-                            <h4 class="mb-0"><?php echo $consumers_total; ?></h4>
-                            <small class="mb-0">Consumers</small>
-                            <i class='bx bx-user bx-md'></i>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h4 class="mb-0"><?php echo $consumers_total; ?></h4>
+                                    <small class="mb-0">Consumers</small>
+                                </div>
+                                <i class='bx bx-user bx-md'></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-3">
-                    <div class="card bg-unpaid-gradient text-white card-custom">
+                <div class="col-md-4">
+                    <div class="card bg-complaints-gradient text-white">
                         <div class="card-body">
-                            <h4 class="mb-0"><?php echo $complaints_total; ?></h4> <!-- Corrected line -->
-                            <small class="mb-0">Complaints</small>
-                            <i class='bx bxs-credit-card bx-md'></i>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h4 class="mb-0"><?php echo $complaints_total; ?></h4>
+                                    <small class="mb-0">Complaints</small>
+                                </div>
+                                <i class='bx bx-message-rounded-dots bx-md'></i>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
     </section>
 
     <?php include 'includes/scripts.php'; ?>
