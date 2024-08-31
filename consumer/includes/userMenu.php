@@ -7,6 +7,7 @@
         color: white;
     }
 </style>
+
 <div class="dropdown">
     <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <h6 class="mb-0">Hi, <?php echo htmlspecialchars($user_row['name']); ?></h6>
@@ -17,6 +18,7 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> <!-- Ensure to include SweetAlert if not already included -->
 <script>
     function confirmLogout() {
         Swal.fire({
