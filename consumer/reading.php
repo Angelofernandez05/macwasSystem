@@ -30,7 +30,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
 <head>
     <meta charset="UTF-8">
     <title>Bill</title>
-    <?php include '../includes/links.php'; ?>
+    <?php include 'includes/links.php'; ?>
 
     <style>
         body{
@@ -49,7 +49,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
    </style>
 </head>
 <body>
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
@@ -143,7 +143,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
         </div>
     </section>
 
-    <?php include '../includes/scripts.php'; ?>
+    <?php include 'includes/scripts.php'; ?>
 </body>
 </html>
 <?php

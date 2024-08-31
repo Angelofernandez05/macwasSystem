@@ -109,7 +109,7 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
                                 if ($new_com_total > 0) {
                                     echo '<div class="row">';
                                     while ($row = mysqli_fetch_array($new_com_result, MYSQLI_ASSOC)) {
-                                        include '../includes/complaint-list.php';
+                                        include 'includes/complaint-list.php';
                                     }
                                     echo '</div>';
                                 }
