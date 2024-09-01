@@ -162,9 +162,9 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                                         echo "<td>" . $status . "</td>";
                                         echo "<td class='d-flex align-items-center' style='gap: 0.3rem'>";
                                             ?>
-                                                <div class="dropdown">
+                                                <!-- <div class="dropdown">
                                                     <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class='bx bx-mail-send'></i>
+                                                        <i class='bx bx-mail-send'></i> -->
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                         <?php

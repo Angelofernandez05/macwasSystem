@@ -9,7 +9,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
-?>
+?>  
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             right: 10px;
             z-index: 9999;
         }
-        body{
+        body {
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
         }
         .navbar-light-gradient {
@@ -44,28 +44,40 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             background-color: #f8f9fa; /* Light background color for table header */
             border-bottom: 2px solid #dee2e6; /* Slightly thicker border for header bottom */
         }
+        .icon-size {
+            font-size: 1rem; /* Adjust the size to be smaller */
+        }
+        .icon-margin {
+            margin-right: 0.7rem; /* Adjust margin to ensure consistent spacing */
+        }
+        .btn-sm .bx-mail-send {
+            font-size: .8rem; /* Adjust the size of the mail-send icon */
+        }
+        .dropdown-toggle::after {
+            display: none; /* Remove the default dropdown arrow */
+        }
     </style>
 </head>
 <body>
     <!-- Confirmation modal -->
     <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to perform this action?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" name="confirm" class="btn btn-primary">Confirm</button>
-          </div>
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to perform this action?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" name="confirm" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <?php include 'includes/sidebar.php'; ?>
@@ -80,8 +92,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         </nav>
 
         <div class="container-fluid py-5">
-            <!-- <a href="new-consumer.php" class="btn btn-primary btn-sm mb-3"><i class='bx bx-plus'></i> New</a> -->
-            
             <?php
             // Include config file
             require_once "config.php";
@@ -130,37 +140,45 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                             }else{
                                 echo '<td><a class="text-success" href="reading.php?consumer_id='. $consumer_id .'&id='.$rid.'">'. $row['name'] .'</a></td>';
                             }
-                            
-                                echo "<td>" . $email . "</td>";
-                                echo "<td>" . $phone . "</td>";
-                                echo "<td>" . $row['barangay'] . "</td>";
-                                echo "<td>" . $row['account_num'] . "</td>";
-                                echo "<td>" . $row['registration_num'] . "</td>";
-                                echo "<td>" . $row['meter_num'] . "</td>";
-                                echo "<td>" . $row['type'] . "</td>";
-                                echo "<td>";
-                                  //  echo '<a href="update-consumer.php?id='. $consumer_id.'" class="mr-2" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil btn btn-success btn-sm mb-3"></i></a>';
-                                    //echo '<a href="delete-consumer.php" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-id="'.$consumer_id.'"><i class="bx bxs-trash-alt btn btn-danger btn-sm mb-3"></i></a>';
-                                    
-                                    // Added action for reading
-                                    echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-2" title="Reading  " data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-3 ml-2"></i></a>';
-                                echo "</td>";
+
+                            echo "<td>" . $email . "</td>";
+                            echo "<td>" . $phone . "</td>";
+                            echo "<td>" . $row['barangay'] . "</td>";
+                            echo "<td>" . $row['account_num'] . "</td>";
+                            echo "<td>" . $row['registration_num'] . "</td>";
+                            echo "<td>" . $row['meter_num'] . "</td>";
+                            echo "<td>" . $row['type'] . "</td>";
+                            echo "<td>";
+                                // Added action for reading
+                                echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-2" title="Reading" data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-1 ml-2"></i></a>';
+                                
+                                // Added bx-mail-send dropdown
+                                echo '<div class="dropdown d-inline-block">';
+                                echo '<button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton' . $consumer_id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                                echo '<i class="bx bx-mail-send"></i>';
+                                echo '</button>';
+                                echo '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' . $consumer_id . '">';
+                                echo '<a target="_blank" href="send-billing-statement.php?id='. $row['id'] .'" class="dropdown-item" title="Job Order" data-toggle="tooltip">Job Order</a>';
+                                echo '<a target="_blank" href="send-billing-statement.php?id='. $row['id'] .'" class="dropdown-item" title="Notice of Disconnection" data-toggle="tooltip">Notice of Disconnection</a>';
+                                echo '</div>';
+                                echo '</div>'; // Close dropdown
+                            echo "</td>";
                             echo "</tr>";
                         }
-                        echo "</tbody>";                            
+                        echo "</tbody>";                                                                    
                     echo "</table>";
                     echo '</div>';
                     mysqli_free_result($result);
                 } else{
                     echo '<script>
                             Swal.fire({
-                            title: "Info!",
-                            text: "No records were found.",
-                            icon: "info",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
+                                title: "Info!",
+                                text: "No records were found.",
+                                icon: "info",
+                                toast: true,
+                                position: "top-right",
+                                showConfirmButton: false,
+                                timer: 3000
                             })
                           </script>';
                 }
@@ -195,10 +213,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             alert.style.display = 'none';
         }
     }, 3000);
-
-   
-
-   
     </script>
 </body>
 </html>

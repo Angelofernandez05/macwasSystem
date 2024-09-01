@@ -1,54 +1,53 @@
 <?php
-session_start();
-
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
-    exit;
-}
-
+// Database connection
 require_once "config.php";
 
-$row = null; // Initialize $row to ensure it's defined
-
-if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
+// Check if an ID is provided in the URL
+if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
     $id = trim($_GET["id"]);
     
-    $sql = "SELECT *, (present - previous) as used, readings.status as reading_status FROM readings LEFT JOIN consumers ON consumers.id = readings.consumer_id WHERE readings.id = ?";
-    if($stmt = mysqli_prepare($link, $sql)){
-        
+    // Adjusted SQL query to match your table structure
+    $sql = "SELECT consumers.name, consumers.barangay, consumers.account_num, readings.reading_date, readings.current_reading 
+            FROM consumers 
+            LEFT JOIN readings ON consumers.id = readings.consumer_id 
+            WHERE consumers.id = ?";
+    
+    if ($stmt = mysqli_prepare($link, $sql)) {
         mysqli_stmt_bind_param($stmt, "i", $param_id);
         $param_id = $id;
-        
-        if(mysqli_stmt_execute($stmt)){
+
+        if (mysqli_stmt_execute($stmt)) {
             $result = mysqli_stmt_get_result($stmt);
 
-            if(mysqli_num_rows($result) == 1){
+            if (mysqli_num_rows($result) == 1) {
                 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-            } else{
-                // Handle case where no rows are found
-                header("location: reading.php?consumer_id=$consumer_id");
-                exit();
+                // Debug output for fetched data
+                echo "Consumer Name: " . $row['name'] . "<br>";
+                echo "Barangay: " . $row['barangay'] . "<br>";
+                echo "Account No.: " . $row['account_num'] . "<br>";
+                echo "Reading Date: " . $row['reading_date'] . "<br>";
+                echo "Current Reading: " . $row['current_reading'] . "<br>";
+            } else {
+                echo "No records matching your query were found.";
             }
-        } else{
-            echo '<script>
-            Swal.fire({
-                title: "Error!",
-                text: "Oops! Something went wrong. Please try again later",
-                icon: "error",
-                toast: true,
-                position: "top-right",
-                showConfirmButton: false,
-                timer: 3000
-            });
-            </script>';
+        } else {
+            echo "ERROR: Could not execute query: $sql. " . mysqli_error($link);
         }
         mysqli_stmt_close($stmt);
+    } else {
+        echo "ERROR: Could not prepare query: $sql. " . mysqli_error($link);
     }
-}  else{
+} else {
+    echo "ID parameter is missing or empty."; // Debugging output
     header("location: consumer.php");
     exit();
 }
+
+mysqli_close($link);
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
