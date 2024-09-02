@@ -8,7 +8,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: login.php");
     exit;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 99d1b02 (commit)
 require_once "config.php";
 
 // Fetch the user ID from the session
@@ -53,6 +56,11 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
     mysqli_stmt_close($stmt);
 }
 
+<<<<<<< HEAD
+=======
+// Close connection
+// mysqli_close($link);
+>>>>>>> 99d1b02 (commit)
 ?>
 
 <!DOCTYPE html>
@@ -72,7 +80,11 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
             border-bottom: 2px solid black !important;
             height: 60px;
         }
+<<<<<<< HEAD
     </style> 
+=======
+   </style> 
+>>>>>>> 99d1b02 (commit)
 </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
@@ -105,6 +117,7 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active py-3" id="new" role="tabpanel" aria-labelledby="new-tab">
                             <?php
+<<<<<<< HEAD
                             if ($new_com_total > 0) {
                                 echo '<div class="row">';
                                 while ($row = mysqli_fetch_array($new_com_result, MYSQLI_ASSOC)) {
@@ -117,10 +130,20 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
                                 }
                                 echo '</div>';
                             }
+=======
+                                if ($new_com_total > 0) {
+                                    echo '<div class="row">';
+                                    while ($row = mysqli_fetch_array($new_com_result, MYSQLI_ASSOC)) {
+                                        include 'includes/complaint-list.php';
+                                    }
+                                    echo '</div>';
+                                }
+>>>>>>> 99d1b02 (commit)
                             ?>
                         </div>
                         <div class="tab-pane fade py-3" id="resolved" role="tabpanel" aria-labelledby="resolved-tab">
                             <?php
+<<<<<<< HEAD
                             if ($resolved_com_total > 0) {
                                 echo '<div class="row">';
                                 while ($row = mysqli_fetch_array($resolved_com_result, MYSQLI_ASSOC)) {
@@ -133,11 +156,21 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
                                 }
                                 echo '</div>';
                             }
+=======
+                                if ($resolved_com_total > 0) {
+                                    echo '<div class="row">';
+                                    while ($row = mysqli_fetch_array($resolved_com_result, MYSQLI_ASSOC)) {
+                                        include 'includes/complaint-list.php';
+                                    }
+                                    echo '</div>';
+                                }
+>>>>>>> 99d1b02 (commit)
                             ?>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
+<<<<<<< HEAD
                     <?php 
                     // Check if complaint-form.php exists before including it
                     if (file_exists('forms/complaint-form.php')) {
@@ -146,11 +179,15 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
                         echo '<p>Error: complaint-form.php not found.</p>';
                     }
                     ?>
+=======
+                    <?php include 'forms/complaint-form.php'; ?>
+>>>>>>> 99d1b02 (commit)
                 </div>
             </div>
         </div>
     </section>
 
+<<<<<<< HEAD
     <?php 
     // Check if scripts.php exists before including it
     if (file_exists('includes/scripts.php')) {
@@ -159,10 +196,17 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
         echo '<p>Error: scripts.php not found.</p>';
     }
     ?>
+=======
+    <?php include 'includes/scripts.php'; ?>
+>>>>>>> 99d1b02 (commit)
 </body>
 </html>
 
 <?php
 // End output buffering and flush all output
 ob_end_flush();
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> 99d1b02 (commit)

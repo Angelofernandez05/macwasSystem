@@ -96,7 +96,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
+<<<<<<< HEAD
             background-image: url("image/tank.jpg");
+=======
+            background-image: url("tank.jpg");
+>>>>>>> 99d1b02 (commit)
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
@@ -150,7 +154,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <!-- Forgot Password Form -->
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <p class="text-center mb-4">
+<<<<<<< HEAD
                             <img src="image/logo.png" alt="Logo" style="width: 200px; height: 100px;">
+=======
+                            <img src="logo.png" alt="Logo" style="width: 200px; height: 100px;">
+>>>>>>> 99d1b02 (commit)
                         </p>
                         <!-- Email input -->
                         <div class="form-outline mb-4">

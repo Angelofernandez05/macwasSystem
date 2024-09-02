@@ -135,7 +135,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     </script>
     <style>
          body {
+<<<<<<< HEAD
             background-image: url("image/tank.jpg");
+=======
+            background-image: url("tank.jpg");
+>>>>>>> 99d1b02 (commit)
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
@@ -216,10 +220,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     <!-- Login Form -->
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <p class="text-center mb-4">
+<<<<<<< HEAD
                             <img src="image/logo.png" alt="Admin-Icon" style="width: 200px; height: 100px;">
                         </p>   
                     <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
                                 <img src="image/users.png" alt="Accountant Icon" style="width: 60px; height: 60px;">
+=======
+                            <img src="logo.png" alt="Admin-Icon" style="width: 200px; height: 100px;">
+                        </p>   
+                    <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
+                                <img src="users.png" alt="Accountant Icon" style="width: 60px; height: 60px;">
+>>>>>>> 99d1b02 (commit)
                         </p>
                         <!-- <p class="text-center">Please fill in your credentials to login.</p> -->
 

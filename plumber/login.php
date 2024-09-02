@@ -4,7 +4,11 @@ session_start();
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+<<<<<<< HEAD
     header("location: index .php");
+=======
+    header("location: plumber.php");
+>>>>>>> 99d1b02 (commit)
     exit;
 }
 

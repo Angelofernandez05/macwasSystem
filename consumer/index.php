@@ -100,7 +100,10 @@ $user_row = mysqli_fetch_assoc($user_result);
     <?php include 'includes/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<<<<<<< HEAD
     
+=======
+>>>>>>> 99d1b02 (commit)
    
 </body>
 </html>

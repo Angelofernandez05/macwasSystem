@@ -382,6 +382,9 @@ mysqli_close($link);
 
        // JavaScript for Clock
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 99d1b02 (commit)
 function updateClock() {
     var now = new Date();
     
@@ -410,6 +413,7 @@ setInterval(updateClock, 1000);
 updateClock();  // Initialize the clock immediately
 
 
+<<<<<<< HEAD
 
 =======
             function updateClock() {
@@ -442,6 +446,9 @@ updateClock();  // Initialize the clock immediately
 
 
 >>>>>>> 9e6d618c51c90c9259810dbd13dc695265bd9558
+=======
+
+>>>>>>> 99d1b02 (commit)
     </script>
 </body>
 </html>
