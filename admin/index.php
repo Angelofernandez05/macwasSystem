@@ -4,15 +4,8 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-// Check if the user is logged in
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    // User is not logged in, redirect to login page
-    header("Location: login.php");
-    exit;
-}
 require_once "config.php";
 
-// Queries and data retrieval
 $consumers_sql = "SELECT * FROM consumers;";
 $consumers_result = mysqli_query($link, $consumers_sql);
 $consumers_total = mysqli_num_rows($consumers_result);
@@ -61,7 +54,7 @@ mysqli_close($link);
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js CDN -->
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        body {
+        body{
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
         }
         .card {
@@ -69,117 +62,68 @@ mysqli_close($link);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .bg-primary-gradient {
+         .bg-primary-gradient {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
         }
+
         .bg-success-gradient {
             background: linear-gradient(135deg, #43cea2, #185a9d);
             color: white;
         }
+
         .bg-dark-gradient {
             background: linear-gradient(135deg, #232526, #414345);
             color: white;
         }
+
         .bg-info-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
         }
+
         .bg-warning-gradient {
             background: linear-gradient(135deg, #f09819, #edde5d);
             color: white;
         }
+
         .bg-unpaid-gradient {
-            background: linear-gradient(#ff66cc 0%, #9999ff 100%);
+            background: linear-gradient(#ff66cc 0%, #9999ff 100%);  /* Pink gradient */
             color: white;
         }
+
         .bg-red-gradient {
-            background: linear-gradient(135deg, #ff4b1f, #ff9068);
+           background: linear-gradient(135deg, #ff4b1f, #ff9068);  /* Red gradient */
             color: white;
         }
+            
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
-            color: linear-gradient(135deg, #f09819, #edde5d);
-            border-bottom: 1px solid black !important;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            margin-left: 10px;
+            color: white;
+            border-bottom: 2px solid black !important;
+                
         }
-        .navbar-header {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: space-between;
-            height: 100%;
-            position: relative;
-        }
-        .clock {
-            font-size: 1.1rem;
-            font-family: 'Verdana', sans-serif;
-            font-weight: 550;
-            color: black;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-            margin-left: 15px;
-        }
-        .bxs-printer, .bx-mail-send {
+        .bxs-printer {
             color: black;
         }
-        .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .bx-mail-send {
+            color: black;
         }
-        .card:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        .marquee {
-            overflow: hidden;
-            position: relative;
-            white-space: nowrap;
-            box-sizing: border-box;
-            height: 40px; /* Adjust the height */
-            display: flex;
-            align-items: center;    
-        }   
-
-        .marquee-content {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 8s linear infinite;
-            font-size: 30px; /* Adjust the text size */
-            color: darkblue;
-        
-        }
-
-        @keyframes marquee {
-            0% {
-                transform: translateX(100%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-        .gradient-text {
-            background: linear-gradient(45deg, #36d1dc, #5b86e5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    
     </style>
 </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
+    
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
-            <div class="navbar-header">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-            <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
-            <div class="marquee">
-                <div class="marquee-content">Macwas Water Billing System</div>
-            </div>
-        </span>
-            </div>
+                <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
+                Dashboard
+            </span>
             <?php include 'includes/userMenu.php'; ?>
         </nav>
-        <div class="clock" id="clock"></div>
 
         <div class="container-fluid py-5">
             <div class="row">
@@ -302,6 +246,7 @@ mysqli_close($link);
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                         <a target="_blank" href="print-reading.php?id=<?php echo $row['reading_id']; ?>" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Billing Statement</a>
+                                                        <a target="_blank" href="print-nod.php?id=<?php echo $row['reading_id']; ?>" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Notice of Disconnection</a>
                                                     </div>
                                                 </div>
                                                 <div class="dropdown">
@@ -309,7 +254,7 @@ mysqli_close($link);
                                                         <i class='bx bx-mail-send'></i>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                        <a target="_self" href="send-billing-statement.php?id=<?php echo $row['reading_id']; ?>" class="dropdown-item" title="Send Billing Statement" data-toggle="tooltip">Job Order</a>
+                                                        <a target="_self" href="send-billing-statement.php?id=<?php echo $row['reading_id']; ?>" class="dropdown-item" title="Send Billing Statement" data-toggle="tooltip">Billing Statement</a>
                                                         <a target="_self" href="send-notice-disconnection.php?id=<?php echo $row['reading_id']; ?>" class="dropdown-item" title="Send Notice of Disconnection" data-toggle="tooltip">Notice of Disconnection</a>
                                                     </div>
                                                 </div>
@@ -379,37 +324,6 @@ mysqli_close($link);
                 }
             });
         });
-
-       // JavaScript for Clock
-function updateClock() {
-    var now = new Date();
-    
-    // Time
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var seconds = now.getSeconds();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-    var timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-    
-    // Date
-    var day = now.getDate();
-    var month = now.getMonth() + 1; // January is 0!
-    var year = now.getFullYear();
-    var dateString = day + '/' + month + '/' + year;
-
-    // Set both date and time
-    document.getElementById('clock').textContent = timeString + ' | ' + dateString;
-}
-
-setInterval(updateClock, 1000);
-updateClock();  // Initialize the clock immediately
-
-
-
     </script>
 </body>
 </html>
