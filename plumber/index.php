@@ -72,21 +72,15 @@ $user_row = mysqli_fetch_assoc($user_result);
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-<<<<<<< HEAD
             height: 60px;
-=======
             height: 70px;
->>>>>>> 9e6d618c51c90c9259810dbd13dc695265bd9558
         }
         .bg-consumer-gradient {
             background: linear-gradient(135deg, #667eea, #764ba2);  /* Pink gradient */
             color: white;
         }
-<<<<<<< HEAD
-        .bg-success-gradient {
-=======
+
         .bg-complaints-gradient {
->>>>>>> 9e6d618c51c90c9259810dbd13dc695265bd9558
             background: linear-gradient(135deg, #43cea2, #185a9d);
             color: white;
         }
@@ -128,16 +122,13 @@ $user_row = mysqli_fetch_assoc($user_result);
         </nav>
 
         <br>
-<<<<<<< HEAD
 
         <div class="container-fluid py-5">
             <div class="row">
                 <div class="col-md-3">
-=======
         <div class="container-fluid py-5">
             <div class="row">
                 <div class="col-md-4">
->>>>>>> 9e6d618c51c90c9259810dbd13dc695265bd9558
                     <div class="card bg-consumer-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
@@ -150,15 +141,12 @@ $user_row = mysqli_fetch_assoc($user_result);
                         </div>
                     </div>
                 </div>
-<<<<<<< HEAD
                 
                 <div class="col-md-3">
                     <div class="card bg-success-gradient text-white">
-=======
 
                 <div class="col-md-4">
                     <div class="card bg-complaints-gradient text-white">
->>>>>>> 9e6d618c51c90c9259810dbd13dc695265bd9558
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
