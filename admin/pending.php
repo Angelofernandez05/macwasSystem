@@ -1,4 +1,4 @@
-    <?php
+<?php
     // Initialize the session
     if (session_status() !== PHP_SESSION_ACTIVE) {
         session_start();
@@ -33,6 +33,7 @@
                 background: linear-gradient(135deg, #36d1dc, #5b86e5);
                 color: white;
                 border-bottom: 2px solid black !important;
+                margin-left: 10px;
             }
             .main-content {
                 margin-left: 250px; /* Adjust this based on the sidebar width */
