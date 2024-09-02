@@ -67,6 +67,29 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
     <title>Bill</title>
     <?php include 'includes/links.php'; ?>
     <style>
+         .table-responsive {
+    overflow-x: auto;
+    /* Ensure the container is responsive */
+}
+
+.table-custom {
+    width: 100%; /* Ensure the table takes full width */
+    max-width: 1300px; /* You can adjust this value */
+    margin: 0 auto; /* Center the table */
+    margin-left: 140px;
+}
+
+.table thead th {
+            background-color: #f8f9fa; /* Light background color for table header */
+            border-bottom: 2px solid #dee2e6; /* Slightly thicker border for header bottom */
+        }
+
+.table-custom th,
+.table-custom td {
+    white-space: nowrap; /* Prevents content from wrapping */
+    text-align: center; /* Center align text */
+}
+
         .alert {
             font-size: 14px;
             padding: 8px 12px;
@@ -78,14 +101,26 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
             right: 10px;
             z-index: 9999;
         }
-
+        .table-custom {
+        width: 100%; /* Full width */
+        table-layout: auto; /* Allow columns to resize based on content */
+        }
+        body{
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        }
+        .navbar-light-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: white;
+            border-bottom: 2px solid black !important;
+            height: 60px;
+        }
     </style>
 </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
-        <nav class="navbar navbar-light bg-white border-bottom">
+        <nav class="navbar navbar-light-gradient bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Bill
@@ -108,7 +143,7 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                     $sql = "SELECT *, (present - previous) as used FROM readings WHERE consumer_id = $id ";
                     if($result = mysqli_query($link, $sql)){
                         if(mysqli_num_rows($result) > 0){
-                            echo '<table class="table table-striped">';
+                            echo '<table class="table table-striped table-custom">';
                             echo '<div class="table-responsive">';
                                 echo "<thead>";
                                     echo "<tr>";
@@ -136,7 +171,7 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                                 }
                                     echo "<tr>";
                                         echo "<td class='text-uppercase'>".date_format(date_create($row['due_date']), 'F j, Y')."</td>";
-                                        echo "<td class='text-uppercase'>".date_format(date_create($row['reading_date']), 'Y-F')."</td>";
+                                        echo "<td class='text-uppercase'>".date_format(date_create($row['reading_date']), 'F j, Y')."</td>";
                                         echo "<td>" . number_format((float)$row['present'], 2, '.', '') . "</td>";
                                         echo "<td>" . number_format((float)$row['previous'], 2, '.', '') . "</td>";
                                         echo "<td>" . number_format((float)$row['used'], 2, '.', '') . "</td>";
@@ -152,24 +187,25 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                                         echo "<td>" . $status . "</td>";
                                         echo "<td class='d-flex align-items-center' style='gap: 0.3rem'>";
                                             ?>
-                                                <div class="dropdown">
+                                                <!-- <div class="dropdown">
                                                     <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class='bx bx-mail-send'></i>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                         <?php
-                                                            echo '<a target="_blank" href="send-billing-statement.php?id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Billing Statement</a>';
-                                                            echo '<a target="_blank" href="send-notice.php?id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Notice of Disconnection</a>';
+                                                            // echo '<a target="_blank" href="send-billing-statement.php?id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Billing Statement</a>';
+                                                            // echo '<a target="_blank" href="send-notice.php?id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Notice of Disconnection</a>';
                                                         ?>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             <?php
                                             // echo '<a target="_blank" href="sendMail.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" class="mr-2" title="Send Billing Statement" data-toggle="tooltip"><i class="bx bx-sm bx-mail-send"></i></a>';
-                                            echo '<a target="_blank" href="print-reading.php?id='. $row['id'] .'" title="Print Billing Statement" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
-                                            echo '<a href="reading.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil" ></i></a>';
+                                            //echo '<a target="_blank" href="print-reading.php?id='. $row['id'] .'" title="Print Billing Statement" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
+                                            // echo '<a target="_blank" href="print-reading.php?id='. $row['id'] .'" title="Print Billing Statement" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
+                                           // echo '<a href="reading.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil" ></i></a>';
                                             // echo '<a onclick="javascript:confirmationDelete($(this));return false;" href="delete-reading.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" title="Delete Record" data-toggle="tooltip"><i class="bx bxs-trash-alt" ></i></a>';
-                                            echo '<a href="#" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-cid="'.$_GET["consumer_id"].'" data-id="'. $row['id'] .'"><i class="bx bxs-trash-alt"></i></a>';
-                                            echo '<a href="#" class="confirmButton" title="Payment" data-toggle="tooltip" data-cid="'.$_GET["consumer_id"].'" data-id="'. $row['id'] .'"><i class="bx bx-money"></i></a>';
+                                           // echo '<a href="#" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-cid="'.$_GET["consumer_id"].'" data-id="'. $row['id'] .'"><i class="bx bxs-trash-alt"></i></a>';
+                                            // echo '<a href="#" class="confirmButton" title="Payment" data-toggle="tooltip" data-cid="'.$_GET["consumer_id"].'" data-id="'. $row['id'] .'"><i class="bx bx-money ml-3"></i></a>';
                                         echo "</td>";
                                     echo "</tr>";
                                 }
@@ -210,19 +246,7 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                     // mysqli_close($link);
                     ?>
                 </div>
-                <div class="col-12 col-lg-3 card">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <p class="mb-0 d-flex align-items-center justify-content-between"><small class="text-muted">Name: </small><span><?php echo $name; ?></span></p>
-                            <p class="mb-0 d-flex align-items-center justify-content-between"><small class="text-muted">Barangay: </small><span><?php echo $barangay; ?></span></p>
-                            <p class="mb-0 d-flex align-items-center justify-content-between"><small class="text-muted">Account #: </small><span><?php echo $account_num; ?></span></p>
-                            <p class="mb-0 d-flex align-items-center justify-content-between"><small class="text-muted">Registration #: </small><span><?php echo $registration_num; ?></span></p>
-                            <p class="mb-0 d-flex align-items-center justify-content-between"><small class="text-muted">Meter #: </small><span><?php echo $meter_num; ?></span></p>
-                            <p class="mb-0 d-flex align-items-center justify-content-between"><small class="text-muted">Type: </small><span><?php echo $type; ?></span></p>
-                        </div>    
-                        <?php include 'forms/reading-form.php'; ?>
-                    </div>
-                </div>
+               
             </div>
         </div>
     </section>
@@ -264,38 +288,6 @@ confirmButton.forEach(button => {
         // Redirect to the desired page
         // window.location.href = `status-consumer.php?id=${id}&status=${status}`;
         window.location.href = `payment-reading.php?consumer_id=${consumer_id}&id=${id}`;
-      }
-    });
-  });
-});
-
-const deleteButton = document.querySelectorAll('.deleteButton');
-// console.log(viewButtons);
-deleteButton.forEach(button => {
-  button.addEventListener('click', function(e) {
-    e.preventDefault();
-
-    const consumer_id = this.dataset.cid;
-    const id = this.dataset.id;
-
-    console.log(`${consumer_id}:${id}`);
-
-    Swal.fire({
-      title: `Are you sure want to delete this record?`,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, do it!',
-      cancelButtonText: 'No, cancel',
-      allowOutsideClick: false, // Prevents closing when clicking outside the dialog box
-      allowEscapeKey: false // Prevents closing when pressing the escape key
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Redirect to the desired page
-        // window.location.href = `status-consumer.php?id=${id}&status=${status}`;
-        window.location.href = `delete-reading.php?consumer_id=${consumer_id}&id=${id}`;
       }
     });
   });

@@ -1,145 +1,204 @@
-    <?php
-    // Initialize the session
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_start();
-    }
+<?php
+// Initialize the session
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
-    require_once "config.php";
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+?>
 
-    // Verify database connection
-    if ($link === false) {
-        die("ERROR: Could not connect. " . mysqli_connect_error());
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports</title>
+    <?php include 'includes/links.php'; ?>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <style>
+        .alert {
+            font-size: 14px;
+            padding: 8px 12px;
+            text-align: center;
+            margin: 10px;
+            max-width: 600px;
+            position: fixed;
+            top: 40px;
+            right: 10px;
+            z-index: 9999;
+        }
+        body{
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        }
+        .navbar-light-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: white;
+            border-bottom: 2px solid black !important;
+            height: 60px;
+        }
+        .table thead th {
+            background-color: #f8f9fa; /* Light background color for table header */
+            border-bottom: 2px solid #dee2e6; /* Slightly thicker border for header bottom */
+        }
+    </style>
+</head>
+<body>
+    <!-- Confirmation modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to perform this action?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" name="confirm" class="btn btn-primary">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    // Define date formats
-    $current_month = date('m-Y');
-    $current_year = date('Y');
+    <?php include 'includes/sidebar.php'; ?>
 
-    // SQL queries to fetch monthly and yearly totals
-    $monthly_paid_sql = "
-        SELECT SUM(present - previous) AS total_paid_month 
-        FROM readings 
-        WHERE status = 1 
-        AND DATE_FORMAT(date_paid, '%m-%Y') = '$current_month';
-    ";
-    $yearly_paid_sql = "
-        SELECT SUM(present - previous) AS total_paid_year 
-        FROM readings 
-        WHERE status = 1 
-        AND DATE_FORMAT(date_paid, '%Y') = '$current_year';
-    ";
+    <section class="home-section">
+        <nav class="navbar navbar-light-gradient bg-white border-bottom">
+            <span class="navbar-brand mb-0 h1 d-flex align-items-center">
+                <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
+                Reports
+            </span>
+            <?php include 'includes/userMenu.php'; ?>
+        </nav>
 
-    // Execute the queries
-    $monthly_paid_result = mysqli_query($link, $monthly_paid_sql);
-    if (!$monthly_paid_result) {
-        die("ERROR: Could not execute $monthly_paid_sql. " . mysqli_error($link));
-    }
-
-    $yearly_paid_result = mysqli_query($link, $yearly_paid_sql);
-    if (!$yearly_paid_result) {
-        die("ERROR: Could not execute $yearly_paid_sql. " . mysqli_error($link));
-    }
-
-    // Fetch and process results
-    $monthly_paid_data = mysqli_fetch_assoc($monthly_paid_result);
-    $yearly_paid_data = mysqli_fetch_assoc($yearly_paid_result);
-
-    $monthly_paid_total = $monthly_paid_data['total_paid_month'] ?? '0';
-    $yearly_paid_total = $yearly_paid_data['total_paid_year'] ?? '0';
-
-    // Close database connection
-    mysqli_close($link);
-    ?>
-
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Reports</title>
-        <?php include 'includes/links.php'; ?>
-        <link rel="icon" href="logo.png" type="image/icon type">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <style>
-            body {
-                background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        <div class="container-fluid py-5">
+            <!-- <a href="new-consumer.php" class="btn btn-primary btn-sm mb-3"><i class='bx bx-plus'></i> New</a> -->
+            
+            <?php
+            // Include config file
+            require_once "config.php";
+            $consumer_id = "";
+            $status = "";
+            // Attempt select query execution
+            $sql = "SELECT * FROM consumers";
+            if($result = mysqli_query($link, $sql)){
+                if(mysqli_num_rows($result) > 0){
+                    echo '<div class="table-responsive">';
+                    echo '<table id="consumerTable" class="display table table-striped" style="width:100%">';
+                        echo "<thead>";
+                            echo "<tr>";
+                                echo "<th>Name</th>";
+                                echo "<th>Email</th>";
+                                echo "<th>Phone</th>";
+                                echo "<th>Barangay</th>";
+                                echo "<th>Account No.</th>";
+                                echo "<th>Registration No.</th>";
+                                echo "<th>Meter No.</th>";
+                                echo "<th>Type</th>";
+                                echo "<th>Action</th>";
+                            echo "</tr>";
+                        echo "</thead>";
+                        echo "<tbody>";
+                        while($row = mysqli_fetch_array($result)){
+                            $email = $row['email'];
+                            $phone = "+63".$row['phone'];
+                            if(empty($row['email'])){
+                                $email = 'N/A';
+                            }
+                            $consumer_id = $row['id'];
+                            $status = $row['status'];
+                            $rid = "";
+                            $sql2 = "SELECT * FROM readings WHERE consumer_id = $consumer_id";
+                            if($result2 = mysqli_query($link, $sql2)){
+                                if(mysqli_num_rows($result2) > 0){
+                                    while($row2 = mysqli_fetch_array($result2)){
+                                        $rid = $row2['id'];
+                                    }
+                                }
+                            }
+                            echo "<tr>";
+                            if($row['status'] == 0){
+                                echo '<td><a class="text-danger" href="reading.php?consumer_id='. $consumer_id .'&id='.$rid.'">'. $row['name'] .'</a></td>';
+                            }else{
+                                echo '<td><a class="text-success" href="reading.php?consumer_id='. $consumer_id .'&id='.$rid.'">'. $row['name'] .'</a></td>';
+                            }
+                            
+                                echo "<td>" . $email . "</td>";
+                                echo "<td>" . $phone . "</td>";
+                                echo "<td>" . $row['barangay'] . "</td>";
+                                echo "<td>" . $row['account_num'] . "</td>";
+                                echo "<td>" . $row['registration_num'] . "</td>";
+                                echo "<td>" . $row['meter_num'] . "</td>";
+                                echo "<td>" . $row['type'] . "</td>";
+                                echo "<td>";
+                                  //  echo '<a href="update-consumer.php?id='. $consumer_id.'" class="mr-2" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil btn btn-success btn-sm mb-3"></i></a>';
+                                    //echo '<a href="delete-consumer.php" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-id="'.$consumer_id.'"><i class="bx bxs-trash-alt btn btn-danger btn-sm mb-3"></i></a>';
+                                    
+                                    // Added action for reading
+                                    echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-2" title="Reading  " data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-3 ml-2"></i></a>';
+                                echo "</td>";
+                            echo "</tr>";
+                        }
+                        echo "</tbody>";                            
+                    echo "</table>";
+                    echo '</div>';
+                    mysqli_free_result($result);
+                } else{
+                    echo '<script>
+                            Swal.fire({
+                            title: "Info!",
+                            text: "No records were found.",
+                            icon: "info",
+                            toast: true,
+                            position: "top-right",
+                            showConfirmButton: false,
+                            timer: 3000
+                            })
+                          </script>';
+                }
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
             }
 
-            .navbar-light-gradient {
-                background: linear-gradient(135deg, #36d1dc, #5b86e5);
-                color: white;
-                border-bottom: 2px solid black !important;
-            }
+            mysqli_close($link);
+            ?>
+        </div>
+    </section>
 
-            .bg-warning-gradient {
-                background: linear-gradient(135deg, #43cea2, #185a9d);
-                color: white;
-            }
+    <?php include 'includes/scripts.php'; ?>
+    <!-- jQuery and DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
-            .bg-danger-gradient {
-                background: linear-gradient(135deg, #667eea, #764ba2);
-                color: white;
-            }
+    <script>
+    // Initialize DataTable
+    $(document).ready(function() {
+        $('#consumerTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true
+        });
+    });
 
-            .card {
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
+    // Hide the alert after 3 seconds
+    setTimeout(function(){
+        var alert = document.querySelector('.alert');
+        if (alert) {
+            alert.style.display = 'none';
+        }
+    }, 3000);
 
-            .card:hover {
-                transform: translateY(-10px) scale(1.05);
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            }
-        </style>
-    </head>
-    <body>
-        <?php include 'includes/sidebar.php'; ?>
+   
 
-        <section class="home-section">
-            <nav class="navbar navbar-light-gradient bg-white border-bottom">
-                <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-                    <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
-                    Reports
-                </span>
-                <?php include 'includes/userMenu.php'; ?>
-            </nav>
-
-            <div class="container-fluid py-5">
-                <div class="row">
-                    <!-- Monthly Paid Total Card -->
-                    <div class="col-md-4">
-                        <div class="card bg-warning-gradient text-white">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="mb-0">
-                                            <?php echo htmlspecialchars($monthly_paid_total); ?><large class="ml-2">cu. m.</large>
-                                        </h4>
-                                        <small class="mb-0">Total Paid Monthly</small>
-                                    </div>
-                                    <i class='bx bxs-calendar-check bx-md'></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Yearly Paid Total Card -->
-                    <div class="col-md-4">
-                        <div class="card bg-danger-gradient text-white">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <h4 class="mb-0">
-                                            <?php echo htmlspecialchars($yearly_paid_total); ?><large class="ml-2">cu. m.</large>
-                                        </h4>
-                                        <small class="mb-0">Total Paid Yearly</small>
-                                    </div>
-                                    <i class='bx bxs-calendar-star bx-md'></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <?php include 'includes/scripts.php'; ?>
-    </body>
-    </html>
+   
+    </script>
+</body>
+</html>

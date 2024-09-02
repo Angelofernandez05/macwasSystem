@@ -139,11 +139,21 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                 echo "<td>" . $row['meter_num'] . "</td>";
                                 echo "<td>" . $row['type'] . "</td>";
                                 echo "<td>";
-                                  //  echo '<a href="update-consumer.php?id='. $consumer_id.'" class="mr-2" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil btn btn-success btn-sm mb-3"></i></a>';
-                                    //echo '<a href="delete-consumer.php" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-id="'.$consumer_id.'"><i class="bx bxs-trash-alt btn btn-danger btn-sm mb-3"></i></a>';
-                                    
-                                    // Added action for reading
-                                    echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-2" title="Reading  " data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-3 ml-2"></i></a>';
+                        
+                                                                    // Inside the dropdown menu
+                                echo '<div class="dropdown">';
+                                echo '<button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton'.$consumer_id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                                echo '<i class="bx bx-mail-send"></i>';
+                                echo '</button>';
+                                echo '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton'.$consumer_id.'">';
+                                echo '<a target="_blank" href="send-billing-statement.php?id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Job Order</a>';
+                                echo '<a target="_blank" href="send-notice-disconnection.php?id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Notice of Disconnection</a>';                                
+                                echo '</div>';
+                                echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-1q" title="Reading" data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-2 ml-2 ;"></i></a>';
+                                echo "</td>";
+                                echo '</div>';
+
+                            
                                 echo "</td>";
                             echo "</tr>";
                         }
@@ -195,10 +205,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             alert.style.display = 'none';
         }
     }, 3000);
-
-   
-
-   
     </script>
 </body>
 </html>

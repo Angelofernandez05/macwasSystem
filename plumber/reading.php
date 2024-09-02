@@ -158,7 +158,7 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                                         } ?>
                                         
                                     </td>
-                                        <?php
+                                        <?php       
                                         echo "<td>" . $status . "</td>";
                                         echo "<td class='d-flex align-items-center' style='gap: 0.3rem'>";
                                             ?>

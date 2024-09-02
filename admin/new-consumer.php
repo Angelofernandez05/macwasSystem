@@ -209,6 +209,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($link);
 }
 ?>
+<style>
+    .navbar-light-gradient {
+                background: linear-gradient(135deg, #36d1dc, #5b86e5);
+                color: white;
+                border-bottom: 2px solid black !important;
+                margin-left: 10px;
+            }
+    </style>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -221,9 +229,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
-        <nav class="navbar navbar-light bg-white border-bottom">
+        <nav class="navbar navbar-light-gradient bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-                <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
+                <i class='bx bx-menu mr-3' style='color: black; ursor: pointer; font-size: 2rem'></i>
                 New Consumer
             </span>
             <?php include 'includes/userMenu.php'; ?>
