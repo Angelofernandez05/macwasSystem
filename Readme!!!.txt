@@ -1,8 +1,9 @@
 Admin Panel
-User: admin
-Password: admin
+User: Macwasbilling
+Password: samuelellum30
 
 Consumer Panel
+<<<<<<< HEAD
 Meter Number: 12345616
 Password: 111111
 
@@ -20,3 +21,15 @@ if ($link->connect_error) {
     die("Connection failed: " . $link->connect_error);
 }
 ?>
+=======
+Email: samuel@gmail.com
+Password: samuelsamuel
+
+accounting Panel
+Username: accounting24
+pass: samuelsamuel
+
+plumber Panel
+Username: Plumber12
+pass: samuelsamuel
+>>>>>>> 9e6d618c51c90c9259810dbd13dc695265bd9558

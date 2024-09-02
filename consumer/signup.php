@@ -125,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
          body {
-            background-image: url("tank.jpg");
+            background-image: url("image/tank.jpg");
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
@@ -198,7 +198,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }        
                     ?>
                     <p class="text-center mb-4">
-                            <img src="logo.png" alt="Admin-Icon" style="width: 200px; height: 150px;">
+                            <img src="image/logo.png" alt="Admin-Icon" style="width: 200px; height: 150px;">
                         </p>   
             <h2 class="text-center mb-4"><strong>Sign up</strong></h2>
             <form action="signup.php" method="post">

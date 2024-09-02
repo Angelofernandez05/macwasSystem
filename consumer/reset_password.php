@@ -109,6 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="icon" href="logo.png" type="image/icon type">
     <style>
+        
         .form-outline {
             position: relative;
         }
@@ -155,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </form>
                                 </div>
                                 <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-                                    <img src="signup.png" class="img-fluid" alt="Sample image" height="300px" width="500px">
+                                    <img src="image/users.png" class="img-fluid" alt="Sample image" height="300px" width="500px">
                                 </div>
                             </div>
                         </div>

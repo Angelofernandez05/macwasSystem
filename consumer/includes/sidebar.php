@@ -1,6 +1,6 @@
 <div class="sidebar bg-light border-right">
         <div class="m-auto">
-            <img class="img-fluid" src="logo.png" alt="">
+            <img class="img-fluid" src="image/logo.png" alt="">
             <p class="text-uppercase text-center mb-0">madridejos community waterworks system</p>
             <p class="text-uppercase text-center">
                 <small class="text-muted">municipality of madridejos</small><br />

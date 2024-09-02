@@ -110,7 +110,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
                             <?php
                             echo "<td>" . $status . "</td>";
                             echo "<td>";
-                            echo '<a target="_blank" href="print-reading.php?id=' . $row['id'] . '" class="mr-2" title="Print Record" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
+                            echo '<a target="_blank" href="print-reading.php?id=' . $row['id'] . '" class="mr-2" title="Total Bill" data-toggle="tooltip"><i class="bx bx-pin bx-lg"></i></a>';
                             echo '<a target="_blank" href="att_payment.php?id=' . $row['id'] . '" class="mr-2" title="Attach Payment" data-toggle="tooltip"><i class="bx bxs-cog"></i></a>';
                             echo "</td>";
                             echo "</tr>";

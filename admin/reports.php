@@ -160,10 +160,19 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 echo "Oops! Something went wrong. Please try again later.";
             }
 
+<<<<<<< HEAD
             mysqli_close($link);
             ?>
         </div>
     </section>
+=======
+            .navbar-light-gradient {
+                background: linear-gradient(135deg, #36d1dc, #5b86e5);
+                color: white;
+                border-bottom: 2px solid black !important;
+                margin-left: 10px;
+            }
+>>>>>>> 9e6d618c51c90c9259810dbd13dc695265bd9558
 
     <?php include 'includes/scripts.php'; ?>
     <!-- jQuery and DataTables JS -->
