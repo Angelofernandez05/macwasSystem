@@ -381,32 +381,32 @@ mysqli_close($link);
         });
 
        // JavaScript for Clock
-function updateClock() {
-    var now = new Date();
-    
-    // Time
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var seconds = now.getSeconds();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-    var timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-    
-    // Date
-    var day = now.getDate();
-    var month = now.getMonth() + 1; // January is 0!
-    var year = now.getFullYear();
-    var dateString = day + '/' + month + '/' + year;
+            function updateClock() {
+            var now = new Date();
+            
+            // Time
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            var timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+            
+            // Date
+            var day = now.getDate();
+            var month = now.getMonth() + 1; // January is 0!
+            var year = now.getFullYear();
+            var dateString = day + '/' + month + '/' + year;
 
-    // Set both date and time
-    document.getElementById('clock').textContent = timeString + ' | ' + dateString;
-}
+            // Set both date and time
+            document.getElementById('clock').textContent = timeString + ' | ' + dateString;
+        }
 
-setInterval(updateClock, 1000);
-updateClock();  // Initialize the clock immediately
+        setInterval(updateClock, 1000);
+        updateClock();  // Initialize the clock immediately
 
 
 
