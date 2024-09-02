@@ -225,6 +225,16 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     }
 }
 ?>
+
+<style>
+        .navbar-light-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: linear-gradient(135deg, #f09819, #edde5d);
+            border-bottom: 1px solid black !important;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            margin-left: 10px;
+        }
+    </style>
  
 <!DOCTYPE html>
 <html lang="en">
@@ -237,7 +247,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
-        <nav class="navbar navbar-light bg-white border-bottom">
+        <nav class="navbar navbar-light-gradient bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
                 <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
                 Update Consumer

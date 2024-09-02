@@ -8,18 +8,19 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 require_once "config.php";
 
-$row = null; // Initialize $row to avoid undefined variable warnings
-
+// Check if an ID is provided in the URL
 if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
     $id = trim($_GET["id"]);
-    // Adjusted SQL query to match your table structure
-    $sql = "SELECT consumers.name, consumers.barangay, consumers.account_num, consumers.meter_num, consumers.type, readings.reading_date, readings.current_reading 
-            FROM consumers 
-            LEFT JOIN readings ON consumers.id = readings.consumer_id 
+
+    // Adjusted SQL query to include due_date if available in your table
+    $sql = "SELECT consumers.name, consumers.barangay, consumers.account_num, consumers.meter_num, consumers.type, readings.reading_date, readings.current_reading, readings.due_date
+            FROM consumers
+            LEFT JOIN readings ON consumers.id = readings.consumer_id
             WHERE consumers.id = ?";
     
     if ($stmt = mysqli_prepare($link, $sql)) {
-        mysqli_stmt_bind_param($stmt, "i", $id);
+        mysqli_stmt_bind_param($stmt, "i", $param_id);
+        $param_id = $id;
         
         if (mysqli_stmt_execute($stmt)) {
             $result = mysqli_stmt_get_result($stmt);
@@ -27,7 +28,7 @@ if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
             if (mysqli_num_rows($result) == 1) {
                 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
             } else {
-                header("location: consumer.php");
+                header("location: reading.php?consumer_id=$id");
                 exit();
             }
         } else {
@@ -40,8 +41,10 @@ if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
     header("location: consumer.php");
     exit();
 }
+
+mysqli_close($link);
 ?>
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,16 +70,25 @@ if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
             </div>
 
             <div class="mt-3">
-                <p class="mb-0"><small class="text-muted mr-2">Name:</small><?php echo htmlspecialchars($row['name'] ?? 'N/A'); ?></p>
-                <p class="mb-0"><small class="text-muted mr-2">Address:</small><?php echo htmlspecialchars($row['barangay'] ?? 'N/A'); ?></p>
-                <p class="mb-0"><small class="text-muted mr-2">Meter No.:</small><?php echo htmlspecialchars($row['meter_num'] ?? 'N/A'); ?></p>
-                <p class="mb-0"><small class="text-muted mr-2">Class:</small><?php echo htmlspecialchars($row['type'] ?? 'N/A'); ?></p>
+                <p class="mb-0"><small class="text-muted mr-2">Name:</small><?php echo htmlspecialchars($row['name']); ?></p>
+                <p class="mb-0"><small class="text-muted mr-2">Address:</small><?php echo htmlspecialchars($row['barangay']); ?></p>
+                <p class="mb-0"><small class="text-muted mr-2">Meter No.:</small><?php echo htmlspecialchars($row['meter_num']); ?></p>
+                <p class="mb-0"><small class="text-muted mr-2">Class:</small><?php echo htmlspecialchars($row['type']); ?></p>
             </div>
             <div class="mt-3">
                 <p><small class="text-muted mr-2">Remarks:</small><strong>NO PAYMENT:</strong></p>
             </div>
             <div class="mt-4">
-                <p class="font-weight-bold">Date of Disconnection: <?php echo date("F j, Y", strtotime("+15 days")); ?></p>
+                <p class="font-weight-bold">Date of Disconnection: 
+                    <?php 
+                    // Check if due_date exists before using it
+                    if (isset($row['due_date'])) {
+                        echo date("F j, Y", strtotime($row['due_date'] . " +15 days"));
+                    } else {
+                        echo "N/A"; // or handle accordingly if due_date is missing
+                    }
+                    ?>
+                </p>
             </div>
             <div class="mt-4">
                 <p>Please pay the above billing month/s before the disconnection date. Thank you.</p>

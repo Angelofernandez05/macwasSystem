@@ -21,12 +21,7 @@ if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
 
             if (mysqli_num_rows($result) == 1) {
                 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-                // Debug output for fetched data
-                echo "Consumer Name: " . $row['name'] . "<br>";
-                echo "Barangay: " . $row['barangay'] . "<br>";
-                echo "Account No.: " . $row['account_num'] . "<br>";
-                echo "Reading Date: " . $row['reading_date'] . "<br>";
-                echo "Current Reading: " . $row['current_reading'] . "<br>";
+                // Data is fetched and stored in $row for use later in the HTML below
             } else {
                 echo "No records matching your query were found.";
             }
@@ -45,9 +40,6 @@ if (isset($_GET["id"]) && !empty(trim($_GET["id"]))) {
 
 mysqli_close($link);
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -103,7 +95,6 @@ mysqli_close($link);
         .signature-item label {
             flex: 1;
             font-size: 16px; /* Adjust as needed */
-            font-weight:;
             margin-right: 10px;
             white-space: nowrap;
         }
@@ -123,7 +114,6 @@ mysqli_close($link);
         /* Font size for section headers */
         .signature-section-header {
             font-size: 20px; /* Adjust as needed */
-            font-weight: ;
             margin-bottom: 10px;
         }
 
@@ -169,8 +159,8 @@ mysqli_close($link);
             </div>
         </div>
 
-       <!-- Consumer Section -->
-       <div class="signature-section">
+        <!-- Consumer Section -->
+        <div class="signature-section">
             <label for="consumer-signature">CONSUMER</label>
             <div class="signature-item">
                 <label for="consumer-signature">SIGNATURE:</label>
@@ -179,39 +169,40 @@ mysqli_close($link);
         </div>
         
         <div class="signature-section">
-    <div class="row">
-        <div class="col-md-6 signature-item">
-            <label for="worked-by">Worked By:</label>
-            <div class="line"></div>
+            <div class="row">
+                <div class="col-md-6 signature-item">
+                    <label for="worked-by">Worked By:</label>
+                    <div class="line"></div>
+                </div>
+                <div class="col-md-6 signature-item">
+                    <label for="approved-by">Approved:</label>
+                    <div class="line"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 signature-item">
+                    <label for="date-worked">Date Worked:</label>
+                    <div class="line"></div>
+                </div>
+                <div class="col-md-6 signature-item">
+                    <label for="date-finished">Date/Time Finished:</label>
+                    <div class="line"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 signature-item">
+                    <label for="remarks">Remarks:</label>
+                    <div class="line"></div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6 signature-item">
-            <label for="approved-by">Approved:</label>
-            <div class="line"></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 signature-item">
-            <label for="date-worked">Date Worked:</label>
-            <div class="line"></div>
-        </div>
-        <div class="col-md-6 signature-item">
-            <label for="date-finished">Date/Time Finished:</label>
-            <div class="line"></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 signature-item">
-            <label for="remarks">Remarks:</label>
-            <div class="line"></div>
-        </div>
-    </div>
-</div>
 
-<!-- Print Script -->
-<script type="text/javascript">
-    window.onload = function() {
-        window.print();
-    };
-</script>
+        <!-- Print Script -->
+        <script type="text/javascript">
+            window.onload = function() {
+                window.print();
+            };
+        </script>
+    </div>
 </body>
 </html>

@@ -159,7 +159,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                 echo '</button>';
                                 echo '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' . $consumer_id . '">';
                                 echo '<a target="_blank" href="send-billing-statement.php?id='. $row['id'] .'" class="dropdown-item" title="Job Order" data-toggle="tooltip">Job Order</a>';
-                                echo '<a target="_blank" href="send-billing-statement.php?id='. $row['id'] .'" class="dropdown-item" title="Notice of Disconnection" data-toggle="tooltip">Notice of Disconnection</a>';
+                                echo '<a target="_blank" href="send-notice-disconnection.php?id='. $row['id'] .'" class="dropdown-item" title="Notice of Disconnection" data-toggle="tooltip">Notice of Disconnection</a>';
                                 echo '</div>';
                                 echo '</div>'; // Close dropdown
                             echo "</td>";
