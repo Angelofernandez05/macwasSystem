@@ -5,14 +5,6 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="styles.css"> <!-- Ensure you link to your existing stylesheet -->
     <style>
-        /* Body Background Color */
-        body {
-            background: linear-gradient(135deg, #e0eafc, #cfdef3);
-        }
-
-        .sidebar .nav-links li a:hover {
-            background: gray; /* Hover effect for links */
-        }
     </style>
 </head>
 <body>
@@ -66,14 +58,10 @@
                 }
             };
             xhr.send();
-        }
-
-        // Update pending consumers badge
-        updateNotificationBadge('get_pending_count.php', 'pending-notification-badge');
-
+        }   
         // Update complaints badge
         updateNotificationBadge('get_complaint_count.php', 'complaint-notification-badge');
-    });
+    }); 
     </script>
 </body>
 </html>

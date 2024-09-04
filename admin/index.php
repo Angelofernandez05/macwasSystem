@@ -296,17 +296,17 @@ mysqli_close($link);
                                         <td><?php echo number_format((float)$row['used'], 2, '.', ''); ?></td>
                                         <td>
                                             <div class="d-flex" style="gap: 0.3rem">
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm custom-btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="bx bxs-printer"></i>
+                                            <div class="dropdown">
+                                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class='bx bxs-printer'></i> 
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                         <a target="_blank" href="print-reading.php?id=<?php echo $row['reading_id']; ?>" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Billing Statement</a>
                                                     </div>
                                                 </div>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-sm custom-btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class='bx bx-mail-send'></i>
+                                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class='bx bx-mail-send'></i> 
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                         <a target="_self" href="send-billing-statement.php?id=<?php echo $row['reading_id']; ?>" class="dropdown-item" title="Send Billing Statement" data-toggle="tooltip">Job Order</a>

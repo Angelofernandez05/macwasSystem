@@ -1,52 +1,37 @@
 <?php
-session_start();
+if (isset($_GET['consumer_id'])) {
+    $consumer_id = $_GET['consumer_id'];
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
-    exit;
-}
-
-require_once "config.php";
-
-// Debugging: Check if $pdo is set
-if (!isset($pdo)) {
-    die("ERROR: Database connection is not established.");
-}
-
-// Initialize variables
-$row = null;
-
-if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
-    $id = trim($_GET["id"]);
+    // You can now use $consumer_id to fetch and process data
+    // For example:
+    require_once "config.php";
+    $sql = "SELECT * FROM consumers WHERE id = ?";
     
-    // Prepare a select statement
-    $sql = "SELECT name, barangay, meter_num, type, due_date FROM consumers WHERE id = ?";
-    
-    if($stmt = $pdo->prepare($sql)){
-        // Bind variables to the prepared statement as parameters
-        $stmt->bindParam(1, $id, PDO::PARAM_INT);
+    if($stmt = mysqli_prepare($link, $sql)){
+        mysqli_stmt_bind_param($stmt, "i", $consumer_id);
         
-        // Attempt to execute the prepared statement
-        if($stmt->execute()){
-            // Fetch result row
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        } else {
-            // Handle query execution error
+        if(mysqli_stmt_execute($stmt)){
+            $result = mysqli_stmt_get_result($stmt);
+            
+            if(mysqli_num_rows($result) == 1){
+                $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                // Process the consumer data
+            } else{
+                echo "No records found!";
+            }
+        } else{
             echo "Oops! Something went wrong. Please try again later.";
-            exit;
         }
-    } else {
-        // Handle preparation error
-        echo "Oops! Something went wrong. Please try again later.";
-        exit;
     }
+    
+    mysqli_stmt_close($stmt);
+    mysqli_close($link);
 } else {
-    // Handle case where ID is not provided or invalid
-    header("location: consumer.php"); // Redirect back to consumer page if ID is missing
-    exit();
+    echo "Consumer ID not provided.";
 }
 ?>
 
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>

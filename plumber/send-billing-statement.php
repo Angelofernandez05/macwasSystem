@@ -1,54 +1,36 @@
 <?php
-session_start();
+if (isset($_GET['consumer_id'])) {
+    $consumer_id = $_GET['consumer_id'];
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
-    exit;
-}
-
-require_once "config.php";
-
-$row = null; // Initialize $row to ensure it's defined
-
-if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
-    $id = trim($_GET["id"]);
+    // You can now use $consumer_id to fetch and process data
+    // For example:
+    require_once "config.php";
+    $sql = "SELECT * FROM consumers WHERE id = ?";
     
-    $sql = "SELECT *, (present - previous) as used, readings.status as reading_status FROM readings LEFT JOIN consumers ON consumers.id = readings.consumer_id WHERE readings.id = ?";
     if($stmt = mysqli_prepare($link, $sql)){
-        
-        mysqli_stmt_bind_param($stmt, "i", $param_id);
-        $param_id = $id;
+        mysqli_stmt_bind_param($stmt, "i", $consumer_id);
         
         if(mysqli_stmt_execute($stmt)){
             $result = mysqli_stmt_get_result($stmt);
-
+            
             if(mysqli_num_rows($result) == 1){
                 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                // Process the consumer data
             } else{
-                // Handle case where no rows are found
-                header("location: reading.php?consumer_id=$consumer_id");
-                exit();
+                echo "No records found!";
             }
         } else{
-            echo '<script>
-            Swal.fire({
-                title: "Error!",
-                text: "Oops! Something went wrong. Please try again later",
-                icon: "error",
-                toast: true,
-                position: "top-right",
-                showConfirmButton: false,
-                timer: 3000
-            });
-            </script>';
+            echo "Oops! Something went wrong. Please try again later.";
         }
-        mysqli_stmt_close($stmt);
     }
-}  else{
-    header("location: consumer.php");
-    exit();
+    
+    mysqli_stmt_close($stmt);
+    mysqli_close($link);
+} else {
+    echo "Consumer ID not provided.";
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,7 +86,6 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
         .signature-item label {
             flex: 1;
             font-size: 16px; /* Adjust as needed */
-            font-weight:;
             margin-right: 10px;
             white-space: nowrap;
         }
@@ -134,7 +115,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     <div class="container pt-5">
         <div class="text-center">
             <img class="img-fluid" src="logo.png" alt="" width=170>
-            <p class="text-uppercase text-center mb-0"><strong>madridejos community waterworks system</strong></p>
+            <p class="text-uppercase text-center mb-0"><strong>Madridejos Community Waterworks System</strong></p>
             <p class="text-uppercase text-center">
             <label for="date-finished"><strong>JOB ORDER</strong></label>
             </p>
@@ -180,39 +161,40 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
         </div>
         
         <div class="signature-section">
-    <div class="row">
-        <div class="col-md-6 signature-item">
-            <label for="worked-by">Worked By:</label>
-            <div class="line"></div>
+            <div class="row">
+                <div class="col-md-6 signature-item">
+                    <label for="worked-by">Worked By:</label>
+                    <div class="line"></div>
+                </div>
+                <div class="col-md-6 signature-item">
+                    <label for="approved-by">Approved:</label>
+                    <div class="line"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 signature-item">
+                    <label for="date-worked">Date Worked:</label>
+                    <div class="line"></div>
+                </div>
+                <div class="col-md-6 signature-item">
+                    <label for="date-finished">Date/Time Finished:</label>
+                    <div class="line"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 signature-item">
+                    <label for="remarks">Remarks:</label>
+                    <div class="line"></div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6 signature-item">
-            <label for="approved-by">Approved:</label>
-            <div class="line"></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 signature-item">
-            <label for="date-worked">Date Worked:</label>
-            <div class="line"></div>
-        </div>
-        <div class="col-md-6 signature-item">
-            <label for="date-finished">Date/Time Finished:</label>
-            <div class="line"></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 signature-item">
-            <label for="remarks">Remarks:</label>
-            <div class="line"></div>
-        </div>
-    </div>
-</div>
 
-<!-- Print Script -->
-<script type="text/javascript">
-    window.onload = function() {
-        window.print();
-    };
-</script>
+        <!-- Print Script -->
+        <script type="text/javascript">
+            window.onload = function() {
+                window.print();
+            };
+        </script>
+    </div>
 </body>
 </html>
