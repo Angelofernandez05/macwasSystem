@@ -29,7 +29,7 @@ mysqli_close($link);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>PLumber</title>
     <?php include 'includes/links.php'; ?>
     <link rel="icon" href="logo.png" type="image/icon type">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

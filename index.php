@@ -47,7 +47,7 @@ $user_row = mysqli_fetch_assoc($user_result);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Dashboard</title>
+    <title>Consumer</title>
     <?php include 'includes/links.php'; ?>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>

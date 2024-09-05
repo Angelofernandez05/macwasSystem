@@ -1,4 +1,21 @@
-<div class="sidebar bg-light border-right">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Ensure you link to your existing stylesheet -->
+    <style>
+         body {
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        }
+
+        .sidebar .nav-links li a:hover {
+            background: gray; /* Hover effect for links */
+        }
+    </style>
+</head>
+<body>
+ <div class="sidebar bg-light-gradient border-right close">
         <div class="m-auto">
             <img class="img-fluid" src="logo.png" alt="">
             <p class="text-uppercase text-center mb-0">madridejos community waterworks system</p>

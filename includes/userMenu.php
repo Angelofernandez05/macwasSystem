@@ -9,7 +9,7 @@
 </style>
 <div class="dropdown">
     <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <h6 class="mb-0">Hi, <?php echo htmlspecialchars($user_row['name']); ?></h6>
+        <h6 sclass="mb-0">Hi, <?php echo htmlspecialchars($user_row['name']); ?></h6>
     </button>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="reset_password.php">Reset Your Password</a>

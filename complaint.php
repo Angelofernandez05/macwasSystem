@@ -60,7 +60,7 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Complaints</title>
+    <title>Consumer</title>
     <?php include 'includes/links.php'; ?>
 
     <style>

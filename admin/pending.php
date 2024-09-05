@@ -21,7 +21,7 @@
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Pending Consumers</title>
+        <title>Admin</title>
         <?php include 'includes/links.php'; ?>
         <link rel="icon" href="logo.png" type="image/icon type">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">

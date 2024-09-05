@@ -29,7 +29,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bill</title>
+    <title>Consumer</title>
     <?php include 'includes/links.php'; ?>
 
     <style>

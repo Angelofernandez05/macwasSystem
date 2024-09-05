@@ -11,7 +11,7 @@ require_once "config.php";
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Complaints</title>
+    <title>Plumber</title>
     <?php include 'includes/links.php'; ?>
 </head>
 <body>

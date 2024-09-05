@@ -5,7 +5,7 @@
 
 // Ensure that user data is available
 // For example, fetch from session variables
-$user_name = isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : 'Guest';
+$user_name = isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : '';
 ?>
 <style>
     .dropdown-toggle {
