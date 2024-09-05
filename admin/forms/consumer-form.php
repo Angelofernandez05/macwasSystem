@@ -61,6 +61,7 @@
             <option <?php echo $type == "" ? "selected" : ""; ?> value="">Select Type</option>
             <option <?php echo $type == "Commercial" ? "selected" : ""; ?> value="Commercial">Commercial</option>
             <option <?php echo $type == "Residential" ? "selected" : ""; ?> value="Residential">Residential</option>
+            <option <?php echo $type == "Institution" ? "selected" : ""; ?> value="Institution">Institution</option>
         </select>
         <span class="invalid-feedback"><?php echo $type_err;?></span>
     </div>

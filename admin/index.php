@@ -69,11 +69,11 @@ mysqli_close($link);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .bg-primary-gradient {
+        .bg-paidbillsyearly-gradient {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
         }
-        .bg-success-gradient {
+        .bg-paidbills-gradient {
             background: linear-gradient(135deg, #43cea2, #185a9d);
             color: white;
         }
@@ -81,7 +81,7 @@ mysqli_close($link);
             background: linear-gradient(135deg, #232526, #414345);
             color: white;
         }
-        .bg-info-gradient {
+        .bg-complaints-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
         }
@@ -93,7 +93,7 @@ mysqli_close($link);
             background: linear-gradient(#ff66cc 0%, #9999ff 100%);
             color: white;
         }
-        .bg-red-gradient {
+        .bg-consumer-gradient {
             background: linear-gradient(135deg, #ff4b1f, #ff9068);
             color: white;
         }
@@ -173,7 +173,7 @@ mysqli_close($link);
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
             <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
             <div class="marquee">
-                <div class="marquee-content">Macwas Water Billing System</div>
+                <div class="marquee-content">Macwas Water Billing System 2.0</div>
             </div>
         </span>
             </div>
@@ -184,7 +184,7 @@ mysqli_close($link);
         <div class="container-fluid py-5">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="card bg-primary-gradient text-white">
+                    <div class="card bg-consumer-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -198,7 +198,7 @@ mysqli_close($link);
                 </div>
                 
                 <div class="col-md-4">
-                    <div class="card bg-success-gradient text-white">
+                    <div class="card bg-complaints-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -227,7 +227,7 @@ mysqli_close($link);
             <br>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="card bg-info-gradient text-white">
+                    <div class="card bg-paidbills-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -253,7 +253,7 @@ mysqli_close($link);
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card bg-red-gradient text-white">
+                    <div class="card bg-paidbillsyearly-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>

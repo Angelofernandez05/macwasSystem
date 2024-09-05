@@ -247,7 +247,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <select class="form-control" id="type" name="type" required>
                                 <option value="commercial">Commercial</option>
                                 <option value="residential">Residential</option>
-                                <option value="residential">Institution</option>
+                                <option value="institution">Institution</option>
                             </select>
                         </div>
                         <div class="form-group position-relative">
