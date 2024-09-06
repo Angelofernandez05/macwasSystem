@@ -13,6 +13,7 @@
         .sidebar .nav-links li a:hover {
             background: gray; /* Hover effect for links */
         }
+        
     </style>
 </head>
 <body>
@@ -52,7 +53,7 @@
                 <a href="complaint.php" class="position-relative">
                     <i class='bx bx-message-rounded-dots' style="background: linear-gradient(45deg, #ff6f61, #f7b42c); -webkit-background-clip: text; color: green;"></i>
                     <span id="complaint-notification-badge" class="badge badge-danger position-absolute top-0 start-100 translate-middle"
-                          style="transform: translate(150%, -50%); font-size: 0.60rem;">
+                          style="transform: translate(110%, -50%); font-size: 0.60rem;">
                         <!-- Complaint badge count will be updated by JavaScript -->
                     </span>
                     <span class="link_name">Complaints</span>

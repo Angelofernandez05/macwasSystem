@@ -1,183 +1,166 @@
 <?php
-    // Initialize the session
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_start();
-    }
+// Initialize the session
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
-    require_once "config.php";
+// Check if the user is logged in, if not then redirect to the login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+?>
 
-    // Fetch pending users
-    $pending_sql = "SELECT id, name, email, phone, barangay, account_num, registration_num, meter_num, type FROM pending_users";
-    $pending_result = mysqli_query($link, $pending_sql);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <?php include 'includes/links.php'; ?>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        }
+        .navbar-light-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: white;
+            border-bottom: 2px solid black !important;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <?php include 'includes/sidebar.php'; ?>
 
-    // Count pending users
-    $pending_count = mysqli_num_rows($pending_result);
+    <section class="home-section">
+        <nav class="navbar navbar-light-gradient bg-white border-bottom">
+            <span class="navbar-brand mb-0 h1 d-flex align-items-center">
+                <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
+                Pending Consumers
+            </span>
+            <?php include 'includes/userMenu.php'; ?>
+        </nav>
 
-    // Close connection
-    mysqli_close($link);
-    ?>      
+        <div class="container-fluid py-5">
+            <?php
+            // Include config file
+            require_once "config.php";
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Admin</title>
-        <?php include 'includes/links.php'; ?>
-        <link rel="icon" href="logo.png" type="image/icon type">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-        <style>
-            body {
-                background: linear-gradient(135deg, #e0eafc, #cfdef3);
-            }
-            .navbar-light-gradient {
-                background: linear-gradient(135deg, #36d1dc, #5b86e5);
-                color: white;
-                border-bottom: 2px solid black !important;
-                margin-left: 10px;
-            }
-            .main-content {
-                margin-left: 250px; /* Adjust this based on the sidebar width */
-            }
-            .table-container {
-                margin: 20px auto;
-                max-width: 1200px;
-            }
-            .action-buttons {
-                display: flex;
-                gap: 5px;
-            }
-            .action-buttons button {
-                margin: 0; /* Remove any default margin */
-                flex: none; /* Prevent buttons from stretching */
-            }
-            .table-container {
-                margin: 20px auto;
-                max-width: 1500px;
-            }
-            .table {
-                width: 100%;
-                border-collapse: collapse; /* Ensures borders between cells are merged */
-            }
-            .table th, .table td {
-                border: 1px solid #dee2e6; /* Light gray border color for table cells */
-                padding: 8px; /* Add padding to table cells */
-            }
-            .table thead th {
-                background-color: #f8f9fa; /* Light background color for table header */
-                border-bottom: 4px solid #dee2e6; /* Slightly thicker border for header bottom */
-            }
-            .table tbody tr:nth-child(even) {
-                background-color: #f2f2f2; /* Light gray background for even rows */
-            }
-            .table tbody tr:hover {
-                background-color: #e9ecef; /* Slightly darker background on hover */
-            }
-            .table-container h2 {
-                margin-bottom: 20px;
-            }
-            .sidebar .badge {
-                font-size: 0.75rem; /* Smaller font size for the badge */
-                padding: 1px 4px; /* Adjust padding */
-            }       
-
-        </style>
-    </head>
-    <body>
-        <?php include 'includes/sidebar.php'; ?>
-
-        <section class="home-section">
-            <nav class="navbar navbar-light-gradient bg-white border-bottom">
-                <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-                    <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
-                        Pending Consumer
-                </span>
-                <?php include 'includes/userMenu.php'; ?>
-            </nav>
-
-            <div class="container-fluid py-5">
-                <div class="table-container">
-                    <h2 class="text-center">Pending Consumers</h2>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Barangay</th>
-                                <th>Account No.</th>
-                                <th>Registration No.</th>
-                                <th>Meter No.</th>
-                                <th>Type</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pendingUsersTable">
-                            <?php if ($pending_count > 0): ?>
-                                <?php while ($row = mysqli_fetch_assoc($pending_result)): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($row['name']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['phone']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['barangay']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['account_num']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['registration_num']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['meter_num']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['type']); ?></td>
-                                        <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-success btn-sm" onclick="acceptUser(<?php echo $row['id']; ?>)">Accept</button>
-                                            <button class="btn btn-danger btn-sm" onclick="declineUser(<?php echo $row['id']; ?>)">Decline</button>
-                                        </div>
-                                        </td>
-                                    </tr>
-                                <?php endwhile; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="9" class="text-center">No pending users found.</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <?php include 'includes/scripts.php'; ?>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            function acceptUser(userId) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to accept this user.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#28a745',
-                    cancelButtonColor: '#dc3545',
-                    confirmButtonText: 'Yes, accept it!',
-                    cancelButtonText: 'No, cancel!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = `process_user.php?action=accept&id=${userId}`;
-                    }
-                });
+            // Attempt select query execution
+            $sql = "SELECT * FROM pending_users";
+            if($result = mysqli_query($link, $sql)){
+                if(mysqli_num_rows($result) > 0){
+                    echo '<div class="table-responsive">';
+                    echo '<table id="pendingTable" class="display table table-striped" style="width:100%">';
+                        echo "<thead>";
+                            echo "<tr>";
+                                echo "<th>Name</th>";
+                                echo "<th>Email</th>";
+                                echo "<th>Phone</th>";
+                                echo "<th>Barangay</th>";
+                                echo "<th>Account No.</th>";
+                                echo "<th>Registration No.</th>";
+                                echo "<th>Meter No.</th>";
+                                echo "<th>Type</th>";
+                                echo "<th>Action</th>";
+                            echo "</tr>";
+                        echo "</thead>";
+                        echo "<tbody>";
+                        while($row = mysqli_fetch_array($result)){
+                            $consumer_id = $row['id'];
+                            echo "<tr>";
+                                echo "<td>" . $row['name'] . "</td>";
+                                echo "<td>" . $row['email'] . "</td>";
+                                echo "<td>" . $row['phone'] . "</td>";
+                                echo "<td>" . $row['barangay'] . "</td>";
+                                echo "<td>" . $row['account_num'] . "</td>";
+                                echo "<td>" . $row['registration_num'] . "</td>";
+                                echo "<td>" . $row['meter_num'] . "</td>";
+                                echo "<td>" . $row['type'] . "</td>";
+                                echo "<td>";
+                                    echo '<a href="process_user.php?action=accept&id='. $consumer_id.'" class="mr-2" title="Approve Record" data-toggle="tooltip"><i class="bx bxs-check-circle btn btn-success btn-sm mb-3"></i></a>';
+                                    echo '<a href="process_user.php?action=decline&id='. $consumer_id.'" class="mr-2" title="Decline Record" data-toggle="tooltip"><i class="bx bxs-x-circle btn btn-danger btn-sm mb-3"></i></a>';
+                                    echo "</td>";
+                            echo "</tr>";
+                        }
+                        echo "</tbody>";                            
+                    echo "</table>";
+                    echo '</div>';
+                    mysqli_free_result($result);
+                } else{
+                    echo '<script>
+                            Swal.fire({
+                            title: "Info!",
+                            text: "No pending consumers found.",
+                            icon: "info",
+                            toast: true,
+                            position: "top-right",
+                            showConfirmButton: false,
+                            timer: 3000
+                            })
+                        </script>';
+                }
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
             }
 
-            function declineUser(userId) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to decline this user.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545',
-                    cancelButtonColor: '#28a745',
-                    confirmButtonText: 'Yes, decline it!',
-                    cancelButtonText: 'No, cancel!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = `process_user.php?action=decline&id=${userId}`;
-                    }
-                });
-            }
-        </script>
-    </body>
-    </html>
+            mysqli_close($link);
+            ?>
+        </div>
+    </section>
+
+    <?php include 'includes/scripts.php'; ?>
+    <!-- jQuery and DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+    // Initialize DataTable for pending consumers
+    $(document).ready(function() {
+        $('#pendingTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "info": true
+        });
+    });
+    function acceptUser(userId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to accept this user.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Yes, accept it!',
+                cancelButtonText: 'No, cancel!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `process_user.php?action=accept&id=${userId}`;
+                }
+            });
+        }
+
+        function declineUser(userId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to decline this user.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#28a745',
+                confirmButtonText: 'Yes, decline it!',
+                cancelButtonText: 'No, cancel!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `process_user.php?action=decline&id=${userId}`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+    </script>
+</body>
+</html>

@@ -168,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .form-control {
-            border-radius: 20px;
+            border-radius: 15px;
         }
 
         .btn {
@@ -213,6 +213,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label for="barangay">Barangay:</label>
                             <select class="form-control" id="barangay" name="barangay" required>
                                 <option value="">Select Brgy</option>
+                                <option value="Poblacion">Poblacion</option>
+                                <option value="Tugas">Tugas</option>
                                 <option value="Bunakan">Bunakan</option>
                                 <option value="Kangwayan">Kangwayan</option>
                                 <option value="Kaongkod">Kaongkod</option>

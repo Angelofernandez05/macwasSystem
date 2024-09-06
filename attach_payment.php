@@ -67,7 +67,7 @@ if(isset($_POST["create"])) {
      
 <br/>
 
-<h6>GCASH NAME: ROQUE C. ZAPA JR.</h6>
+<h6>GCASH NAME: SAMUEL U. MULLE JR.</h6>
 <h6>GCASH NUMBER: 09309631219 </h6>
 
 <br/>
