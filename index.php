@@ -33,7 +33,7 @@ $billing_row = mysqli_fetch_assoc($billing_result);
 $total_due = $billing_row['total_due'] ? number_format((float)$billing_row['total_due'], 2, '.', '') : '0.00';
 
 // Fetch user info
-$user_sql = "SELECT name, email, registration_date FROM consumers WHERE id = $id;"; // Adjust column names as needed
+$user_sql = "SELECT name, email, registration_date FROM consumers WHERE id = $id;";
 $user_result = mysqli_query($link, $user_sql);
 
 if (!$user_result) {
@@ -47,23 +47,97 @@ $user_row = mysqli_fetch_assoc($user_result);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Consumer</title>
+    <title>Consumer Dashboard</title>
     <?php include 'includes/links.php'; ?>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        /* Your CSS styles */
-        body{
+        body {
+            margin: 0;
+            padding: 0;
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-            height: 60px;
+            height: 65px;
+            margin-left: 15px;
         }
-        .bg-success-gradient {
-            background: linear-gradient(135deg, #43cea2, #185a9d);
+        .bg-complaints-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
+        }
+        .clock {
+            font-size: 1.1rem;
+            font-family: 'Verdana', sans-serif;
+            font-weight: 550;
+            color: black;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            margin-left: 15px;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .marquee {
+            overflow: hidden;
+            position: relative;
+            white-space: nowrap;
+            box-sizing: border-box;
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 8s linear infinite;
+            font-size: 30px;
+            color: darkblue;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #36d1dc, #5b86e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .chart-container {
+            position: relative;
+            height: 600px; /* Adjusted height */
+            width: 100%; /* Full width for responsiveness */
+            max-width: 500px; /* Max width for large screens */
+            margin: 20px auto; /* Centered */
+            margin-left: 70px;
+        }
+        .content {
+            flex: 1; /* Take up remaining space */
+            padding: 20px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .col-md-4 {
+            flex: 1 1 30%; /* Responsive column */
+            margin: 10px;
+        }
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        @media (max-width: 768px) {
+            .col-md-4 {
+                flex: 1 1 100%; /* Full width on small screens */
+            }
         }
     </style>
 </head>
@@ -72,17 +146,21 @@ $user_row = mysqli_fetch_assoc($user_result);
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
+            <div class="navbar-header">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-                <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
-                Dashboard
-            </span>
+            <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
+            <div class="marquee">
+                <div class="marquee-content">Macwas Water Billing System 2.0</div>
+            </div>
+        </span>
+            </div>
             <?php include 'includes/userMenu.php'; ?>
         </nav>
-
-        <br>
+        <div class="clock" id="clock"></div>
+        <div class="content">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="card bg-success-gradient text-white ml-3">
+                <div class="col-md-4">
+                    <div class="card bg-complaints-gradient text-white ml-1">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
@@ -94,12 +172,71 @@ $user_row = mysqli_fetch_assoc($user_result);
                         </div>
                     </div>
                 </div>
+            </div>  
+            <br>
+            <!-- Chart Container -->
+            <div class="mt-5">
+                <h4>Dashboard Chart</h4>
+                <div class="chart-container">
+                    <canvas id="dashboardChart"></canvas>
+                </div>
             </div>
+        </div>
     </section>
 
     <?php include 'includes/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   
+    <script>
+        // JavaScript for Clock
+        function updateClock() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            var timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+
+            var day = now.getDate();
+            var month = now.getMonth() + 1;
+            var year = now.getFullYear();
+            var dateString = day + '/' + month + '/' + year;
+
+            document.getElementById('clock').textContent = timeString + ' | ' + dateString;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();  // Initialize the clock immediately
+
+        // Chart.js Code
+        var ctx = document.getElementById('dashboardChart').getContext('2d');
+        var dashboardChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Complaints', 'Total Due'],
+                datasets: [{
+                    label: 'Consumer Data',
+                    data: [<?php echo $complaints_total; ?>, <?php echo $total_due; ?>],
+                    backgroundColor: ['#36d1dc', '#5b86e5'],
+                    borderColor: ['#36d1dc', '#5b86e5'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 </body>
 </html>

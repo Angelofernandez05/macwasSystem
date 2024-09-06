@@ -32,7 +32,7 @@ mysqli_close($link);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Accounting</title>
+    <title>Accounting Dashboard</title>
     <?php include 'includes/links.php'; ?>
     <link rel="icon" href="logo.png" type="image/icon type">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -64,6 +64,7 @@ mysqli_close($link);
             color: linear-gradient(135deg, #f09819, #edde5d);
             border-bottom: 1px solid black !important;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            height: 65px;
             
         }
         .clock {
@@ -143,7 +144,7 @@ mysqli_close($link);
 
         <div class="container-fluid py-5">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card bg-consumer-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
@@ -156,7 +157,7 @@ mysqli_close($link);
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card bg-paidbills-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
@@ -169,7 +170,7 @@ mysqli_close($link);
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card bg-unpaid-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">

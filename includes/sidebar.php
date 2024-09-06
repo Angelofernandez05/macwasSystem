@@ -28,16 +28,16 @@
         <ul class="nav-links">
             <li>
                 <a href="index.php">
-                    <i class='bx bx-grid-alt' ></i>
+                    <i class='bx bx-grid-alt' style="background: linear-gradient(45deg, #ff6f61, #f7b42c); -webkit-background-clip: text; color: green;"></i>   
                     <span class="link_name">Dashboard</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="index.php">Dashboard</a></li>
+                    <li><a class="link_name" href="index.php"></a></li>
                 </ul>
             </li>
             <li>
                 <a href="reading.php">
-                <i class='bx bxs-file'></i>
+                <i class='bx bxs-file'style="background: linear-gradient(45deg, #ff6f61, #f7b42c); -webkit-background-clip: text; color: green;"></i>
                 <div class="d-inline-flex align-items-center">
                 <span class="link_name">Bill</span>
                 <?php
@@ -66,17 +66,17 @@
                 </div>
                 </a>
                 <ul class="sub-menu blank">
-                <li><a class="link_name" href="reading.php">Bill</a></li>
+                <li><a class="link_name" href="reading.php"></a></li>
                 </ul>
             </li>
 
             <li>
                 <a href="complaint.php">
-                    <i class='bx bx-message-rounded-dots'></i>
+                <i class='bx bx-message-rounded-dots' style="background: linear-gradient(45deg, #ff6f61, #f7b42c); -webkit-background-clip: text; color: green;"></i>
                     <span class="link_name">Complaints</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="complaint.php">Complaints</a></li>
+                    <li><a class="link_name" href="complaint.php"></a></li>
                 </ul>
             </li>
 

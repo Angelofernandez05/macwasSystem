@@ -11,7 +11,7 @@ require_once "config.php";
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Plumber</title>
+    <title>Plumber Complaints</title>
     <?php include 'includes/links.php'; ?>
 </head>
 <body>
@@ -24,6 +24,7 @@ require_once "config.php";
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
+            height: 65px;
         }
     </style>
     <?php include 'includes/sidebar.php'; ?>

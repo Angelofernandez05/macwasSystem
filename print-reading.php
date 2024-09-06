@@ -177,7 +177,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     </div>
     
     <script type="text/javascript">
-      window.onload = function() { window.print(); }
+    //   window.onload = function() { window.print(); }
     </script>
 </body>
 </html>

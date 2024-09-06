@@ -11,7 +11,7 @@ require_once "config.php";
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin</title>
+    <title>Admin Complaints</title>
     <?php include 'includes/links.php'; ?>
 </head>
 <body>

@@ -60,7 +60,7 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Consumer</title>
+    <title>Consumer Complaint</title>
     <?php include 'includes/links.php'; ?>
 
     <style>
@@ -71,7 +71,7 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-            height: 60px;
+            height: 65px;
         }
    </style> 
 </head>
@@ -81,7 +81,7 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-                <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
+                <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
                 Complaints
             </span>
             <?php include 'includes/userMenu.php'; ?>

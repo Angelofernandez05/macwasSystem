@@ -4,7 +4,7 @@
 ob_start();
 session_start();
  
-// Check if the user is logged in, if not then redirect him to login page
+// Check if the user is logged in, if not then redirect to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
@@ -29,32 +29,64 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Consumer</title>
+    <title>Consumer Bill</title>
     <?php include 'includes/links.php'; ?>
-
     <style>
-        body{
+        body {
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
-            border-bottom: 2px solid black !important;
-            height: 60px;
+            border-bottom: 2px solid black;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            color: black;
         }
         .table thead th {
-            background-color: #f8f9fa; /* Light background color for table header */
-            border-bottom: 2px solid #dee2e6; /* Slightly thicker border for header bottom */
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
         }
-   </style>
+        .table td img {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+        }
+        .container-fluid {
+            flex: 1;
+            padding: 20px;
+        }
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
-            <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-                <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
+            <span class="navbar-brand mb-0 h1">
+                <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
                 Bill
             </span>
             <?php include 'includes/userMenu.php'; ?>
@@ -104,14 +136,14 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
                             ?>
                             <td>
                                 <?php if (!empty($row["screenshot"])) {
-                                    echo '<img width="100px" height="100px" src="uploads/' . $row["screenshot"] . '">';
+                                    echo '<img src="uploads/' . $row["screenshot"] . '" alt="Screenshot">';
                                 } ?>
                             </td>
                             <?php
                             echo "<td>" . $status . "</td>";
                             echo "<td>";
-                            echo '<a target="_blank" href="print-reading.php?id=' . $row['id'] . '" class="mr-2" title="Print Record" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
-                            echo '<a target="_blank" href="att_payment.php?id=' . $row['id'] . '" class="mr-2" title="Attach Payment" data-toggle="tooltip"><i class="bx bxs-cog"></i></a>';
+                            echo '<a target="_blank" href="print-reading.php?id=' . $row['id'] . '" class="mr-2" title="bill" data-toggle="tooltip"><i class="bx bxs-file btn btn-danger btn-sm mb-3"></i></a>';
+                            echo '<a target="_blank" href="att_payment.php?id=' . $row['id'] . '" class="mr-2" title="Attach Payment" data-toggle="tooltip"><i class="bx bxs-cog btn btn-warning btn-sm mb-3 btn-sm ml-2"></i></a>';
                             echo "</td>";
                             echo "</tr>";
                         }

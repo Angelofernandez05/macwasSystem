@@ -15,7 +15,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Plumber</title>
+    <title>Plumber Consumers</title>
     <?php include 'includes/links.php'; ?>
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
@@ -38,7 +38,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-            height: 60px;
+            height: 65px;
         }
         .table thead th {
             background-color: #f8f9fa; /* Light background color for table header */
@@ -142,14 +142,14 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                                         // Inside the dropdown menu in consumer.php
                                 echo '<div class="dropdown">';
                                 echo '<button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton'.$consumer_id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-                                echo '<i class="bx bx-mail-send"></i>';
+                                echo '<i class="bx bx-mail-send" style="font-size: 10px;"></i>';
                                 echo '</button>';
                                 echo '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton'.$consumer_id.'">';
                                 // Pass the consumer ID to send-billing-statement.php
                                 echo '<a target="_blank" href="send-billing-statement.php?consumer_id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Job Order</a>';
                                 echo '<a target="_blank" href="send-notice-disconnection.php?consumer_id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Notice of Disconnection</a>';
                                 echo '</div>';
-                                echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-1q" title="Reading" data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-2 ml-2 ;"></i></a>';
+                                echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-1q" title="Reading" data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-1 ml-2 ;"></i></a>';
                                 echo "</td>";
                                 echo '</div>';
 

@@ -29,7 +29,7 @@ mysqli_close($link);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PLumber</title>
+    <title>PLumber Dashboard</title>
     <?php include 'includes/links.php'; ?>
     <link rel="icon" href="logo.png" type="image/icon type">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -45,11 +45,11 @@ mysqli_close($link);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .bg-consumer-gradient {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ff4b1f, #ff9068);
             color: white;
         }
-        .bg-complaint-gradient {
-            background: linear-gradient(135deg, #43cea2, #185a9d);
+        .bg-complaints-gradient {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
         }
         .navbar-light-gradient {
@@ -57,7 +57,7 @@ mysqli_close($link);
             color: linear-gradient(135deg, #f09819, #edde5d);
             border-bottom: 1px solid black !important;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            
+            height: 65px;
         }
         .clock {
             font-size: 1.1rem;
@@ -110,7 +110,7 @@ mysqli_close($link);
             -webkit-text-fill-color: transparent;
         }
         #consumersChart {
-            max-width: 600px;
+            max-width: 500px;
             max-height: 650px;
            
         }
@@ -126,7 +126,7 @@ mysqli_close($link);
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
             <i class='bx bx-menu mr-3' style='cursor: pointer; font-size: 2rem'></i>
             <div class="marquee">
-                <div class="marquee-content">Macwas Water Billing System</div>
+                <div class="marquee-content">Macwas Water Billing System 2.0</div>
             </div>
         </span>
             </div>
@@ -151,7 +151,7 @@ mysqli_close($link);
                 </div>
                 
                 <div class="col-md-4">
-                    <div class="card bg-complaint-gradient text-white">
+                    <div class="card bg-complaints-gradient text-white">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>

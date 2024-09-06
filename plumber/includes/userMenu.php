@@ -22,9 +22,9 @@ $user_name = isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : 'G
         <h6 class="mb-0">Hi, <?php echo $user_name; ?></h6>
     </button>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <!-- <a class="dropdown-item" href="reset_password.php">Reset Your Password</a> -->
+        <a class="dropdown-item" href="reset_password.php">Reset Your Password</a>
         <a class="dropdown-item" href="#" onclick="confirmLogout()">Sign Out</a>
-    </div>
+    </div>  
 </div>
 
 <script>

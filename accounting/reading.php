@@ -4,7 +4,7 @@
 // Initialize the session
 ob_start();
 session_start();
- 
+
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
@@ -34,8 +34,6 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
             $result = mysqli_stmt_get_result($stmt3);
 
             if(mysqli_num_rows($result) == 1){
-                /* Fetch result row as an associative array. Since the result set
-                contains only one row, we don't need to use while loop */
                 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
                 
                 // Retrieve individual field value
@@ -46,8 +44,6 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                 $meter_num = $row["meter_num"];
                 $type = $row["type"];
             } else{
-                // URL doesn't contain valid id. Redirect to error page
-                // header("location: consumer.php");
                 exit();
             }
             
@@ -64,57 +60,48 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bill</title>
+    <title>Accounting Bill</title>
     <?php include 'includes/links.php'; ?>
     <style>
-         .table-responsive {
-    overflow-x: auto;
-    /* Ensure the container is responsive */
-}
-
-.table-custom {
-    width: 100%; /* Ensure the table takes full width */
-    max-width: 1300px; /* You can adjust this value */
-    margin: 0 auto; /* Center the table */
-    margin-left: 140px;
-}
-
-.table thead th {
-            background-color: #f8f9fa; /* Light background color for table header */
-            border-bottom: 2px solid #dee2e6; /* Slightly thicker border for header bottom */
-        }
-
-.table-custom th,
-.table-custom td {
-    white-space: nowrap; /* Prevents content from wrapping */
-    text-align: center; /* Center align text */
-}
-
-        .alert {
-            font-size: 14px;
-            padding: 8px 12px;
-            text-align: center;
-            margin: 10px;
-            max-width: 600px;
-            position: fixed;
-            top: 50px;
-            right: 10px;
-            z-index: 9999;
-        }
-        .table-custom {
+    .table-custom {
         width: 100%; /* Full width */
-        table-layout: auto; /* Allow columns to resize based on content */
-        }
-        body{
-            background: linear-gradient(135deg, #e0eafc, #cfdef3);
-        }
-        .navbar-light-gradient {
-            background: linear-gradient(135deg, #36d1dc, #5b86e5);
-            color: white;
-            border-bottom: 2px solid black !important;
-            height: 60px;
-        }
+        table-layout: auto; /* Columns adjust based on content */
+        margin: 0 auto;
+        max-width: 100%; /* Ensure the table uses the full width */
+    }
+
+    .table-custom th, .table-custom td {
+        text-align: center; /* Center align text */
+        padding: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal; /* Allow text wrapping */
+    }
+
+    body {
+        background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    }
+
+    .navbar-light-gradient {
+        background: linear-gradient(135deg, #36d1dc, #5b86e5);
+        color: white;
+        border-bottom: 2px solid black !important;
+        height: 60px;
+    }
+
+    /* Remove unnecessary margin on the table */
+    .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .table-custom img {
+        max-width: 100px; /* Limit image size to fit within the cell */
+        height: auto;
+    }
+
     </style>
+
 </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
@@ -131,20 +118,15 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
         <div class="container-fluid py-5">
             <div class="row w-100">
                 <div class="col-12 col-lg-9">
-                    <!-- <a target="_blank" href="print-reading.php?consumer_id=<?php echo $_GET["consumer_id"] ?>" class="btn btn-primary btn-sm mb-3"><i class='bx bxs-printer'></i> Print</a> -->
                 
                     <?php
-                    // Include config file
-                    // require_once "config.php";
                     $idn = "";
-                    
-                    // Attempt select query execution
                     $id = $_GET["consumer_id"];
                     $sql = "SELECT *, (present - previous) as used FROM readings WHERE consumer_id = $id ";
                     if($result = mysqli_query($link, $sql)){
                         if(mysqli_num_rows($result) > 0){
-                            echo '<table class="table table-striped table-custom">';
                             echo '<div class="table-responsive">';
+                            echo '<table class="table table-striped table-custom">';
                                 echo "<thead>";
                                     echo "<tr>";
                                         echo "<th>Due Date</th>";
@@ -159,7 +141,6 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                                     echo "</tr>";
                                 echo "</thead>";
                                 echo "<tbody>";
-                                echo '</div>';
                                 while($row = mysqli_fetch_array($result)){
                                     $status = 'Pending';
                                     $idn = $row['id'];
@@ -179,42 +160,22 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                                         ?>
                                         <td>
                                         <?php if(!empty($row["screenshot"])) {
-                                        echo '<img width="100px" height="100px" src="../uploads/'.$row["screenshot"] .'">';
+                                        echo '<img src="../uploads/'.$row["screenshot"] .'">';
                                         } ?>
                                         
                                     </td>
                                         <?php
                                         echo "<td>" . $status . "</td>";
                                         echo "<td class='d-flex align-items-center' style='gap: 0.3rem'>";
-                                            ?>
-                                                <!-- <div class="dropdown">
-                                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class='bx bx-mail-send'></i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                        <?php
-                                                            // echo '<a target="_blank" href="send-billing-statement.php?id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Billing Statement</a>';
-                                                            // echo '<a target="_blank" href="send-notice.php?id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Notice of Disconnection</a>';
-                                                        ?>
-                                                    </div>
-                                                </div> -->
-                                            <?php
-                                            // echo '<a target="_blank" href="sendMail.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" class="mr-2" title="Send Billing Statement" data-toggle="tooltip"><i class="bx bx-sm bx-mail-send"></i></a>';
-                                            //echo '<a target="_blank" href="print-reading.php?id='. $row['id'] .'" title="Print Billing Statement" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
-                                            // echo '<a target="_blank" href="print-reading.php?id='. $row['id'] .'" title="Print Billing Statement" data-toggle="tooltip"><i class="bx bxs-printer"></i></a>';
-                                           // echo '<a href="reading.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil" ></i></a>';
-                                            // echo '<a onclick="javascript:confirmationDelete($(this));return false;" href="delete-reading.php?consumer_id='.$_GET["consumer_id"].'&id='. $row['id'] .'" title="Delete Record" data-toggle="tooltip"><i class="bx bxs-trash-alt" ></i></a>';
-                                           // echo '<a href="#" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-cid="'.$_GET["consumer_id"].'" data-id="'. $row['id'] .'"><i class="bx bxs-trash-alt"></i></a>';
-                                            echo '<a href="#" class="confirmButton" title="Payment" data-toggle="tooltip" data-cid="'.$_GET["consumer_id"].'" data-id="'. $row['id'] .'"><i class="bx bx-money ml-3"></i></a>';
+                                            echo '<a href="#" class="confirmButton" title="Payment" data-toggle="tooltip" data-cid="'.$_GET["consumer_id"].'" data-id="'. $row['id'] .'"><i class="bx bx-money btn btn-danger btn-sm mb-3"></i></a>';
                                         echo "</td>";
                                     echo "</tr>";
                                 }
                                 echo "</tbody>";                            
                             echo "</table>";
-                            // Free result set
+                            echo '</div>'; // Close table-responsive
                             mysqli_free_result($result);
                         } else{
-                            // echo '<div class="alert alert-danger"><em>No records were found.</em></div>';
                             echo '<script>
                             Swal.fire({
                             title: "Info!",
@@ -228,7 +189,6 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                             </script>';
                         }
                     } else{
-                        // echo '<div class="alert alert-danger"><em>Oops! Something went wrong. Please try again later.</em></div>';
                         echo '<script>
                         Swal.fire({
                         title: "Error!",
@@ -241,58 +201,39 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
                         })
                         </script>';
                     }
-
-                    // Close connection
-                    // mysqli_close($link);
                     ?>
                 </div>
-               
             </div>
         </div>
     </section>
 
     <?php include 'includes/scripts.php'; ?>
         <script>
-    // Hide the alert after 3 seconds
-    // setTimeout(function(){
-    //     var alert = document.querySelector('.alert');
-    //     if (alert) {
-    //     alert.style.display = 'none';
-    //     }
-    // }, 3000);
+    const confirmButton = document.querySelectorAll('.confirmButton');
+    confirmButton.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const consumer_id = this.dataset.cid;
+        const id = this.dataset.id;
 
-const confirmButton = document.querySelectorAll('.confirmButton');
-// console.log(viewButtons);
-confirmButton.forEach(button => {
-  button.addEventListener('click', function(e) {
-    e.preventDefault();
-
-    const consumer_id = this.dataset.cid;
-    const id = this.dataset.id;
-
-    console.log(`${consumer_id}:${id}`);
-
-    Swal.fire({
-      title: `Are you sure want to paid this?`,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, do it!',
-      cancelButtonText: 'No, cancel',
-      allowOutsideClick: false, // Prevents closing when clicking outside the dialog box
-      allowEscapeKey: false // Prevents closing when pressing the escape key
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Redirect to the desired page
-        // window.location.href = `status-consumer.php?id=${id}&status=${status}`;
-        window.location.href = `payment-reading.php?consumer_id=${consumer_id}&id=${id}`;
-      }
+        Swal.fire({
+          title: `Are you sure want to pay this?`,
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, do it!',
+          cancelButtonText: 'No, cancel',
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = `payment-reading.php?consumer_id=${consumer_id}&id=${id}`;
+          }
+        });
+      });
     });
-  });
-});
-
     </script>
 </body>
 </html>
