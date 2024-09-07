@@ -83,15 +83,7 @@ if (isset($_GET['consumer_id'])) {
                 <p><small class="text-muted mr-2">Remarks:</small><strong>NO PAYMENT:</strong></p>
             </div>
             <div class="mt-4">
-                <p class="font-weight-bold">Date of Disconnection: 
-                    <?php 
-                    if (isset($row['due_date'])) {
-                        echo date("F j, Y", strtotime($row['due_date'] . " +15 days"));
-                    } else {
-                        echo "Due date not available";
-                    }
-                    ?>
-                </p>
+                <p class="font-weight-bold">Date of Disconnection: <?php echo date("F j, Y", strtotime($row['due_date'] . " +15 days")); ?></p>
             </div>
             <div class="mt-4">
                 <p>Please pay the above billing month/s before the disconnection date. Thank you.</p>

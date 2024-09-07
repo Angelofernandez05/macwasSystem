@@ -64,7 +64,7 @@ if(!isset($_GET["consumer_id"]) || empty(trim($_GET["consumer_id"]))){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bill</title>
+    <title>PLumber Bill</title>
     <?php include 'includes/links.php'; ?>
     <style>
          body{

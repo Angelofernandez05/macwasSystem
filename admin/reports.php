@@ -39,6 +39,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             color: white;
             border-bottom: 2px solid black !important;
             height: 60px;
+            margin-left: 10px;
         }
         .table thead th {
             background-color: #f8f9fa; /* Light background color for table header */

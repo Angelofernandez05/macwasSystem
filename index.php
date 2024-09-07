@@ -21,16 +21,16 @@ if (!$complaints_result) {
 
 $complaints_total = mysqli_num_rows($complaints_result);
 
-// Fetch billing information
-$billing_sql = "SELECT SUM(present - previous) AS total_due FROM readings WHERE consumer_id = $id AND status = 0;";
-$billing_result = mysqli_query($link, $billing_sql);
+// Fetch total used
+$used_sql = "SELECT SUM(present - previous) AS total_used FROM readings WHERE consumer_id = $id;";
+$used_result = mysqli_query($link, $used_sql);
 
-if (!$billing_result) {
+if (!$used_result) {
     die("Error executing query: " . mysqli_error($link));
 }
 
-$billing_row = mysqli_fetch_assoc($billing_result);
-$total_due = $billing_row['total_due'] ? number_format((float)$billing_row['total_due'], 2, '.', '') : '0.00';
+$used_row = mysqli_fetch_assoc($used_result);
+$total_used = $used_row['total_used'] ? number_format((float)$used_row['total_used'], 2, '.', '') : '0.00';
 
 // Fetch user info
 $user_sql = "SELECT name, email, registration_date FROM consumers WHERE id = $id;";
@@ -68,6 +68,10 @@ $user_row = mysqli_fetch_assoc($user_result);
         }
         .bg-complaints-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
+            color: white;
+        }
+        .bg-used-gradient {
+            background: linear-gradient(135deg, #ff6f61, #d84a38);
             color: white;
         }
         .clock {
@@ -112,12 +116,14 @@ $user_row = mysqli_fetch_assoc($user_result);
         }
         .chart-container {
             position: relative;
-            height: 600px; /* Adjusted height */
+            height: 400px; /* Adjusted height to fit within viewport */
             width: 100%; /* Full width for responsiveness */
-            max-width: 500px; /* Max width for large screens */
+            max-width: 700px; /* Max width for large screens */
             margin: 20px auto; /* Centered */
-            margin-left: 70px;
+            margin-left: 20px;
+            overflow: hidden; /* Hide overflow to prevent scroll bars */
         }
+
         .content {
             flex: 1; /* Take up remaining space */
             padding: 20px;
@@ -147,12 +153,12 @@ $user_row = mysqli_fetch_assoc($user_result);
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
             <div class="navbar-header">
-            <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-            <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
-            <div class="marquee">
-                <div class="marquee-content">Macwas Water Billing System 2.0</div>
-            </div>
-        </span>
+                <span class="navbar-brand mb-0 h1 d-flex align-items-center">
+                    <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
+                    <div class="marquee">
+                        <div class="marquee-content">Macwas Water Billing System 2.0</div>
+                    </div>
+                </span>
             </div>
             <?php include 'includes/userMenu.php'; ?>
         </nav>
@@ -172,6 +178,19 @@ $user_row = mysqli_fetch_assoc($user_result);
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="card bg-used-gradient text-white ml-1">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h4 class="mb-0"><?php echo $total_used; ?></h4>
+                                    <small class="mb-0">Total Used</small>
+                                </div>
+                                <i class='bx bx-tachometer bx-md'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>  
             <br>
             <!-- Chart Container -->
@@ -187,53 +206,63 @@ $user_row = mysqli_fetch_assoc($user_result);
     <?php include 'includes/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // JavaScript for Clock
-        function updateClock() {
+          // JavaScript for Clock
+          function updateClock() {
             var now = new Date();
+            
+            // Time
             var hours = now.getHours();
             var minutes = now.getMinutes();
             var seconds = now.getSeconds();
             var ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
-            hours = hours ? hours : 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
             minutes = minutes < 10 ? '0' + minutes : minutes;
             seconds = seconds < 10 ? '0' + seconds : seconds;
             var timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-
+            
+            // Date
             var day = now.getDate();
-            var month = now.getMonth() + 1;
+            var month = now.getMonth() + 1; // January is 0!
             var year = now.getFullYear();
             var dateString = day + '/' + month + '/' + year;
 
+            // Set both date and time
             document.getElementById('clock').textContent = timeString + ' | ' + dateString;
         }
 
         setInterval(updateClock, 1000);
         updateClock();  // Initialize the clock immediately
 
-        // Chart.js Code
+        // JavaScript for Chart.js
         var ctx = document.getElementById('dashboardChart').getContext('2d');
         var dashboardChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Complaints', 'Total Due'],
+                labels: ['Complaints', 'Total Used'],
                 datasets: [{
-                    label: 'Consumer Data',
-                    data: [<?php echo $complaints_total; ?>, <?php echo $total_due; ?>],
-                    backgroundColor: ['#36d1dc', '#5b86e5'],
-                    borderColor: ['#36d1dc', '#5b86e5'],
+                    label: 'Total',
+                    data: [<?php echo $complaints_total; ?>, <?php echo $total_used; ?>],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)', // Blue for complaints
+                        'rgba(255, 99, 132, 0.2)'  // Red for total used
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',   // Blue for complaints
+                        'rgba(255, 99, 132, 1)'    // Red for total used
+                    ],
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
         });

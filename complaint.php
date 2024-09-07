@@ -93,18 +93,18 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new" aria-selected="true">
-                                New <span class="badge badge-primary"><?php echo htmlspecialchars($new_com_total); ?></span>
+                                New <span class="primary"><?php echo htmlspecialchars($new_com_total); ?></span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="resolved-tab" data-toggle="tab" href="#resolved" role="tab" aria-controls="resolved" aria-selected="false">
-                                Resolved <span class="badge badge-primary"><?php echo htmlspecialchars($resolved_com_total); ?></span>
+                                Resolved <span class="primary"><?php echo htmlspecialchars($resolved_com_total); ?></span>
                             </a>
                         </li>
                     </ul>
 
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active py-3" id="new" role="tabpanel" aria-labelledby="new-tab">
+                        <div class="tab-pane fade show active py-4" id="new" role="tabpanel" aria-labelledby="new-tab">
                             <?php
                                 if ($new_com_total > 0) {
                                     echo '<div class="row">';
@@ -115,7 +115,7 @@ if ($stmt = mysqli_prepare($link, $resolved_com_sql)) {
                                 }
                             ?>
                         </div>
-                        <div class="tab-pane fade py-3" id="resolved" role="tabpanel" aria-labelledby="resolved-tab">
+                        <div class="tab-pane fade py-4" id="resolved" role="tabpanel" aria-labelledby="resolved-tab">
                             <?php
                                 if ($resolved_com_total > 0) {
                                     echo '<div class="row">';

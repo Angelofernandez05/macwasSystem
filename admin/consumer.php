@@ -146,7 +146,7 @@
                                                 if($row['status'] == 0){
                                                     echo '<a href="#" class="viewButton" title="Enable Record" data-toggle="tooltip" data-id="'.$consumer_id.'" data-status="1"><i class="bx bx-show btn btn-success btn-sm mb-3 btn-sm ml-2"></i></a>';
                                                 }else{
-                                                    echo '<a href="#" class="viewButton" title="Disable Record"  data-toggle="tooltip" data-id="'.$consumer_id.'" data-status="0"><i class="bx bx-hide btn btn-warning btn-sm mb-3 btn-sm ml-2"></i></a>';
+                                                    // echo '<a href="#" class="viewButton" title="Disable Record"  data-toggle="tooltip" data-id="'.$consumer_id.'" data-status="0"><i class="bx bx-hide btn btn-warning btn-sm mb-3 btn-sm ml-2"></i></a>';
                                                 }
                                                 // Added action for reading
                                                 //echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-2" title="Reading  " data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-3 ml-2"></i></a>';
