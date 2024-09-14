@@ -142,8 +142,8 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
                             <?php
                             echo "<td>" . $status . "</td>";
                             echo "<td>";
-                            echo '<a target="_blank" href="print-reading.php?id=' . $row['id'] . '" class="mr-2" title="bill" data-toggle="tooltip"><i class="bx bxs-file btn btn-danger btn-sm mb-3"></i></a>';
-                            echo '<a target="_blank" href="att_payment.php?id=' . $row['id'] . '" class="mr-2" title="Attach Payment" data-toggle="tooltip"><i class="bx bxs-cog btn btn-warning btn-sm mb-3 btn-sm ml-2"></i></a>';
+                            echo '<a target="_blank" href="print-reading.php?id=' . $row['id'] . '" class="mr-2" title="bill" data-toggle="tooltip"><i class="bx bxs-file btn btn-danger btn-sm mb-3 rounded-circle"></i></a>';
+                            echo '<a target="_blank" href="att_payment.php?id=' . $row['id'] . '" class="mr-2" title="Attach Payment" data-toggle="tooltip"><i class="bx bxs-wallet btn btn-primary btn-sm mb-3 ml-2 rounded-circle"></i></a>';                            
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -152,7 +152,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
                         // Free result set
                         mysqli_free_result($result);
                     } else {
-                        echo '<script>
+                        echo '<script>q
                         Swal.fire({
                             title: "Info!",
                             text: "No records were found.",
