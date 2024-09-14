@@ -297,7 +297,7 @@ mysqli_close($link);
                                         <td>
                                             <div class="d-flex" style="gap: 0.3rem">
                                             <div class="dropdown">
-                                                    <button class="btn btn-sm btn-danger dropdown-toggle rounded-circle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button class="btn btn-sm btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class='bx bxs-printer'></i> 
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -305,7 +305,7 @@ mysqli_close($link);
                                                     </div>
                                                 </div>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-sm btn-primary dropdown-toggle rounded-circle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class='bx bx-mail-send'></i> 
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
