@@ -54,7 +54,7 @@ mysqli_close($link);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin1 Dashboard</title>
+    <title>Admin Dashboard</title>
     <?php include 'includes/links.php'; ?>
     <link rel="icon" href="logo.png" type="image/icon type">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -257,7 +257,7 @@ mysqli_close($link);
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h4 class="mb-0"><?php echo $paid_total_year; ?></h4>
+                                    <h4 class="mb-0"><?php echo $paid_total_yearly; ?></h4>
                                     <small class="mb-0">Paid Bills Yearly</small>
                                 </div>
                                 <i class='bx bxs-calendar-star bx-md'></i>
