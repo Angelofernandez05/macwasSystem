@@ -349,7 +349,7 @@ mysqli_close($link);
                             <?php echo $unpaid_total; ?>,
                             <?php echo $paid_total; ?>,
                             <?php echo $paid_total_month; ?>,
-                            <?php echo "0"; ?>
+                            <?php echo $paid_total_year; ?>
                         ],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',

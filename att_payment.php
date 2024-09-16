@@ -59,7 +59,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Payment</title> 
+    <title> Consumer Payment</title> 
 
      <!-- Bootstrap CSS v5.2.1 -->
      <link rel="stylesheet" href="harry.css">
@@ -79,8 +79,8 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         <div class="flexbox">
             <div class="box">
                 <h2>GCASH Details:</h2>
-                <span>Angelo Fernandez</span>
-                <div class="card-holder-name">09454351571</div>
+                <span>Samuel U. Mulle Jr.</span>
+                <div class="card-holder-name">09755319049</div>
             </div>
         </div>
     </div>
