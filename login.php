@@ -106,11 +106,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport meta tag -->
     <title>Consumer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
@@ -141,35 +141,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             background-attachment: fixed;
             background-size: cover;
         }
-        .input-group {
-            position: relative;
-        }
-
-        .input-group .form-control {
-            padding-right: 2.5rem;
-        }
-
-        .input-group .input-group-text {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 10;
-            margin-right: 20px;
-        }
-
-        .input-group .input-group-text i {
-            color: #000;
-            font-size: 1.2rem;
-        }
         .card {
             border-radius: 25px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(173, 216, 230, 0.0); /* Light blue with some transparency */
+            background-color: rgba(173, 216, 230, 0.2); /* Light blue with some transparency */
             padding: 20px; /* Add padding for content inside the card */
             backdrop-filter: blur(3px); /* Optional: Adds a blur effect to the background of the card */
         }
@@ -180,7 +155,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
         .container {
             max-width: 550px;
-            margin-left: 30px; /* Adjust this value to move the form further left */
+            margin-left: auto; /* Center align the form on larger screens */
+            margin-right: auto;
         }
 
         .form-control {
@@ -216,17 +192,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     <!-- Login Form -->
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <p class="text-center mb-4">
-                            <img src="logo.png" alt="Admin-Icon" style="width: 200px; height: 100px;">
+                            <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;">
                         </p>   
                     <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
-                                <img src="users.png" alt="Accountant Icon" style="width: 60px; height: 60px;">
+                                <img src="users.png" alt="User Icon" style="width: 60px; height: 60px;">
                         </p>
-                        <!-- <p class="text-center">Please fill in your credentials to login.</p> -->
 
                         <!-- Email input -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="login_email"><i class="bi bi-person-circle"></i><strong> Email</strong></label>
-                            <input type="email" id="login_email" class="form-control form-control-lg py-3 <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" name="email" autocomplete="off" placeholder="Enter your email" style="border-radius:25px;">
+                            <input type="email" id="login_email" class="form-control py-3 <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>" name="email" autocomplete="off" placeholder="Enter your email">
                             <span class="invalid-feedback"><?php echo $email_err; ?></span>
                         </div>
 
@@ -234,7 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         <div class="form-outline mb-4">
                             <label class="form-label" for="login_password"><i class="bi bi-chat-left-dots-fill"></i><strong>Password</strong></label>
                             <div class="input-group">
-                                <input type="password" id="login_password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" style="border-radius:25px;">
+                                <input type="password" id="login_password" class="form-control py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password">
                                 <span class="input-group-text" onclick="togglePassword()">
                                     <i class="fas fa-eye" id="toggle-icon"></i>
                                 </span>
@@ -243,13 +218,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         </div>
 
                         <!-- Submit button -->
-                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                            <input type="submit" value="Login" name="login" class="btn btn-primary btn-lg text-light my-2 py-3" style="width:100%; border-radius: 30px; font-weight:600;">
+                        <div class="d-grid mb-3">
+                            <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3" style="border-radius: 30px; font-weight: 600;">
                         </div>
                     </form>
-                    <p align="center"><strong>Don't have an account? Sign up</strong><a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
-                    <p align="center"><strong>Forgot your password?</strong> <a href="forgot_password.php" class="text-primary" style="font-weight:600;text-decoration:none;">Click here</a></p>
-
+                    <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary" style="font-weight: 600; text-decoration: none;">Sign up here</a></strong></p>
+                    <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary" style="font-weight: 600; text-decoration: none;">Click here</a></strong></p>
                 </div>
             </div>
         </div>

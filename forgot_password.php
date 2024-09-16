@@ -88,6 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
@@ -101,12 +102,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-position: center;
             background-attachment: fixed;
             background-size: cover;
+            margin: 0;
+            padding: 0;
         }
 
         .card {
             border-radius: 25px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(173, 216, 230, 0.2);
+            background-color: rgba(173, 216, 230, 0.3);
             padding: 20px;
             backdrop-filter: blur(3px);
         }
@@ -114,7 +117,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .container {
             max-width: 490px;
             margin-top: 70px;
-            margin-left: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
         }
 
         .form-control {
@@ -124,6 +130,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .btn {
             border-radius: 30px;
             font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 40px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                margin-top: 20px;
+            }
+
+            .btn {
+                font-size: 0.9rem;
+            }
+
+            .card img {
+                width: 150px;
+                height: 75px;
+            }
         }
     </style>
 </head>
