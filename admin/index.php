@@ -251,7 +251,7 @@ mysqli_close($link);
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>1
                 <div class="col-md-4">
                     <div class="card bg-paidbillsyearly-gradient text-white">
                         <div class="card-body">
