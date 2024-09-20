@@ -198,6 +198,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 icon.classList.add('bi-eye-slash');
             }
         });
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, and Ctrl+U
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode == 123) { // F12
+                e.preventDefault();
+            }
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) { // Ctrl+Shift+I or J
+                e.preventDefault();
+            }
+            if (e.ctrlKey && e.keyCode == 85) { // Ctrl+U
+                e.preventDefault();
+            }
+        });
     </script>
+    
 </body>
 </html>

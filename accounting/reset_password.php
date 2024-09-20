@@ -101,7 +101,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-image: url("plumber.jpg");
+            background-image: url("account.webp");
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;

@@ -48,10 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
                     if (mysqli_stmt_fetch($stmt)) {
-                        // Debugging output
-                        error_log("Hashed Password: $hashed_password");
-                        error_log("Entered Password: $password");
-
                         if (password_verify($password, $hashed_password)) {
                             if ($is_approved == 0) {
                                 $login_err = "Your account is awaiting approval. Please contact the system administrator.";
@@ -77,8 +73,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     $login_err = "Invalid email or password.";
                 }
             } else {
-                // Error executing statement
-                error_log('Error executing statement.');
                 echo '<script>
                 Swal.fire({
                     title: "Error!",
@@ -94,8 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
             // Close statement
             mysqli_stmt_close($stmt);
-        } else {
-            error_log('Error preparing statement.');
         }
     }
 
@@ -104,13 +96,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consumer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
@@ -118,23 +108,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <link rel="icon" href="logo.png" type="image/icon type">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    
+    <!-- Disable Inspect -->
     <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('login_password');
-            const toggleIcon = document.getElementById('toggle-icon');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, and Ctrl+U
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode == 123) { // F12
+                e.preventDefault();
             }
-        }
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) { // Ctrl+Shift+I or J
+                e.preventDefault();
+            }
+            if (e.ctrlKey && e.keyCode == 85) { // Ctrl+U
+                e.preventDefault();
+            }
+        });
     </script>
+
     <style>
-         body {
+        body {
             background-image: url("tank.jpg");
             background-repeat: no-repeat;
             background-position: center;
@@ -144,25 +141,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         .card {
             border-radius: 25px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(173, 216, 230, 0.2); /* Light blue with some transparency */
-            padding: 20px; /* Add padding for content inside the card */
-            backdrop-filter: blur(3px); /* Optional: Adds a blur effect to the background of the card */
+            background-color: rgba(173, 216, 230, 0.2);
+            padding: 20px;
+            backdrop-filter: blur(3px);
         }
-
-        .card-body {
-            padding: 1rem;
-        }
-
         .container {
             max-width: 550px;
-            margin-left: auto; /* Center align the form on larger screens */
+            margin-left: auto;
             margin-right: auto;
         }
-
         .form-control {
             border-radius: 20px;
         }
-
         .btn {
             border-radius: 30px;
             font-weight: 600;
@@ -175,27 +165,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             <div class="card">
                 <div class="card-body text-center">
                     <?php 
-                    if(!empty($login_err)){
+                    if (!empty($login_err)) {
                         echo '<script>
                         Swal.fire({
-                        title: "Error!",
-                        text: "' . $login_err . '",
-                        icon: "error",
-                        toast: true,
-                        position: "top-right",
-                        showConfirmButton: false,
-                        timer: 3000
-                        })
+                            title: "Error!",
+                            text: "' . $login_err . '",
+                            icon: "error",
+                            toast: true,
+                            position: "top-right",
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
                         </script>';
                     }        
                     ?>
                     <!-- Login Form -->
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                    <p class="text-center mb-4">
+                        <p class="text-center mb-4">
                             <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;">
                         </p>   
-                    <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
-                                <img src="users.png" alt="User Icon" style="width: 60px; height: 60px;">
+                        <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
+                            <img src="users.png" alt="User Icon" style="width: 60px; height: 60px;">
                         </p>
 
                         <!-- Email input -->
@@ -219,18 +209,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
                         <!-- Submit button -->
                         <div class="d-grid mb-3">
-                            <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3" style="border-radius: 30px; font-weight: 600;">
+                            <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
                         </div>
                     </form>
-                    <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary" style="font-weight: 600; text-decoration: none;">Sign up here</a></strong></p>
-                    <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary" style="font-weight: 600; text-decoration: none;">Click here</a></strong></p>
+                    <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary">Sign up here</a></strong></p>
+                    <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary">Click here</a></strong></p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Bootstrap JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

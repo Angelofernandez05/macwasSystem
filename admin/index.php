@@ -251,7 +251,7 @@ mysqli_close($link);
                             </div>
                         </div>
                     </div>
-                </div>1
+                </div>
                 <div class="col-md-4">
                     <div class="card bg-paidbillsyearly-gradient text-white">
                         <div class="card-body">
@@ -410,6 +410,25 @@ mysqli_close($link);
 
 
 
+    </script>
+      <script>
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, and Ctrl+U
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode == 123) { // F12
+                e.preventDefault();
+            }
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) { // Ctrl+Shift+I or J
+                e.preventDefault();
+            }
+            if (e.ctrlKey && e.keyCode == 85) { // Ctrl+U
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>
