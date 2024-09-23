@@ -201,8 +201,7 @@ $user_row = mysqli_fetch_assoc($user_result);
                 </div>
             </div>
         </div>
-    </section>
-
+    </section>  
     <?php include 'includes/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

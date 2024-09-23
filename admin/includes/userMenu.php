@@ -4,12 +4,20 @@
     }
     
     .dropdown-toggle::after {
-        color: white;
+        color: black;
     }
+    .dropdown-toggle img {
+    width: 25px; /* Adjust the width of the profile picture */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 50%; /* Make it round */
+    margin-right: 10px; /* Space between picture and name */
+}
+
 </style>
 
 <div class="dropdown">
     <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+     <img src="sam.jpg.jpg" alt="Profile Picture"> 
         <span style="color: white ;">Hi, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
     </button>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
