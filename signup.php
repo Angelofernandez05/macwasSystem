@@ -137,11 +137,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="col-md-6 col-sm-12">
                             <!-- Personal Information -->
                             <div class="form-group">
-                                <label for="name">Name:</label>
+                            <label class="icon">👤<strong>Name:</strong></label>
                                 <input type="text" class="form-control" id="name" name="name" required>
                             </div>
                             <div class="form-group">
-                                <label for="barangay">Barangay:</label>
+                            <label class="icon">📍</span><strong>Barangay:</strong></label>
                                 <select class="form-control" id="barangay" name="barangay" required>
                                     <option value="">Select Brgy</option>
                                     <option value="Poblacion">Poblacion</option>
@@ -161,11 +161,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="account_num">Account Number:</label>
+                            <label class="icon">🔢<strong>Account Number:</strong></label>
                                 <input type="text" class="form-control" id="account_num" name="account_num" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="registration_num">Registration Number:</label>
+                            <label class="icon">🔑<strong>Registration Number:</strong></label>
                                 <input type="text" class="form-control" id="registration_num" name="registration_num" readonly>
                             </div>
                             <div class="form-group">

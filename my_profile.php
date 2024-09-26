@@ -100,7 +100,7 @@ $link->close();
         .card {
             border-radius: 25px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(11, 16, 20, 0.2);
+            background-color: rgba(173, 216, 230, 0.2);
             padding: 20px;
             backdrop-filter: blur(3px);
         }
@@ -160,15 +160,18 @@ $link->close();
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p><strong>Name:</strong> <?php echo htmlspecialchars($name); ?></p>
-                                    <p><strong>Barangay:</strong> <?php echo htmlspecialchars($barangay); ?></p>
-                                    <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-                                    <p><strong>Contact Number:</strong> <?php echo htmlspecialchars($phone); ?></p>
-                                    <p><strong>Account Number:</strong> <?php echo htmlspecialchars($account_num); ?></p>
-                                    <p><strong>Registration Number:</strong> <?php echo htmlspecialchars($registration_num); ?></p>
-                                    <p><strong>Meter Number:</strong> <?php echo htmlspecialchars($meter_num); ?></p>
+                                    <p><span class="icon">👤</span><strong>Name:</strong> <?php echo htmlspecialchars($name); ?></p>
+                                    <p><span class="icon">📍</span><strong>Barangay:</strong> <?php echo htmlspecialchars($barangay); ?></p>
+                                    <p><span class="icon">📧</span><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
+                                    <p><span class="icon">📞</span><strong>Contact Number:</strong> <?php echo htmlspecialchars($phone); ?></p>
+                                    </div>
+                                <div class="col-md-6">
+                                    <p><span class="icon">🔢</span><strong>Account Number:</strong> <?php echo htmlspecialchars($account_num); ?></p>
+                                    <p><span class="icon">🔑</span><strong>Registration Number:</strong> <?php echo htmlspecialchars($registration_num); ?></p>
+                                    <p><span class="icon">⚡</span><strong>Meter Number:</strong> <?php echo htmlspecialchars($meter_num); ?></p>
                                 </div>
                             </div>
+                                </div>
 
                             <?php if (!empty($upload_error)): ?>
                                 <div class="alert alert-danger mt-3"><?php echo $upload_error; ?></div>
@@ -186,7 +189,23 @@ $link->close();
             </div>
         </div>
     </section>
+    <script>
+     document.addEventListener('keydown', function (e) {
+        // Disable F12
+        if (e.key === 'F12') {
+            e.preventDefault();
+        }
+        // Disable Ctrl + Shift + I
+        if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+            e.preventDefault();
+        }
+        });
 
+        // Disable right-click
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
 </body>

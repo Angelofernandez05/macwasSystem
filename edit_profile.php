@@ -22,8 +22,8 @@ if ($stmt = $link->prepare($sql)) {
 }
 
 // Initialize variables for form submission
-$new_name = $new_barangay = $new_email = $new_phone = "";
-$new_name_err = $new_barangay_err = $new_email_err = $new_phone_err = "";
+$new_name = $new_barangay = $new_email = $new_phone = $new_account_num = $new_registration_num = "";
+$new_name_err = $new_barangay_err = $new_email_err = $new_phone_err = $new_account_num_err = $new_registration_num_err = "";
 $success_message = false; // Variable to track success
 
 // Processing form data when form is submitted
@@ -58,14 +58,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $new_phone = trim($_POST["phone"]);
     }
 
+    // Validate account number
+    if (empty(trim($_POST["account_num"]))) {
+        $new_account_num_err = "Please enter your account number.";
+    } else {
+        $new_account_num = trim($_POST["account_num"]);
+    }
+
+    // Validate registration number
+    if (empty(trim($_POST["registration_num"]))) {
+        $new_registration_num_err = "Please enter your registration number.";
+    } else {
+        $new_registration_num = trim($_POST["registration_num"]);
+    }
+
     // Check input errors before updating the database
-    if (empty($new_name_err) && empty($new_barangay_err) && empty($new_email_err) && empty($new_phone_err)) {
+    if (empty($new_name_err) && empty($new_barangay_err) && empty($new_email_err) && empty($new_phone_err) && empty($new_account_num_err) && empty($new_registration_num_err)) {
         // Prepare an update statement
-        $sql = "UPDATE consumers SET name = ?, barangay = ?, email = ?, phone = ? WHERE id = ?";
+        $sql = "UPDATE consumers SET name = ?, barangay = ?, email = ?, phone = ?, account_num = ?, registration_num = ? WHERE id = ?";
 
         if ($stmt = $link->prepare($sql)) {
             // Bind variables to the prepared statement as parameters
-            $stmt->bind_param("ssssi", $new_name, $new_barangay, $new_email, $new_phone, $_SESSION["id"]);
+            $stmt->bind_param("ssssssi", $new_name, $new_barangay, $new_email, $new_phone, $new_account_num, $new_registration_num, $_SESSION["id"]);
 
             // Attempt to execute the prepared statement
             if ($stmt->execute()) {
@@ -95,6 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $link->close();
 }
 ?>
+
 <style>
     body {
             background-image: url("tank.jpg");
@@ -130,36 +145,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col-lg-6 col-xl-5"> <!-- Minimized box size -->
                     <div class="card text-black" style="border-radius: 25px;">
                         <div class="card-body p-md-3">
-                            <h1 class="text-center fw-bold mb-4">Edit Profile</h1>
+                        <h1 class="text-center fw-bold mb-4" style="font-family: Georgia, serif;">Edit Profile</h1>
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                                 <div class="mb-4">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="name" value="<?php echo htmlspecialchars($name); ?>" required>
+                                <label class="icon">👤<strong>Name:</strong></label>
+                                    <input type="text" class="form-control" name="name" value="<?php echo htmlspecialchars($name); ?>" readonly>
                                     <span class="text-danger"><?php echo $new_name_err; ?></span>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="barangay" class="form-label">Barangay</label>
-                                    <input type="text" class="form-control" name="barangay" value="<?php echo htmlspecialchars($barangay); ?>" required>
-                                    <span class="text-danger"><?php echo $new_barangay_err; ?></span>
+                                <label class="icon">📍</span><strong>Barangay:</strong></label>
+                                <select type="text" class="form-control" name="barangay" value="<?php echo htmlspecialchars($barangay); ?>" required>>
+                                    <option value="">Select Brgy</option>
+                                    <option value="Poblacion">Poblacion</option>
+                                    <option value="Tugas">Tugas</option>
+                                    <option value="Bunakan">Bunakan</option>
+                                    <option value="Kangwayan">Kangwayan</option>
+                                    <option value="Kaongkod">Kaongkod</option>
+                                    <option value="Kodia">Kodia</option>
+                                    <option value="Maalat">Maalat</option>
+                                    <option value="Malbago">Malbago</option>
+                                    <option value="Mancilang">Mancilang</option>
+                                    <option value="Pili">Pili</option>
+                                    <option value="Poblacion">Poblacion</option>
+                                    <option value="San Agustin">San Agustin</option>
+                                    <option value="Tabagak">Tabagak</option>
+                                    <option value="Talangnan">Talangnan</option>
+                                </select>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="email" class="form-label">Email</label>
+                                    <label class="icon">📧<strong>Email:</strong></label>
                                     <input type="email" class="form-control" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
                                     <span class="text-danger"><?php echo $new_email_err; ?></span>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="phone" class="form-label">Contact Number</label>
-                                    <input type="text" class="form-control" name="phone" value="<?php echo htmlspecialchars($phone); ?>" required>
+                                 <div class="mb-4">
+                                    <label class="icon">📞</span><strong>Contact Number:</strong></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">+63</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="phone" id="phone" value="<?php echo htmlspecialchars($phone); ?>" required pattern="[9][0-9]{9}" maxlength="10" placeholder="9XXXXXXXXX" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                    </div>
                                     <span class="text-danger"><?php echo $new_phone_err; ?></span>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="registration_num" class="form-label">Registration Number</label>
-                                    <input type="text" class="form-control" name="registration_num" value="<?php echo htmlspecialchars($registration_num); ?>" readonly>
+                                    <label class="icon">🔑<strong>Registration Number:</strong></label>
+                                    <input type="text" class="form-control" name="registration_num" value="<?php echo htmlspecialchars($registration_num); ?>" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="account_num" class="form-label">Account Number</label>
-                                    <input type="text" class="form-control" name="account_num" value="<?php echo htmlspecialchars($account_num); ?>" readonly>
+                                    <label class="icon">🔢<strong>Account Number:</strong></label>
+                                    <input type="text" class="form-control" name="account_num" value="<?php echo htmlspecialchars($account_num); ?>" required>
                                 </div>
+
                                 <div class="d-flex justify-content-center">
                                     <input type="submit" value="Update Profile" class="btn btn-primary btn-lg">
                                     <a href="my_profile.php" class="btn btn-secondary btn-lg ms-2">Cancel</a>
@@ -195,6 +231,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 window.location.href = "my_profile.php"; // Redirect to profile page after showing the alert
             });
         }
+        document.addEventListener('keydown', function (e) {
+        // Disable F12
+        if (e.key === 'F12') {
+            e.preventDefault();
+        }
+        // Disable Ctrl + Shift + I
+        if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+            e.preventDefault();
+        }
+        });
+
+        // Disable right-click
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
     </script>
 </body>
 </html>
