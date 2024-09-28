@@ -162,6 +162,7 @@ mysqli_close($link);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        
     </style>
 </head>
 <body>
@@ -268,20 +269,21 @@ mysqli_close($link);
             </div>
 
             <div class="mt-5">
-                <h4>Overdue Billing Statement</h4>
+                <h4><label class="icon">⚠️ <strong>Overdue Billing Statement:</strong></label>
+                </h4>
                 <div>
                     <?php if (mysqli_num_rows($result_overdue) > 0): ?>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Meter No.</th>
-                                    <th>Date of Disconnection</th>
-                                    <th>Due Date</th>
-                                    <th>Present</th>
-                                    <th>Previous</th>
-                                    <th>Used</th>
-                                    <th>Action</th>
+                                    <th>👤Name</th>
+                                    <th>⏲️Meter No.</th>
+                                    <th>📅Date of Disconnection</th>
+                                    <th>⌛ Due Date</th>
+                                    <th>🟢Present</th>
+                                    <th>⏮️Previous</th>
+                                    <th>🛠️Used</th>
+                                    <th>🔄Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -326,7 +328,7 @@ mysqli_close($link);
             </div>
 
             <div class="mt-5">
-                <h4>Dashboard Chart</h4>
+            <h4><label class="icon">📊 <strong>Dashboard Chart:</strong></label></h4>
                 <canvas id="consumersChart" width="400" height="200"></canvas>
             </div>
         </div>

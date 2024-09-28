@@ -149,7 +149,7 @@ $link->close();
                                 <?php if (isset($profile_image) && !empty($profile_image)): ?>
                                     <img src="<?php echo htmlspecialchars($profile_image); ?>" alt="Profile Image" class="profile-image"> <!-- User's uploaded image -->
                                 <?php else: ?>
-                                    <img src="sam.jpg.jpg" alt="Default Profile Image" class="profile-image"> <!-- Placeholder image -->
+                                    <img src="users.png" alt="Default Profile Image" class="profile-image"> <!-- Placeholder image -->
                                 <?php endif; ?>
                                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
                                     <input type="file" name="profile_image" class="d-none" id="profile_image" required onchange="this.form.submit();">

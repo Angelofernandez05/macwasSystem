@@ -169,26 +169,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="text" class="form-control" id="registration_num" name="registration_num" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="meter_num">Meter Number:</label>
+                                <label class="icon">⚡<strong>Meter Number:</strong></label>
                                 <input type="text" class="form-control" id="meter_num" name="meter_num" readonly>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <!-- Contact Information -->
                             <div class="form-group position-relative">
-                                <label for="type">Type:</label>
+                            <label class="icon">🏷️ <strong>Type:</strong></label>
                                 <select class="form-control" id="type" name="type" required>
-                                    <option value="commercial">Commercial</option>
-                                    <option value="residential">Residential</option>
-                                    <option value="institution">Institution</option>
+                                <option value="commercial">🏢 Commercial</option>
+                                <option value="residential">🏠 Residential</option>
+                                <option value="institution">🏛️ Institution</option>
                                 </select>
                             </div>
                             <div class="form-group position-relative">
-                                <label for="email">Email:</label>
+                            <label class="icon">📧 <strong>Email:</strong></label>
                                 <input type="email" class="form-control" id="email" name="email" required>
                             </div>
                             <div class="form-group position-relative">
-                                <label>Contact No.</label>
+                            <label class="icon">📞 <strong>Contact Number:</strong></label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">+63</span>
@@ -197,17 +197,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
                             </div>
                             <div class="form-group position-relative">
-                                <label for="password">Password:</label>
+                            <label class="icon">🔒 <strong>Password:</strong></label>
                                 <input type="password" class="form-control" id="password" name="password" required minlength="8">
                                 <span class="toggle-password" onclick="togglePassword()">
                                     <i class="fas fa-eye" id="toggle-icon"></i>
                                 </span>
                             </div>
                             <div class="form-group">
-                                <label for="status">Status:</label>
+                            <label class="icon">✅ <strong>Status:</strong></label>
                                 <select class="form-control" id="status" name="status" required>
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
+                                    <option value="1">🟢Active</option>
+                                    <option value="0">🔴Inactive</option>
                                 </select>
                             </div>
                         </div>
