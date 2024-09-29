@@ -104,6 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             background-position: center;
             background-attachment: fixed;
             background-size: cover;
+            font-family: 'Georgia', serif;
         }
         .card {
             border-radius: 25px;

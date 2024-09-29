@@ -3,7 +3,11 @@
 session_start();
 include 'config.php';
 
+$alert_type = '';
+$error_msg = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Fetch the data from the form and escape it
     $name = mysqli_real_escape_string($link, $_POST['name']);
     $barangay = mysqli_real_escape_string($link, $_POST['barangay']);
     $account_num = mysqli_real_escape_string($link, $_POST['account_num']);
@@ -22,40 +26,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $registration_num = NULL;
     }
 
-    // Validate phone number
+    // Validate phone number format
     if (!preg_match('/^\d{1,11}$/', $phone)) {
         $error_msg = "Phone number must be up to 11 digits.";
         $alert_type = 'error';
-    }elseif (strlen($password) <= 8) {
+    } elseif (strlen($password) <= 8) {
         $error_msg = "Password must be greater than 8 characters.";
         $alert_type = 'error';
     } else {
-        // Check if email already exists
-        $sql = "SELECT id FROM consumers WHERE email = '$email'";
+        // Check if email or phone already exists in consumers or pending_users table
+        $sql = "SELECT id FROM consumers WHERE email = '$email' OR phone = '$phone'
+                UNION
+                SELECT id FROM pending_users WHERE email = '$email' OR phone = '$phone'";
+        
         $result = mysqli_query($link, $sql);
 
         if (mysqli_num_rows($result) > 0) {
-            $error_msg = "Error: Email already exists.";
+            $error_msg = "Error: Email or phone number already exists.";
             $alert_type = 'error';
         } else {
-            // Insert the new user into pending_users table
+            // Insert the new user into the pending_users table
             $sql = "INSERT INTO pending_users (name, barangay, account_num, registration_num, meter_num, type, email, phone, password, status) 
                     VALUES ('$name', '$barangay', '$account_num', '$registration_num', " . ($meter_num === NULL ? 'NULL' : "'$meter_num'") . ", '$type', '$email', '$phone', '$password', '$status')";
 
             if (mysqli_query($link, $sql)) {
-                $error_msg = "Registration successful. Awaiting admin approval.";
                 $alert_type = 'success';
             } else {
                 $error_msg = "Error: " . mysqli_error($link);
                 $alert_type = 'error';
             }
         }
-        mysqli_close($link);
-    }   
-        exit();
     }
+    mysqli_close($link);
+}
 ?>
-
 
 
 <!DOCTYPE html>
@@ -74,6 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-position: center;
             background-attachment: fixed;
             background-size: cover;
+            font-family: 'Georgia', serif;
         }
         .form-group {
             margin-bottom: 15px;
@@ -101,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             backdrop-filter: blur(5px);
         }
         .container {
-            max-width: 900px;
+            max-width: 850px;
             margin-top: 50px;
         }
         .form-control {
@@ -121,6 +126,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 padding: 15px;
             }
         }
+        .georgia-font {
+            font-family: 'Georgia', serif;
+        }
     </style>
 </head>
 <body>
@@ -131,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p class="text-center mb-4">
                     <img src="logo.png" alt="Admin-Icon" style="width: 200px; height: 150px;">
                 </p>
-                <h2 class="text-center mb-4"><strong>Sign up</strong></h2>
+                <h2 class="text-center mb-4 georgia-font"><strong>SIGN UP</strong></h2>
                 <form action="signup.php" method="post">
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
@@ -226,22 +234,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener('keydown', function (e) {
-        // Disable F12
-        if (e.key === 'F12') {
-            e.preventDefault();
-        }
-        // Disable Ctrl + Shift + I
-        if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-            e.preventDefault();
-        }
-    });
 
-    // Disable right-click
-    document.addEventListener('contextmenu', function (e) {
-        e.preventDefault();
-    });
+<script>
     function togglePassword() {
         var password = document.getElementById("password");
         var icon = document.getElementById("toggle-icon");
@@ -255,6 +249,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             icon.classList.add("fa-eye");
         }
     }
+
+    // Display SweetAlert based on PHP alert type
+    <?php if ($alert_type == 'success') { ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Registration successful!',
+            text: 'Awaiting admin approval.',
+            confirmButtonText: 'OK',
+            willClose: () => {
+                // Redirect to login.php after closing the SweetAlert
+                window.location.href = "login.php";
+            }
+        });
+    <?php } elseif ($alert_type == 'error') { ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '<?php echo $error_msg; ?>',
+            confirmButtonText: 'OK'
+        });
+    <?php } ?>
 </script>
 </body>
 </html>

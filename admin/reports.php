@@ -4,218 +4,397 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-// Check if the user is logged in, if not then redirect him to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
+// Check if the user is logged in
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
     exit;
 }
+
+require_once "config.php";
+
+// Get current date information for reports
+$curr_month = date('m');
+$curr_year = date('Y');
+
+$unpaid_sql = "SELECT * FROM readings WHERE status = 0;";
+$unpaid_result = mysqli_query($link, $unpaid_sql);
+$unpaid_total = mysqli_num_rows($unpaid_result);
+
+$paid_sql = "SELECT * FROM readings WHERE status = 1;";
+$paid_result = mysqli_query($link, $paid_sql);
+$paid_total = mysqli_num_rows($paid_result);
+
+$date = date('m-Y');
+$paid_sql_month = "SELECT * FROM readings WHERE status = 1 AND DATE_FORMAT(date_paid, '%m-%Y') = '$date';";
+$paid_result_month = mysqli_query($link, $paid_sql_month);
+$paid_total_month = mysqli_num_rows($paid_result_month);
+
+$date_year = date('Y');
+$paid_sql_year = "SELECT * FROM readings WHERE status = 1 AND DATE_FORMAT(date_paid, '%Y') = '$date_year';";
+$paid_result_year = mysqli_query($link, $paid_sql_year);
+$paid_total_year = mysqli_num_rows($paid_result_year);
+
+
+// Query to get total paid bills for the current year
+$yearly_paid_sql = "SELECT COUNT(*) AS yearly_paid FROM readings WHERE status = 1 AND YEAR(date_paid) = '$curr_year';";
+$yearly_paid_result = mysqli_query($link, $yearly_paid_sql);
+$yearly_paid = 0;
+if ($yearly_paid_result && mysqli_num_rows($yearly_paid_result) > 0) {
+    $row = mysqli_fetch_assoc($yearly_paid_result);
+    $yearly_paid = $row['yearly_paid'];
+}
+
+// Query to get total unpaid bills for the current year
+$yearly_unpaid_sql = "SELECT COUNT(*) AS yearly_unpaid FROM readings WHERE status = 0 AND YEAR(date_paid) = '$curr_year';";
+$yearly_unpaid_result = mysqli_query($link, $yearly_unpaid_sql);
+$yearly_unpaid = 0;
+if ($yearly_unpaid_result && mysqli_num_rows($yearly_unpaid_result) > 0) {
+    $row = mysqli_fetch_assoc($yearly_unpaid_result);
+    $yearly_unpaid = $row['yearly_unpaid'];
+}
+
+
+// Query for lose connection
+$lose_connection_sql = "SELECT COUNT(id) AS lose_connection FROM consumers WHERE status = 'disconnected';";
+$lose_connection_result = mysqli_query($link, $lose_connection_sql);
+$lose_connection = 0;
+if ($lose_connection_result && mysqli_num_rows($lose_connection_result) > 0) {
+    $row = mysqli_fetch_assoc($lose_connection_result);
+    $lose_connection = $row['lose_connection'];
+}
+
+// Close connection
+mysqli_close($link);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Reports</title>
+    <title>Admin Dashboard</title>
     <?php include 'includes/links.php'; ?>
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Add Font Awesome -->
     <style>
-        .alert {
-            font-size: 14px;
-            padding: 8px 12px;
-            text-align: center;
-            margin: 10px;
-            max-width: 600px;
-            position: fixed;
-            top: 40px;
-            right: 10px;
-            z-index: 9999;
+        body {
+            background-color: #f7f9fb;
+            font-family: Arial, sans-serif;
         }
-        body{
-            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Change to 2 columns */
+            gap: 20px;
+            margin: 40px;
+        }
+        .dashboard-section {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+        .dashboard-section h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .dashboard-section p {
+            font-size: 18px;
+            color: #333;
+        }
+        .dashboard-section small {
+            display: block;
+            margin-top: 5px;
+            color: #777;
+        }
+        .chart-container {
+            height: 300px;
+            width: 100%;
+        }
+        .print-button {
+            margin-top: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #007bff;
+            transition: transform 0.2s;
+        }
+        .print-button:hover {
+            color: #0056b3;
+            transform: scale(1.1);
+        }
+        .bx-printer {
+            font-size: 24px; /* Set icon size */
         }
         .navbar-light-gradient {
             background: linear-gradient(135deg, #36d1dc, #5b86e5);
             color: white;
             border-bottom: 2px solid black !important;
-            height: 60px;
             margin-left: 10px;
-        }
-        .table thead th {
-            background-color: #f8f9fa; /* Light background color for table header */
-            border-bottom: 2px solid #dee2e6; /* Slightly thicker border for header bottom */
         }
     </style>
 </head>
 <body>
-    <!-- Confirmation modal -->
-    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+<?php include 'includes/sidebar.php'; ?>
+<section class="home-section">
+    <nav class="navbar navbar-light-gradient bg-white border-bottom">
+        <span class="navbar-brand mb-0 h1 d-flex align-items-center">
+            <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
+            Reports
+        </span>
+        <?php include 'includes/userMenu.php'; ?>
+    </nav>
+    <div class="dashboard">
+
+        <div class="dashboard-section">
+            <h2>Income Monthly</h2>
+            <p>₱<?php echo number_format($paid_total_month); ?></p>
+            <small>Total Income This Month (<?php echo date('F Y'); ?>)</small>
+            <div id="monthlyIncomeChart" class="chart-container"></div>
+            <button class="print-button" onclick="printChart('monthlyIncomeChart', 'Income Monthly: ₱<?php echo number_format($paid_total_month); ?>')">
+                <i class='bx bxs-printer'></i> <!-- Boxicons printer icon -->
             </button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to perform this action?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" name="confirm" class="btn btn-primary">Confirm</button>
-          </div>
         </div>
-      </div>
+
+        <div class="dashboard-section">
+            <h2>Income Yearly</h2>
+            <p>₱<?php echo number_format($paid_total_year); ?></p>
+            <small>Total Income This Year (<?php echo date('Y'); ?>)</small>
+            <div id="yearlyIncomeChart" class="chart-container"></div>
+            <button class="print-button" onclick="printChart('yearlyIncomeChart', 'Income Yearly: ₱<?php echo number_format($paid_total_year); ?>')">
+                <i class='bx bxs-printer'></i> <!-- Boxicons printer icon -->
+            </button>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Total Paid Bills Monthly</h2>
+            <p><?php echo number_format($paid_total); ?></p>
+            <small>Total Amount Paid Bills</small>
+            <div id="totalBilledChart" class="chart-container"></div>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Total Unpaid Bills Monthly</h2>
+            <p><?php echo number_format($unpaid_total); ?></p>
+            <small>Total Unpaid Bills</small>
+            <div id="totalUnbilledChart" class="chart-container"></div>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Total Paid Bills Yearly</h2>
+            <p><?php echo number_format($yearly_paid); ?></p>
+            <small>Total Paid Bills This Year (<?php echo date('Y'); ?>)</small>
+            <div id="yearlyPaidChart" class="chart-container"></div>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Total Unpaid Bills Yearly</h2>
+            <p><?php echo number_format($yearly_unpaid); ?></p>
+            <small>Total Unpaid Bills This Year (<?php echo date('Y'); ?>)</small>
+            <div id="yearlyUnpaidChart" class="chart-container"></div>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Lose Connection Monthly</h2>
+            <p><?php echo $lose_connection; ?> users</p>
+            <small>Disconnected Users</small>
+            <div id="loseConnectionChart" class="chart-container"></div>
+        </div>
+        <div class="dashboard-section">
+            <h2>Lose Connection Yearly</h2>
+            <p><?php echo $lose_connection; ?> users</p>
+            <small>Disconnected Users</small>
+            <div id="loseConnectionChart" class="chart-container"></div>
     </div>
+</section>
 
-    <?php include 'includes/sidebar.php'; ?>
+<?php include 'includes/scripts.php'; ?>
 
-    <section class="home-section">
-        <nav class="navbar navbar-light-gradient bg-white border-bottom">
-            <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-                <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
-                Reports
-            </span>
-            <?php include 'includes/userMenu.php'; ?>
-        </nav>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    // Monthly Income Chart
+    var monthlyIncomeOptions = {
+        series: [{
+            name: 'Monthly Income',
+            data: [200000, 300000, 400000, 500000, 600000, 1000000] // Sample Data
+        }],
+        chart: {
+            type: 'area',
+            height: 300,
+            zoom: { enabled: false }
+        },
+        colors: ['#00E396'],
+        xaxis: {
+            categories: ['September','October']
+        },
+        title: {
+            text: 'Monthly Income Trend',
+            align: 'left'
+        },
+        dataLabels: {
+            enabled: false
+        },
+    };
+    var monthlyIncomeChart = new ApexCharts(document.querySelector("#monthlyIncomeChart"), monthlyIncomeOptions);
+    monthlyIncomeChart.render();
 
-        <div class="container-fluid py-5">
-            <!-- <a href="new-consumer.php" class="btn btn-primary btn-sm mb-3"><i class='bx bx-plus'></i> New</a> -->
-            
-            <?php
-            // Include config file
-            require_once "config.php";
-            $consumer_id = "";
-            $status = "";
-            // Attempt select query execution
-            $sql = "SELECT * FROM consumers";
-            if($result = mysqli_query($link, $sql)){
-                if(mysqli_num_rows($result) > 0){
-                    echo '<div class="table-responsive">';
-                    echo '<table id="consumerTable" class="display table table-striped" style="width:100%">';
-                        echo "<thead>";
-                            echo "<tr>";
-                                echo "<th>Name</th>";
-                                echo "<th>Email</th>";
-                                echo "<th>Phone</th>";
-                                echo "<th>Barangay</th>";
-                                echo "<th>Account No.</th>";
-                                echo "<th>Registration No.</th>";
-                                echo "<th>Meter No.</th>";
-                                echo "<th>Type</th>";
-                                echo "<th>Action</th>";
-                            echo "</tr>";
-                        echo "</thead>";
-                        echo "<tbody>";
-                        while($row = mysqli_fetch_array($result)){
-                            $email = $row['email'];
-                            $phone = "+63".$row['phone'];
-                            if(empty($row['email'])){
-                                $email = 'N/A';
-                            }
-                            $consumer_id = $row['id'];
-                            $status = $row['status'];
-                            $rid = "";
-                            $sql2 = "SELECT * FROM readings WHERE consumer_id = $consumer_id";
-                            if($result2 = mysqli_query($link, $sql2)){
-                                if(mysqli_num_rows($result2) > 0){
-                                    while($row2 = mysqli_fetch_array($result2)){
-                                        $rid = $row2['id'];
-                                    }
-                                }
-                            }
-                            echo "<tr>";
-                            if($row['status'] == 0){
-                                echo '<td><a class="text-danger" href="reading.php?consumer_id='. $consumer_id .'&id='.$rid.'">'. $row['name'] .'</a></td>';
-                            }else{
-                                echo '<td><a class="text-success" href="reading.php?consumer_id='. $consumer_id .'&id='.$rid.'">'. $row['name'] .'</a></td>';
-                            }
-                            
-                                echo "<td>" . $email . "</td>";
-                                echo "<td>" . $phone . "</td>";
-                                echo "<td>" . $row['barangay'] . "</td>";
-                                echo "<td>" . $row['account_num'] . "</td>";
-                                echo "<td>" . $row['registration_num'] . "</td>";
-                                echo "<td>" . $row['meter_num'] . "</td>";
-                                echo "<td>" . $row['type'] . "</td>";
-                                echo "<td>";
-                                  //  echo '<a href="update-consumer.php?id='. $consumer_id.'" class="mr-2" title="Update Record" data-toggle="tooltip"><i class="bx bxs-pencil btn btn-success btn-sm mb-3"></i></a>';
-                                    //echo '<a href="delete-consumer.php" class="deleteButton" title="Delete Record" data-toggle="tooltip" data-id="'.$consumer_id.'"><i class="bx bxs-trash-alt btn btn-danger btn-sm mb-3"></i></a>';
-                                    
-                                    // Added action for reading
-                                    echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-2" title="Reading  " data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-3 ml-2"></i></a>';
-                                echo "</td>";
-                            echo "</tr>";
-                        }
-                        echo "</tbody>";                            
-                    echo "</table>";
-                    echo '</div>';
-                    mysqli_free_result($result);
-                } else{
-                    echo '<script>
-                            Swal.fire({
-                            title: "Info!",
-                            text: "No records were found.",
-                            icon: "info",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
-                            })
-                          </script>';
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
+    // Yearly Income Chart
+    var yearlyIncomeOptions = {
+        series: [{
+            name: 'Yearly Income',
+            data: [30000, 45000, 55000] // Sample Data
+        }],
+        chart: {
+            type: 'bar',
+            height: 300
+        },
+        colors: ['#008FFB'],
+        xaxis: {
+            categories: ['2024', '2025', '2026']
+        },
+        title: {
+            text: 'Yearly Income Overview',
+            align: 'left'
+        },
+        dataLabels: {
+            enabled: true
+        },
+    };
+    var yearlyIncomeChart = new ApexCharts(document.querySelector("#yearlyIncomeChart"), yearlyIncomeOptions);
+    yearlyIncomeChart.render();
 
-            mysqli_close($link);
-            ?>
-        </div>
-    </section>
+    // Chart for Total Billed
+    var totalBilledOptions = {
+        series: [{
+            name: 'Billed',
+            data: [100, 200, 150, 300, 250] // Sample Data
+        }],
+        chart: {
+            type: 'donut',
+            height: 300
+        },
+        colors: ['#FF4560', '#775DD0'],
+        labels: ['January', 'February', 'March', 'April', 'May','June','July','August','September','October','November','December'],
+        title: {
+            text: 'Total Billed Distribution',
+            align: 'left'
+        },
+    };
+    var totalBilledChart = new ApexCharts(document.querySelector("#totalBilledChart"), totalBilledOptions);
+    totalBilledChart.render();
 
-    <?php include 'includes/scripts.php'; ?>
-    <!-- jQuery and DataTables JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    // Chart for Total Unbilled
+    var totalUnbilledOptions = {
+        series: [{
+            name: 'Unbilled',
+            data: [50, 70, 90, 40, 80] // Sample Data
+        }],
+        chart: {
+            type: 'bar',
+            height: 300
+        },
+        colors: ['#FEB019'],
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+        },
+        title: {
+            text: 'Total Unbilled Overview',
+            align: 'left'
+        },
+        dataLabels: {
+            enabled: true
+        },
+    };
+    var totalUnbilledChart = new ApexCharts(document.querySelector("#totalUnbilledChart"), totalUnbilledOptions);
+    totalUnbilledChart.render();
 
-    <script>
-    // Initialize DataTable
-    $(document).ready(function() {
-        $('#consumerTable').DataTable({
-            "paging": true,
-            "searching": true,
-            "info": true
-        });
-    });
+    // Chart for Lose Connection
+    var loseConnectionOptions = {
+        series: [{
+            name: 'Lose Connection',
+            data: [5, 8, 12] // Sample Data
+        }],
+        chart: {
+            type: 'line',
+            height: 300
+        },
+        colors: ['#FF4560'],
+        xaxis: {
+            categories: ['Month 1', 'Month 2', 'Month 3']
+        },
+        title: {
+            text: 'Lose Connection Trend',
+            align: 'left'
+        },
+        dataLabels: {
+            enabled: true
+        },
+    };
+    // Existing chart scripts...
 
-    // Hide the alert after 3 seconds
-    setTimeout(function(){
-        var alert = document.querySelector('.alert');
-        if (alert) {
-            alert.style.display = 'none';
-        }
-    }, 3000);
-   
-    </script>
-      <script>
-        // Disable right-click
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
+    // Yearly Paid Bills Chart
+    var yearlyPaidOptions = {
+        series: [{
+            name: 'Paid Bills',
+            data: [<?php echo implode(',', array_fill(0, 12, $yearly_paid)); ?>] // Sample Data, replace as needed
+        }],
+        chart: {
+            type: 'bar',
+            height: 300
+        },
+        colors: ['#00E396'],
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        title: {
+            text: 'Total Paid Bills Yearly',
+            align: 'left'
+        },
+        dataLabels: {
+            enabled: true
+        },
+    };
+    var yearlyPaidChart = new ApexCharts(document.querySelector("#yearlyPaidChart"), yearlyPaidOptions);
+    yearlyPaidChart.render();
 
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, and Ctrl+U
-        document.addEventListener('keydown', function(e) {
-            if (e.keyCode == 123) { // F12
-                e.preventDefault();
-            }
-            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) { // Ctrl+Shift+I or J
-                e.preventDefault();
-            }
-            if (e.ctrlKey && e.keyCode == 85) { // Ctrl+U
-                e.preventDefault();
-            }
-        });
-    </script>s  
+    // Yearly Unpaid Bills Chart
+    var yearlyUnpaidOptions = {
+        series: [{
+            name: 'Unpaid Bills',
+            data: [<?php echo implode(',', array_fill(0, 12, $yearly_unpaid)); ?>] // Sample Data, replace as needed
+        }],
+        chart: {
+            type: 'bar',
+            height: 300
+        },
+        colors: ['#FF4560'],
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        title: {
+            text: 'Total Unpaid Bills Yearly',
+            align: 'left'
+        },
+        dataLabels: {
+            enabled: true
+        },
+    };
+    var yearlyUnpaidChart = new ApexCharts(document.querySelector("#yearlyUnpaidChart"), yearlyUnpaidOptions);
+    yearlyUnpaidChart.render();
+    var loseConnectionChart = new ApexCharts(document.querySelector("#loseConnectionChart"), loseConnectionOptions);
+    loseConnectionChart.render();
+    
+    function printChart(chartId, title) {
+        var chart = document.getElementById(chartId);
+        var win = window.open('', '', 'height=500,width=800');
+        win.document.write('<html><head><title>' + title + '</title>');
+        win.document.write('</head><body >');
+        win.document.write('<h1>' + title + '</h1>');
+        win.document.write(chart.outerHTML);
+        win.document.write('</body></html>');
+        win.document.close();
+        win.print();
+    }
+</script>
 </body>
 </html>

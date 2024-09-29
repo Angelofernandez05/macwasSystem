@@ -95,15 +95,15 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                     echo '<table id="consumerTable" class="display table table-striped" style="width:100%">';
                         echo "<thead>";
                             echo "<tr>";
-                                echo "<th>Name</th>";
-                                echo "<th>Email</th>";
-                                echo "<th>Phone</th>";
-                                echo "<th>Barangay</th>";
-                                echo "<th>Account No.</th>";
-                                echo "<th>Registration No.</th>";
-                                echo "<th>Meter No.</th>";
-                                echo "<th>Type</th>";
-                                echo "<th>Action</th>";
+                            echo "<th>👤Name</th>";
+                            echo "<th>📧Email</th>";
+                            echo "<th>📞Phone #</th>";
+                            echo "<th>📍Brgy</th>";
+                            echo "<th>🔢Account #</th>";
+                            echo "<th>🔑Registration #</th>";
+                            echo "<th>⚡Meter #</th>";
+                            echo "<th>🏷️Type</th>";
+                            echo "<th>🔄Action</th>";
                             echo "</tr>";
                         echo "</thead>";
                         echo "<tbody>";
@@ -140,18 +140,22 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                 echo "<td>" . $row['type'] . "</td>";
                                 echo "<td>";
                                                         // Inside the dropdown menu in consumer.php
-                                echo '<div class="dropdown">';
+                                            
+                                echo '<div class="dropdown d-inline-block">'; // Use inline-block to ensure it stays on the same line
                                 echo '<button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton'.$consumer_id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-                                echo '<i class="bx bx-mail-send" style="font-size: 10px;"></i>';
+                                echo '<i class="bx bx-mail-send" style="font-size: 14px;"></i>'; // Adjust font size for consistency
                                 echo '</button>';
                                 echo '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton'.$consumer_id.'">';
-                                // Pass the consumer ID to send-billing-statement.php
+                                                        // Pass the consumer ID to send-billing-statement.php
                                 echo '<a target="_blank" href="send-billing-statement.php?consumer_id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Job Order</a>';
                                 echo '<a target="_blank" href="send-notice-disconnection.php?consumer_id='. $row['id'] .'" class="dropdown-item" title="Print Billing Statement" data-toggle="tooltip">Notice of Disconnection</a>';
                                 echo '</div>';
-                                echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="mr-1q" title="Reading" data-toggle="tooltip"><i class="bx bx-book-open btn btn-info btn-sm mb-1 ml-2 ;"></i></a>';
-                                echo "</td>";
                                 echo '</div>';
+                                                        
+                                echo '<a href="reading.php?consumer_id='. $consumer_id .'" class="d-inline-block" title="Reading" data-toggle="tooltip" style="margin-left: 10px;">';
+                                echo '<i class="bx bx-book-open btn btn-info btn-sm"></i>'; // Ensures button stays inline
+                                echo '</a>';
+                                                        
 
                             
                                 echo "</td>";
