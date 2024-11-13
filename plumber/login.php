@@ -164,7 +164,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             padding: 20px; /* Add padding for content inside the card */
             backdrop-filter: blur(5px); /* Optional: Adds a blur effect to the background of the card */
         }
-
         .card-body {
             padding: 1rem;
         }
@@ -181,6 +180,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         .btn {
             border-radius: 30px;
             font-weight: 600;
+        }
+        .recaptcha-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+        .g-recaptcha {
+            display: inline-block;
         }
     </style>
 </head>
