@@ -173,7 +173,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             border-radius: 20px;
         }
         .btn {
-            border-radius: 40px;
+            border-radius: 30px;
             font-weight: 600;
         }
         .recaptcha-container {
