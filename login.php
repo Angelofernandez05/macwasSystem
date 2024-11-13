@@ -25,8 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         $password = trim($_POST["password"]);
     }
 
-   // Process form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     // Verify reCAPTCHA v3
     $recaptcha_secret = '6LftD30qAAAAALz6BP1WmhlbWnaEntyi1QqHqxOd';
     $recaptcha_response = $_POST['recaptcha_response']; // Get the response token
@@ -39,68 +37,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     if ($response_keys["success"] && $response_keys["score"] >= 0.5) {
         // reCAPTCHA passed and score is acceptable
         // Continue with the rest of your login logic
-        // ... (your existing code for handling login)
+        // Prepare a select statement
+        $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
+        if ($stmt = mysqli_prepare($link, $sql)) {
+            mysqli_stmt_bind_param($stmt, "s", $param_email);
+            $param_email = $email;
 
+            // Execute the prepared statement
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+
+                // Check if email exists, if yes then verify password
+                if (mysqli_stmt_num_rows($stmt) == 1) {
+                    mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
+                    if (mysqli_stmt_fetch($stmt)) {
+                        if (password_verify($password, $hashed_password)) {
+                            if ($is_approved == 0) {
+                                $login_err = "Your account is awaiting approval. Please contact the system administrator.";
+                            } elseif ($status === 'inactive') {
+                                $login_err = "Your account is inactive. Please contact the system administrator.";
+                            } else {
+                                // Regenerate session ID for security
+                                session_regenerate_id();
+
+                                // Set session variables
+                                $_SESSION["loggedin"] = true;
+                                $_SESSION["id"] = $id;
+                                $_SESSION["email"] = $email;
+
+                                // Redirect user to the dashboard
+                                header("location: index.php");
+                                exit;
+                            }
+                        } else {
+                            $login_err = "Invalid email or password.";
+                        }
+                    }
+                } else {
+                    $login_err = "Invalid email or password.";
+                }
+            } else {
+                echo '<script>
+                Swal.fire({
+                    title: "Error!",
+                    text: "Oops! Something went wrong. Please try again later.",
+                    icon: "error",
+                    toast: true,
+                    position: "top-right",
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                </script>';
+            }
+            mysqli_stmt_close($stmt);
+        }
     } else {
         $login_err = "Please complete the CAPTCHA verification.";
     }
- else {
-            // Prepare a select statement
-            $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
-            if ($stmt = mysqli_prepare($link, $sql)) {
-                mysqli_stmt_bind_param($stmt, "s", $param_email);
-                $param_email = $email;
 
-                // Execute the prepared statement
-                if (mysqli_stmt_execute($stmt)) {
-                    mysqli_stmt_store_result($stmt);
-
-                    // Check if email exists, if yes then verify password
-                    if (mysqli_stmt_num_rows($stmt) == 1) {
-                        mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
-                        if (mysqli_stmt_fetch($stmt)) {
-                            if (password_verify($password, $hashed_password)) {
-                                if ($is_approved == 0) {
-                                    $login_err = "Your account is awaiting approval. Please contact the system administrator.";
-                                } elseif ($status === 'inactive') {
-                                    $login_err = "Your account is inactive. Please contact the system administrator.";
-                                } else {
-                                    // Regenerate session ID for security
-                                    session_regenerate_id();
-
-                                    // Set session variables
-                                    $_SESSION["loggedin"] = true;
-                                    $_SESSION["id"] = $id;
-                                    $_SESSION["email"] = $email;
-
-                                    // Redirect user to the dashboard
-                                    header("location: index.php");
-                                    exit;
-                                }
-                            } else {
-                                $login_err = "Invalid email or password.";
-                            }
-                        }
-                    } else {
-                        $login_err = "Invalid email or password.";
-                    }
-                } else {
-                    echo '<script>
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Oops! Something went wrong. Please try again later.",
-                        icon: "error",
-                        toast: true,
-                        position: "top-right",
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                    </script>';
-                }
-                mysqli_stmt_close($stmt);
-            }
-        }
-    }
     mysqli_close($link);
 }
 ?>
@@ -225,14 +219,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             }
         }
     </script>
-    <script>
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6LftD30qAAAAAFx58cDE04XqcRkQGwAPvVxSol4P', {action: 'login'}).then(function(token) {
-            document.getElementById('recaptchaResponse').value = token;
-        });
-    });
-</script>
-<script src="https://www.google.com/recaptcha/api.js?render=6LftD30qAAAAAFx58cDE04XqcRkQGwAPvVxSol4P"></script>
-
 </body>
 </html>
