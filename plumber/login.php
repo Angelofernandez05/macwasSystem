@@ -16,7 +16,7 @@ $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
 // Google reCAPTCHA secret key
-$secret_key = "6Lc5Dn0qAAAAAMYzPsoS20eZ8vEIEzZPE9olVTrN";
+$secret_key = "6LdWHn0qAAAAAIKYM5oSv5ws6hsCfnQt3SJZOGzW";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -29,8 +29,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$captcha");
         $response_keys = json_decode($response, true);
 
-        // If CAPTCHA is valid
-        if(intval($response_keys["success"]) !== 1) {
+        // If CAPTCHA score is high enough (above threshold of 0.5)
+        if($response_keys["success"] === true && $response_keys["score"] >= 0.5) {
+            // CAPTCHA passed
+        } else {
             $login_err = "Please verify that you are not a robot.";
         }
     } else {
@@ -127,7 +129,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link rel="stylesheet" href="style2.css">
     <link rel="icon" href="logo.png" type="image/icon type">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=your_site_key_here"></script>
     <style>
         body {
             background-image: url("plumber.jpg");
@@ -162,29 +164,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: rgba(173, 216, 230, 0.0); /* Light blue with some transparency */
             padding: 20px; /* Add padding for content inside the card */
-            backdrop-filter: blur(3px); /* Optional: Adds a blur effect to the background of the card */
+            backdrop-filter: blur(5px); /* Optional: Adds a blur effect to the background of the card */
         }
+
         .card-body {
             padding: 1rem;
         }
+
         .container {
             max-width: 550px;
             margin-left: 50px; /* Adjust this value to move the form further left */
         }
+
         .form-control {
             border-radius: 20px;
         }
+
         .btn {
             border-radius: 30px;
             font-weight: 600;
-        }
-        .recaptcha-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        }
-        .g-recaptcha {
-            display: inline-block;
         }
     </style>
 </head>
@@ -231,14 +229,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
                         </div>
 
-                        <!-- Google reCAPTCHA -->
-                        <div class="form-outline mb-4">
-                            <div class="g-recaptcha" data-sitekey="6LdzD30qAAAAAGGUZtHHljbEuOozmOKjwgjBJWrw"></div>
-                        </div>
+                        <!-- reCAPTCHA -->
+                        <div class="g-recaptcha" data-sitekey="6LdWHn0qAAAAANMt3aJRdjriCTdx0VFChCe_QQlQ"></div>
 
                         <!-- Submit button -->
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary btn-lg" style="width: 600px; height: 50px;">Login</button>
+                            <button type="submit" class="btn btn-primary btn-lg" style="width: 200px; height: 50px;">Login</button>
                         </div>
 
                         <!-- Register buttons -->
