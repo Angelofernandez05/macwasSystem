@@ -176,6 +176,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             border-radius: 30px;
             font-weight: 600;
         }
+        .recaptcha-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+        .g-recaptcha {
+            display: inline-block;
+        }
     </style>
 </head>
 <body class="bg-light">
