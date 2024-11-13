@@ -24,10 +24,20 @@ $paid_sql = "SELECT * FROM readings WHERE status = 1;";
 $paid_result = mysqli_query($link, $paid_sql);
 $paid_total = mysqli_num_rows($paid_result);
 
-$date = date('m-Y');
-$paid_sql_month = "SELECT * FROM readings WHERE status = 1 AND DATE_FORMAT(date_paid, '%m-%Y') = '$date';";
-$paid_result_month = mysqli_query($link, $paid_sql_month);
-$paid_total_month = mysqli_num_rows($paid_result_month);
+// ... (existing code)
+
+// Set the date variable for current month and year
+$date = date('m-Y'); // Current month and year in 'mm-yyyy' format
+
+// Query to get total income for the current month
+$income_monthly_sql = "SELECT SUM(amount) AS total_income FROM readings WHERE status = 1 AND DATE_FORMAT(date_paid, '%m-%Y') = '$date';";
+$income_monthly_result = mysqli_query($link, $income_monthly_sql);
+$total_income_monthly = 0;
+if ($income_monthly_result && mysqli_num_rows($income_monthly_result) > 0) {
+    $row = mysqli_fetch_assoc($income_monthly_result);
+    $total_income_monthly = $row['total_income'];
+}
+
 
 $date_year = date('Y');
 $paid_sql_year = "SELECT * FROM readings WHERE status = 1 AND DATE_FORMAT(date_paid, '%Y') = '$date_year';";
@@ -145,14 +155,13 @@ mysqli_close($link);
         <?php include 'includes/userMenu.php'; ?>
     </nav>
     <div class="dashboard">
-
-        <div class="dashboard-section">
+            <div class="dashboard-section">
             <h2>Income Monthly</h2>
-            <p>₱<?php echo number_format($paid_total_month); ?></p>
+            <p>₱<?php echo number_format($total_income_monthly, 2); ?></p>
             <small>Total Income This Month (<?php echo date('F Y'); ?>)</small>
             <div id="monthlyIncomeChart" class="chart-container"></div>
-            <button class="print-button" onclick="printChart('monthlyIncomeChart', 'Income Monthly: ₱<?php echo number_format($paid_total_month); ?>')">
-                <i class='bx bxs-printer'></i> <!-- Boxicons printer icon -->
+            <button class="print-button" onclick="printChart('monthlyIncomeChart', 'Income Monthly: ₱<?php echo number_format($total_income_monthly, 2); ?>')">
+                <i class='bx bxs-printer'></i>
             </button>
         </div>
 
@@ -195,13 +204,13 @@ mysqli_close($link);
         </div>
 
         <div class="dashboard-section">
-            <h2>Lose Connection Monthly</h2>
+            <h2>Disconnection Monthly</h2>
             <p><?php echo $lose_connection; ?> users</p>
             <small>Disconnected Users</small>
             <div id="loseConnectionChart" class="chart-container"></div>
         </div>
         <div class="dashboard-section">
-            <h2>Lose Connection Yearly</h2>
+            <h2>Disconnection Yearly</h2>
             <p><?php echo $lose_connection; ?> users</p>
             <small>Disconnected Users</small>
             <div id="loseConnectionChart" class="chart-container"></div>
