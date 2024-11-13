@@ -238,7 +238,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                         <!-- Submit button -->
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary btn-lg" style="width: 600px; height: 30px;">Login</button>
+                            <button type="submit" class="btn btn-primary btn-lg" style="width: 600px; height: 50px;">Login</button>
                         </div>
 
                         <!-- Register buttons -->
