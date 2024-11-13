@@ -71,6 +71,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $login_err = "Invalid username or password.";
                         }
                     }
+                    if (empty($email_err) && empty($password_err)) {
+                        $recaptcha_secret = '6Lc5Dn0qAAAAAMYzPsoS20eZ8vEIEzZPE9olVTrN';
+                        $recaptcha_response = $_POST['g-recaptcha-response'];
+                        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptcha_secret&response=$recaptcha_response");
+                        $response_keys = json_decode($response, true);
+                
+                        if (intval($response_keys["success"]) !== 1) {
+                            $login_err = "Please complete the CAPTCHA verification.";
+                        }
                 } else{
                     // Username doesn't exist, display a generic error message
                     $login_err = "Invalid username or password.";
@@ -217,7 +226,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <input type="submit" value="Sign in" name="login" class="btn btn-primary btn-lg text-light my-2 py-3" style="width:100% ; border-radius: 30px; font-weight:600;" />
                         </div>
                         <br>
-                        
+                        <div class="g-recaptcha mb-3" data-sitekey="6LdzD30qAAAAAGGUZtHHljbEuOozmOKjwgjBJWrw"></div>
                     </form>
                     <p align="center"><strong>Don't have an account? Sign up</strong><a href="signup.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
                     
