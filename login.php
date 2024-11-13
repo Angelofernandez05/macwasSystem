@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
     // Verify reCAPTCHA
     if (empty($email_err) && empty($password_err)) {
-        $recaptcha_secret = '6LdqCn0qAAAAAC8DbOmtgEtXxEM-VuQLODrj-zPP';
+        $recaptcha_secret = '66LegDX0qAAAAAHIg0_FL1CZUr_uYOEPERp_DYy3Z';
         $recaptcha_response = $_POST['g-recaptcha-response'];
         $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptcha_secret&response=$recaptcha_response");
         $response_keys = json_decode($response, true);
@@ -183,7 +183,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         </div>
 
                         <!-- Add reCAPTCHA widget -->
-                        <div class="g-recaptcha mb-3" data-sitekey="6LdqCn0qAAAAALSmwRzVSu62rFgrlg0TjBxJPITw"></div>
+                        <div class="g-recaptcha mb-3" data-sitekey="6LegDX0qAAAAAIijYmMaIYZr8ZzREm5VPYX6LXps"></div>
 
                         <div class="d-grid mb-3">
                             <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
