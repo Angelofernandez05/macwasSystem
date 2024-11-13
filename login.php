@@ -25,16 +25,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         $password = trim($_POST["password"]);
     }
 
-    // Verify reCAPTCHA
-    if (empty($email_err) && empty($password_err)) {
-        $recaptcha_secret = '6LdzD30qAAAAABXTn5GjcSUSoF-gSqHuSpbiaifJ';
-        $recaptcha_response = $_POST['g-recaptcha-response'];
-        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptcha_secret&response=$recaptcha_response");
-        $response_keys = json_decode($response, true);
+   // Process form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
+    // Verify reCAPTCHA v3
+    $recaptcha_secret = '6LftD30qAAAAALz6BP1WmhlbWnaEntyi1QqHqxOd';
+    $recaptcha_response = $_POST['recaptcha_response']; // Get the response token
 
-        if (intval($response_keys["success"]) !== 1) {
-            $login_err = "Please complete the CAPTCHA verification.";
-        } else {
+    // Verify reCAPTCHA response with Google
+    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptcha_secret&response=$recaptcha_response");
+    $response_keys = json_decode($response, true);
+
+    // Check the score
+    if ($response_keys["success"] && $response_keys["score"] >= 0.5) {
+        // reCAPTCHA passed and score is acceptable
+        // Continue with the rest of your login logic
+        // ... (your existing code for handling login)
+
+    } else {
+        $login_err = "Please complete the CAPTCHA verification.";
+    }
+ else {
             // Prepare a select statement
             $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
             if ($stmt = mysqli_prepare($link, $sql)) {
@@ -183,7 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         </div>
 
                         <!-- Add reCAPTCHA widget -->
-                        <div class="g-recaptcha mb-3" data-sitekey="6LdzD30qAAAAAGGUZtHHljbEuOozmOKjwgjBJWrw"></div>
+                        <!-- <div class="g-recaptcha mb-3" data-sitekey="6LdzD30qAAAAAGGUZtHHljbEuOozmOKjwgjBJWrw"></div> -->
 
                         <div class="d-grid mb-3">
                             <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
@@ -215,5 +225,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             }
         }
     </script>
+    <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LftD30qAAAAAFx58cDE04XqcRkQGwAPvVxSol4P', {action: 'login'}).then(function(token) {
+            document.getElementById('recaptchaResponse').value = token;
+        });
+    });
+</script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LftD30qAAAAAFx58cDE04XqcRkQGwAPvVxSol4P"></script>
+
 </body>
 </html>
