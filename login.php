@@ -135,6 +135,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             border-radius: 30px;
             font-weight: 600;
         }
+        .recaptcha-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+        .g-recaptcha {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
