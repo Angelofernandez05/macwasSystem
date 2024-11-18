@@ -25,15 +25,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         $password = trim($_POST["password"]);
     }
 
-    // // Verify reCAPTCHA
+    // Verify reCAPTCHA
     // if (empty($email_err) && empty($password_err)) {
     //     $recaptcha_secret = '6Lc9TYIqAAAAAM0dTnNsu3INPMMHwQ3TM8L1obgf';
     //     $recaptcha_response = $_POST['g-recaptcha-response'];
     //     $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptcha_secret&response=$recaptcha_response");
     //     $response_keys = json_decode($response, true);
 
-    //     if (intval($response_keys["success"]) !== 1) {
-    //         $login_err = "Please complete the CAPTCHA verification.";
+        if (intval($response_keys["success"]) !== 1) {
+            $login_err = "Please complete the CAPTCHA verification.";
         } else {
             // Prepare a select statement
             $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
