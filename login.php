@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
     //     if (intval($response_keys["success"]) !== 1) {
     //         $login_err = "Please complete the CAPTCHA verification.";
-    //     } else {
+        } else {
             // Prepare a select statement
             $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
             if ($stmt = mysqli_prepare($link, $sql)) {
