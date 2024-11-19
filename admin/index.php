@@ -270,12 +270,12 @@ mysqli_close($link);
 
             <div class="mt-5">
                 <!-- <h4><label class="icon">⚠️ <strong>Overdue Billing Statement:</strong></label> -->
-                </h4>
+                <!-- </h4>
                 <div>
                     <?php if (mysqli_num_rows($result_overdue) > 0): ?>
                         <table class="table table-striped">
                             <thead>
-                                <tr>
+                                <tr> -->
                                     <!-- <th>👤Name</th>
                                     <th>⏲️Meter No.</th>
                                     <th>📅Date of Disconnection</th>
@@ -297,7 +297,7 @@ mysqli_close($link);
                                         <td><?php echo $row['previous']; ?></td>
                                         <td><?php echo number_format((float)$row['used'], 2, '.', ''); ?></td>
                                         <td> -->
-                                            <div class="d-flex" style="gap: 0.3rem">
+                                            <!-- <div class="d-flex" style="gap: 0.3rem">
                                             <div class="dropdown">
                                                     <button class="btn btn-sm btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class='bx bxs-printer'></i> 
@@ -313,7 +313,7 @@ mysqli_close($link);
                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                         <a target="_self" href="send-billing-statement.php?id=<?php echo $row['reading_id']; ?>" class="dropdown-item" title="Send Billing Statement" data-toggle="tooltip">Job Order</a>
                                                         <a target="_self" href="send-notice-disconnection.php?id=<?php echo $row['reading_id']; ?>" class="dropdown-item" title="Send Notice of Disconnection" data-toggle="tooltip">Notice of Disconnection</a>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                         </td>
