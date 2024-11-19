@@ -246,7 +246,7 @@ mysqli_close($link);
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h4 class="mb-0"><?php echo $paid_total_month; ?></h4>
-                                    <small class="mb-0">Paid Bills Monthly</small>
+                                    <small class="mb-0">Monthly Income</small>
                                 </div>
                                 <i class='bx bxs-calendar-check bx-md'></i>
                             </div>
@@ -259,7 +259,7 @@ mysqli_close($link);
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h4 class="mb-0"><?php echo $paid_total_year; ?></h4>
-                                    <small class="mb-0">Paid Bills Yearly</small>
+                                    <small class="mb-0">Yearly Income</small>
                                 </div>
                                 <i class='bx bxs-calendar-star bx-md'></i>
                             </div>
