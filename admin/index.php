@@ -259,6 +259,8 @@ mysqli_close($link);
                         </div>
                     </div>
                 </div>
+            </div>
+         </div>
             <div class="mt-5">
             <h4><label class="icon">📊 <strong>Dashboard Chart:</strong></label></h4>
                 <canvas id="consumersChart" width="400" height="200"></canvas>
