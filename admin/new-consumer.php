@@ -222,7 +222,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New Consumer</title>
+    <title>Admin New Consumer</title>
     <?php include 'includes/links.php'; ?>
 </head>
 <body>
