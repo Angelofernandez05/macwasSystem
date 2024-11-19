@@ -276,27 +276,27 @@ mysqli_close($link);
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>👤Name</th>
+                                    <!-- <th>👤Name</th>
                                     <th>⏲️Meter No.</th>
                                     <th>📅Date of Disconnection</th>
                                     <th>⌛ Due Date</th>
                                     <th>🟢Present</th>
                                     <th>⏮️Previous</th>
                                     <th>🛠️Used</th>
-                                    <th>🔄Action</th>
+                                    <th>🔄Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php while ($row = mysqli_fetch_array($result_overdue)): ?>
                                     <tr>
-                                        <td><?php echo $row['name']; ?></td>
+                                        <!-- <td><?php echo $row['name']; ?></td>
                                         <td><?php echo $row['meter_num']; ?></td>
                                         <td><?php echo date("F j, Y", strtotime($row['due_date'] . " +15 day")); ?></td>
                                         <td><?php echo date_format(date_create($row['due_date']), 'F j, Y'); ?></td>
                                         <td><?php echo $row['present']; ?></td>
                                         <td><?php echo $row['previous']; ?></td>
                                         <td><?php echo number_format((float)$row['used'], 2, '.', ''); ?></td>
-                                        <td>
+                                        <td> -->
                                             <div class="d-flex" style="gap: 0.3rem">
                                             <div class="dropdown">
                                                     <button class="btn btn-sm btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
