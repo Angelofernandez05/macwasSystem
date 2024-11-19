@@ -261,60 +261,84 @@ mysqli_close($link);
                 </div>
             </div>
          </div>
-            <div class="mt-5">
-            <h4><label class="icon">📊 <strong>Dashboard Chart:</strong></label></h4>
-                <canvas id="consumersChart" width="400" height="200"></canvas>
-            </div>
-        </div>
-    </section>
+         <div class="mt-5">
+    <h4><label class="icon">📊 <strong>Dashboard Chart:</strong></label></h4>
+    <canvas id="dashboardChart" width="400" height="200"></canvas>
+</div>
 
-    <?php include 'includes/scripts.php'; ?>
-    <script>
-        // Chart.js Configuration
-        $(document).ready(function() {
-            var ctx = document.getElementById('consumersChart').getContext('2d');
-            var consumersChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Consumers', 'Complaints', 'Unpaid Bills', 'Paid Bills', 'Paid Bills Monthly', 'Paid Bills Yearly'],
-                    datasets: [{
-                        label: 'Data Count',
-                        data: [
-                            <?php echo $consumers_total; ?>,
-                            <?php echo $complaints_total; ?>,
-                            <?php echo $unpaid_total; ?>,
-                            <?php echo $paid_total; ?>,
-                            <?php echo $paid_total_month; ?>,
-                            <?php echo $paid_total_year; ?>
-                        ],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                        borderWidth: 1.5
-                    }]
+<script>
+    // Chart.js Configuration
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('dashboardChart').getContext('2d');
+        const dashboardChart = new Chart(ctx, {
+            type: 'bar', // You can change this to 'line', 'pie', etc., based on your preference
+            data: {
+                labels: [
+                    'Consumers',
+                    'Complaints',
+                    'Unpaid Bills',
+                    'Paid Bills',
+                    'Monthly Income',
+                    'Yearly Income'
+                ],
+                datasets: [{
+                    label: 'Data Overview',
+                    data: [
+                        <?php echo $consumers_total; ?>,
+                        <?php echo $complaints_total; ?>,
+                        <?php echo $unpaid_total; ?>,
+                        <?php echo $paid_total; ?>,
+                        <?php echo $paid_total_month; ?>,
+                        <?php echo $paid_total_year; ?>
+                    ],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1.5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    tooltip: {
+                        enabled: true,
+                    }
                 },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Count'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Categories'
                         }
                     }
                 }
-            });
+            }
         });
+    });
 
        // JavaScript for Clock
             function updateClock() {
