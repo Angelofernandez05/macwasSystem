@@ -72,7 +72,12 @@ if ($lose_connection_result && mysqli_num_rows($lose_connection_result) > 0) {
     $row = mysqli_fetch_assoc($lose_connection_result);
     $lose_connection = $row['lose_connection'];
 }
-
+// Fetch overdue billing statement data
+$currDate = date('Y-m-d');
+$sql_overdue = "SELECT *, (present - previous) AS used, consumers.id AS consumer_id, readings.id AS reading_id FROM readings 
+                LEFT JOIN consumers ON readings.consumer_id = consumers.id 
+                WHERE DATE(readings.due_date) < '$currDate' AND readings.status = 0";
+$result_overdue = mysqli_query($link, $sql_overdue);
 // Close connection
 mysqli_close($link);
 ?>
@@ -212,7 +217,6 @@ mysqli_close($link);
                     <?php endif; ?>
                 </div>
             </div>
-            
     <div class="dashboard">
             <div class="dashboard-section">
             <h2>Income Monthly</h2>
