@@ -40,11 +40,11 @@ $paid_result_year = mysqli_query($link, $paid_sql_year);
 $paid_total_year = mysqli_num_rows($paid_result_year);
 
 // Fetch overdue billing statement data
-$currDate = date('Y-m-d');
-$sql_overdue = "SELECT *, (present - previous) AS used, consumers.id AS consumer_id, readings.id AS reading_id FROM readings 
-                LEFT JOIN consumers ON readings.consumer_id = consumers.id 
-                WHERE DATE(readings.due_date) < '$currDate' AND readings.status = 0";
-$result_overdue = mysqli_query($link, $sql_overdue);
+// $currDate = date('Y-m-d');
+// $sql_overdue = "SELECT *, (present - previous) AS used, consumers.id AS consumer_id, readings.id AS reading_id FROM readings 
+//                 LEFT JOIN consumers ON readings.consumer_id = consumers.id 
+//                 WHERE DATE(readings.due_date) < '$currDate' AND readings.status = 0";
+// $result_overdue = mysqli_query($link, $sql_overdue);
 
 // Close connection
 mysqli_close($link);
@@ -268,7 +268,7 @@ mysqli_close($link);
                 </div>
             </div>
 
-            <div class="mt-5">
+            <!-- <div class="mt-5">
                 <h4><label class="icon">⚠️ <strong>Overdue Billing Statement:</strong></label>
                 </h4>
                 <div>
@@ -325,7 +325,7 @@ mysqli_close($link);
                         <p>No overdue billing statements found.</p>
                     <?php endif; ?>
                 </div>
-            </div>
+            </div> -->
 
             <div class="mt-5">
             <h4><label class="icon">📊 <strong>Dashboard Chart:</strong></label></h4>
