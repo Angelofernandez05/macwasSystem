@@ -31,7 +31,7 @@ $date = date('m-Y'); // Current month and year in 'mm-yyyy' format
 
 // Query to get total income for the current month
 $income_monthly_sql = "SELECT SUM(amount) AS total_income FROM readings WHERE status = 1 AND DATE_FORMAT(date_paid, '%m-%Y') = '$date';";
-$income_monthly_result = mysqli_query($link, $income_monthly_sql);
+// $income_monthly_result = mysqli_query($link, $income_monthly_sql);
 $total_income_monthly = 0;
 if ($income_monthly_result && mysqli_num_rows($income_monthly_result) > 0) {
     $row = mysqli_fetch_assoc($income_monthly_result);
