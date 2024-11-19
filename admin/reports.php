@@ -157,7 +157,7 @@ mysqli_close($link);
     <div class="dashboard">
             <div class="dashboard-section">
             <h2>Income Monthly</h2>
-            <p>₱<?php echo number_format($total_income_monthly, 2); ?></p>
+            <!-- <p>₱<?php echo number_format($total_income_monthly, 2); ?></p> -->
             <small>Total Income This Month (<?php echo date('F Y'); ?>)</small>
             <div id="monthlyIncomeChart" class="chart-container"></div>
             <button class="print-button" onclick="printChart('monthlyIncomeChart', 'Income Monthly: ₱<?php echo number_format($total_income_monthly, 2); ?>')">
