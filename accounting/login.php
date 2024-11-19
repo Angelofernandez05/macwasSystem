@@ -16,7 +16,7 @@ $username = $password = "";
 $username_err = $password_err = $login_err = $captcha_err = "";
 
 // Google reCAPTCHA secret key
-$secret_key = '6Lc5Dn0qAAAAAMYzPsoS20eZ8vEIEzZPE9olVTrN';
+$secret_key = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -231,7 +231,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
 
                         <!-- reCAPTCHA -->
-                        <div class="g-recaptcha" data-sitekey="6LdzD30qAAAAAGGUZtHHljbEuOozmOKjwgjBJWrw"></div>
+                        <div class="g-recaptcha" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
                         <span class="invalid-feedback"><?php echo $captcha_err; ?></span>
                         <br>
 
