@@ -222,7 +222,6 @@ mysqli_close($link);
     </div>
     </div>
     </div>
-    </div>
     <div class="mt-5">
                 <h4><label class="icon">⚠️ <strong>Overdue Billing Statement:</strong></label>
                 </h4>
