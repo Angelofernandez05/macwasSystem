@@ -22,7 +22,7 @@
     </button>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="reset-password.php">Reset Your Password</a>
-        <a class="dropdown-item" href="generate-security.php">Generate Security Password</a>
+        <!-- <a class="dropdown-item" href="generate-security.php">Generate Security Password</a> -->
         <a class="dropdown-item" href="#" onclick="logoutConfirmation()">Sign Out</a>
     </div>
 </div>
