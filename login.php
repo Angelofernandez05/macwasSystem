@@ -1,121 +1,124 @@
-    <?php
-    // Initialize the session
-    session_start();
+<?php
+// Initialize the session
+session_start();
 
-    // Include config file
-    require_once 'config.php';
+// Include config file
+require_once 'config.php';
 
-    // Define variables and initialize with empty values
-    $email = $password = "";
-    $email_err = $password_err = $login_err = "";
+// Define variables and initialize with empty values
+$email = $password = "";
+$email_err = $password_err = $login_err = "";
 
-    // Process form submission
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
-        // Check if email is empty
-        if (empty(trim($_POST["email"]))) {
-            $email_err = "Please enter your email.";
-        } else {
-            $email = trim($_POST["email"]);
-        }
-
-        // Check if password is empty
-        if (empty(trim($_POST["password"]))) {
-            $password_err = "Please enter your password.";
-        } else {
-            $password = trim($_POST["password"]);
-        }
-
-        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j';
-$recaptcha_response = $_POST['recaptcha_response'];
-
-$url = "https://www.google.com/recaptcha/api/siteverify";
-$data = [
-    'secret' => $recaptcha_secret,
-    'response' => $recaptcha_response,
-    'remoteip' => $_SERVER['REMOTE_ADDR']
-];
-
-$options = [
-    'http' => [
-        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-        'method'  => 'POST',
-        'content' => http_build_query($data),
-    ],
-];
-$context  = stream_context_create($options);
-$response = file_get_contents($url, false, $context);
-$response_keys = json_decode($response, true);
-
-if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
-    $login_err = "CAPTCHA verification failed. Please try again.";
-}
- else {
-                // Prepare a select statement
-                $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
-                if ($stmt = mysqli_prepare($link, $sql)) {
-                    mysqli_stmt_bind_param($stmt, "s", $param_email);
-                    $param_email = $email;
-
-                    // Execute the prepared statement
-                    if (mysqli_stmt_execute($stmt)) {
-                        mysqli_stmt_store_result($stmt);
-
-                        // Check if email exists, if yes then verify password
-                        if (mysqli_stmt_num_rows($stmt) == 1) {
-                            mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
-                            if (mysqli_stmt_fetch($stmt)) {
-                                if (password_verify($password, $hashed_password)) {
-                                    if ($is_approved == 0) {
-                                        $login_err = "Your account is awaiting approval. Please contact the system administrator.";
-                                    } elseif ($status === 'inactive') {
-                                        $login_err = "Your account is inactive. Please contact the system administrator.";
-                                    } else {
-                                        // Regenerate session ID for security
-                                        session_regenerate_id();
-
-                                        // Set session variables
-                                        $_SESSION["loggedin"] = true;
-                                        $_SESSION["id"] = $id;
-                                        $_SESSION["email"] = $email;
-
-                                        // Redirect user to the dashboard
-                                        header("location: index.php");
-                                        exit;
-                                    }
-                                } else {
-                                    $login_err = "Invalid email or password.";
-                                }
-                            }
-                        } else {
-                            $login_err = "Invalid email or password.";
-                        }
-                    } else {
-                        echo '<script>
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Oops! Something went wrong. Please try again later.",
-                            icon: "error",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                        </script>';
-                    }
-                    mysqli_stmt_close($stmt);
-                }
-            }
-        }
-        mysqli_close($link);
+// Process form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
+    // Check if email is empty
+    if (empty(trim($_POST["email"]))) {
+        $email_err = "Please enter your email.";
+    } else {
+        $email = trim($_POST["email"]);
     }
 
-    header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
-    header("X-Frame-Options: SAMEORIGIN");
-    header("X-Content-Type-Options: nosniff");
-    header("Referrer-Policy: strict-origin-when-cross-origin");
-    header("Permissions-Policy: geolocation=(self), microphone=()");
+    // Check if password is empty
+    if (empty(trim($_POST["password"]))) {
+        $password_err = "Please enter your password.";
+    } else {
+        $password = trim($_POST["password"]);
+    }
 
-    ?>
+    // Verify reCAPTCHA
+    if (empty($email_err) && empty($password_err)) {
+        $recaptcha_secret = 'YOUR_SECRET_KEY'; // Replace with your reCAPTCHA v3 secret key
+        $recaptcha_response = $_POST['recaptcha_response'];
+
+        // Verify the reCAPTCHA response
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+        $data = [
+            'secret' => $recaptcha_secret,
+            'response' => $recaptcha_response,
+            'remoteip' => $_SERVER['REMOTE_ADDR']
+        ];
+
+        $options = [
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($data),
+            ],
+        ];
+        $context = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
+        $response_keys = json_decode($response, true);
+
+        if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
+            $login_err = "CAPTCHA verification failed. Please try again.";
+        } else {
+            // Prepare a select statement
+            $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
+            if ($stmt = mysqli_prepare($link, $sql)) {
+                mysqli_stmt_bind_param($stmt, "s", $param_email);
+                $param_email = $email;
+
+                // Execute the prepared statement
+                if (mysqli_stmt_execute($stmt)) {
+                    mysqli_stmt_store_result($stmt);
+
+                    // Check if email exists, if yes then verify password
+                    if (mysqli_stmt_num_rows($stmt) == 1) {
+                        mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
+                        if (mysqli_stmt_fetch($stmt)) {
+                            if (password_verify($password, $hashed_password)) {
+                                if ($is_approved == 0) {
+                                    $login_err = "Your account is awaiting approval. Please contact the system administrator.";
+                                } elseif ($status === 'inactive') {
+                                    $login_err = "Your account is inactive. Please contact the system administrator.";
+                                } else {
+                                    // Regenerate session ID for security
+                                    session_regenerate_id();
+
+                                    // Set session variables
+                                    $_SESSION["loggedin"] = true;
+                                    $_SESSION["id"] = $id;
+                                    $_SESSION["email"] = $email;
+
+                                    // Redirect user to the dashboard
+                                    header("location: index.php");
+                                    exit;
+                                }
+                            } else {
+                                $login_err = "Invalid email or password.";
+                            }
+                        }
+                    } else {
+                        $login_err = "Invalid email or password.";
+                    }
+                } else {
+                    echo '<script>
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Oops! Something went wrong. Please try again later.",
+                        icon: "error",
+                        toast: true,
+                        position: "top-right",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    </script>';
+                }
+                mysqli_stmt_close($stmt);
+            }
+        }
+    }
+    mysqli_close($link);
+}
+
+// Security headers
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Permissions-Policy: geolocation=(self), microphone=()");
+?>
+
 
     <!DOCTYPE html>
     <html lang="en">
@@ -213,7 +216,7 @@ if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
                             </div>
 
                             <!-- Add reCAPTCHA widget -->
-                            <!--<div class="g-recaptcha mb-3" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>-->
+                            <div class="g-recaptcha mb-3" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
 
                             <div class="d-grid mb-3">
                                 <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
@@ -228,7 +231,7 @@ if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
-        <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render=YOUR_SITE_KEY"></script>
 
         <script>
             // Toggle password visibility
@@ -249,7 +252,7 @@ if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
         </script>
         <script>
     grecaptcha.ready(function() {
-        grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
+        grecaptcha.execute('YOUR_SITE_KEY', { action: 'login' }).then(function(token) {
             const recaptchaResponseField = document.createElement('input');
             recaptchaResponseField.setAttribute('type', 'hidden');
             recaptchaResponseField.setAttribute('name', 'recaptcha_response');
