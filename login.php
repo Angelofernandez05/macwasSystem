@@ -25,16 +25,31 @@
             $password = trim($_POST["password"]);
         }
 
-        // Verify reCAPTCHA
-        if (empty($email_err) && empty($password_err)) {
-            $recaptcha_secret = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
-            $recaptcha_response = $_POST['g-recaptcha-response'];
-            $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptcha_secret&response=$recaptcha_response");
-            $response_keys = json_decode($response, true);
+        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j';
+$recaptcha_response = $_POST['recaptcha_response'];
 
-            if (intval($response_keys["success"]) !== 1) {
-                $login_err = "Please complete the CAPTCHA verification.";
-            } else {
+$url = "https://www.google.com/recaptcha/api/siteverify";
+$data = [
+    'secret' => $recaptcha_secret,
+    'response' => $recaptcha_response,
+    'remoteip' => $_SERVER['REMOTE_ADDR']
+];
+
+$options = [
+    'http' => [
+        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+        'method'  => 'POST',
+        'content' => http_build_query($data),
+    ],
+];
+$context  = stream_context_create($options);
+$response = file_get_contents($url, false, $context);
+$response_keys = json_decode($response, true);
+
+if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
+    $login_err = "CAPTCHA verification failed. Please try again.";
+}
+ else {
                 // Prepare a select statement
                 $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
                 if ($stmt = mysqli_prepare($link, $sql)) {
@@ -198,7 +213,7 @@
                             </div>
 
                             <!-- Add reCAPTCHA widget -->
-                            <div class="g-recaptcha mb-3" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
+                            <!--<div class="g-recaptcha mb-3" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>-->
 
                             <div class="d-grid mb-3">
                                 <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
@@ -213,6 +228,8 @@
 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL"></script>
+
         <script>
             // Toggle password visibility
             function togglePasswordVisibility() {
@@ -230,5 +247,17 @@
                 }
             }
         </script>
+        <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
+            const recaptchaResponseField = document.createElement('input');
+            recaptchaResponseField.setAttribute('type', 'hidden');
+            recaptchaResponseField.setAttribute('name', 'recaptcha_response');
+            recaptchaResponseField.setAttribute('value', token);
+            document.querySelector('form').appendChild(recaptchaResponseField);
+        });
+    });
+</script>
+
     </body>
     </html>
