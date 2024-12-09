@@ -207,7 +207,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
                             <!-- Add reCAPTCHA widget -->
                             <div class="g-recaptcha mb-3" data-sitekey="6LfQpZYqAAAAAMVEwIBukdWlJJwrgG2vL9wZLHKb"></div>
-
                             <div class="d-grid mb-3">
                                 <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
                             </div>
