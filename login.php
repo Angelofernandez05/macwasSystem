@@ -27,7 +27,7 @@
 
         // Verify reCAPTCHA
         if (empty($email_err) && empty($password_err)) {
-            $recaptcha_secret = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
+            $recaptcha_secret = '6LfQpZYqAAAAALrfaCPDGrL76GCaQYtgPFGWe_Nu';
             $recaptcha_response = $_POST['g-recaptcha-response'];
             $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptcha_secret&response=$recaptcha_response");
             $response_keys = json_decode($response, true);
@@ -191,7 +191,7 @@
                             </div>
 
                             <!-- Add reCAPTCHA widget -->
-                            <div class="g-recaptcha mb-3" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
+                            <div class="g-recaptcha mb-3" data-sitekey="6LfQpZYqAAAAAMVEwIBukdWlJJwrgG2vL9wZLHKb"></div>
 
                             <div class="d-grid mb-3">
                                 <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
@@ -219,7 +219,7 @@
                 } else {
                     passwordInput.type = 'password';
                     toggleIcon.classList.remove('fa-eye-slash');
-                    toggleIcon.classList.add('fa-eye');
+                    toggleIcon.classList.add('fa-eye'); 
                 }
             }
         </script>

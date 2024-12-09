@@ -165,9 +165,9 @@ mysqli_close($link);
             <!-- <p>₱<?php echo number_format($total_income_monthly, 2); ?></p> -->
             <small>Total Income This Month (<?php echo date('F Y'); ?>)</small>
             <div id="monthlyIncomeChart" class="chart-container"></div>
-            <button class="print-button" onclick="printChart('monthlyIncomeChart', 'Income Monthly: ₱<?php echo number_format($total_income_monthly, 2); ?>')">
+            <!-- <button class="print-button" onclick="printChart('monthlyIncomeChart', 'Income Monthly: ₱<?php echo number_format($total_income_monthly, 2); ?>')">
                 <i class='bx bxs-printer'></i>
-            </button>
+            </button> -->
         </div>
 
         <div class="dashboard-section">
@@ -175,9 +175,9 @@ mysqli_close($link);
             <p>₱<?php echo number_format($paid_total_year); ?></p>
             <small>Total Income This Year (<?php echo date('Y'); ?>)</small>
             <div id="yearlyIncomeChart" class="chart-container"></div>
-            <button class="print-button" onclick="printChart('yearlyIncomeChart', 'Income Yearly: ₱<?php echo number_format($paid_total_year); ?>')">
-                <i class='bx bxs-printer'></i> <!-- Boxicons printer icon -->
-            </button>
+            <!-- <button class="print-button" onclick="printChart('yearlyIncomeChart', 'Income Yearly: ₱<?php echo number_format($paid_total_year); ?>')">
+                <i class='bx bxs-printer'></i>
+            </button> -->
         </div>
 
         <div class="dashboard-section">
