@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
     // Verify reCAPTCHA
     if (empty($email_err) && empty($password_err)) {
-        $recaptcha_secret = 'YOUR_SECRET_KEY'; // Replace with your reCAPTCHA v3 secret key
+        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
         $recaptcha_response = $_POST['recaptcha_response'];
 
         // Verify the reCAPTCHA response
@@ -216,7 +216,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                             </div>
 
                             <!-- Add reCAPTCHA widget -->
-                            <div class="g-recaptcha mb-3" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
+                            <!--<div class="g-recaptcha mb-3" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>-->
 
                             <div class="d-grid mb-3">
                                 <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
@@ -231,7 +231,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
-        <script src="https://www.google.com/recaptcha/api.js?render=YOUR_SITE_KEY"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL"></script>
 
         <script>
             // Toggle password visibility
@@ -252,7 +252,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
         </script>
         <script>
     grecaptcha.ready(function() {
-        grecaptcha.execute('YOUR_SITE_KEY', { action: 'login' }).then(function(token) {
+        grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
             const recaptchaResponseField = document.createElement('input');
             recaptchaResponseField.setAttribute('type', 'hidden');
             recaptchaResponseField.setAttribute('name', 'recaptcha_response');
