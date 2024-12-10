@@ -2,10 +2,10 @@
 // Initialize the session
 session_start();
 
-// Check if the user is already logged in, if yes then redirect to the home page
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("Location: index");
-    exit();
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("location: index.php");
+    exit;
 }
 
 // Include config file
@@ -14,83 +14,92 @@ require_once "config.php";
 // Define variables and initialize with empty values
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-// Check if the URL ends with .php
-$request = $_SERVER['REQUEST_URI'];
-if (substr($request, -4) === '.php') {
-    // Redirect to the same URL without .php
-    $new_url = substr($request, 0, -4);
-    header("Location: $new_url", true, 301);
-    exit();
-}
-
-// Processing form data when the form is submitted
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Check if username is empty
-    if (empty(trim($_POST["username"]))) {
-        $username_err = "Please enter your username.";
-    } else {
+    if(empty(trim($_POST["username"]))){
+        $username_err = "Please enter username.";
+    } else{
         $username = trim($_POST["username"]);
     }
-
+    
     // Check if password is empty
-    if (empty(trim($_POST["password"]))) {
+    if(empty(trim($_POST["password"]))){
         $password_err = "Please enter your password.";
-    } else {
+    } else{
         $password = trim($_POST["password"]);
     }
-
+    
     // Validate credentials
-    if (empty($username_err) && empty($password_err)) {
+    if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
         $sql = "SELECT id, username, password FROM users WHERE username = ?";
-        if ($stmt = mysqli_prepare($link, $sql)) {
+        
+        if($stmt = mysqli_prepare($link, $sql)){
+            // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $param_username);
+            
+            // Set parameters
             $param_username = $username;
-
-            if (mysqli_stmt_execute($stmt)) {
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                // Store result
                 mysqli_stmt_store_result($stmt);
-
-                if (mysqli_stmt_num_rows($stmt) == 1) {
+                
+                // Check if username exists, if yes then verify password
+                if(mysqli_stmt_num_rows($stmt) == 1){                    
+                    // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
-                    if (mysqli_stmt_fetch($stmt)) {
-                        if (password_verify($password, $hashed_password)) {
-                            // Password is correct, start a session
+                    if(mysqli_stmt_fetch($stmt)){
+                        if(password_verify($password, $hashed_password)){
+                            // Password is correct, so start a new session
                             session_start();
-
+                            
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;
-
-                            // Redirect to the home page
-                            header("Location: index");
-                        } else {
+                            $_SESSION["username"] = $username;                      
+                            
+                            // Redirect user to welcome page
+                            header("location: index.php");
+                        } else{
+                            // Password is not valid, display a generic error message
                             $login_err = "Invalid username or password.";
                         }
                     }
-                } else {
+                } else{
+                    // Username doesn't exist, display a generic error message
                     $login_err = "Invalid username or password.";
                 }
-            } else {
-                echo "Oops! Something went wrong. Please try again later.";
+            } else{
+                echo '<script>
+                Swal.fire({
+                title: "Error!",
+                text: "Oops! Something went wrong. Please try again later.",
+                icon: "error",
+                toast: true,
+                position: "top-right",
+                showConfirmButton: false,
+                timer: 3000
+                })
+                </script>';
             }
 
+            // Close statement
             mysqli_stmt_close($stmt);
         }
-    }
-
-    // Close the database connection
+    }   
+    
+    // Close connection
     mysqli_close($link);
 }
-
-// Add security headers
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 header("X-Frame-Options: SAMEORIGIN");
 header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Permissions-Policy: geolocation=(self), microphone=()");
-
 ?>
 
 <!DOCTYPE html>
@@ -262,14 +271,5 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
             }
         });
     </script>
-    <script>
-    // Prevent right-click and developer tools
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('keydown', e => {
-        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) {
-            e.preventDefault();
-        }
-    });
-</script>
 </body>
 </html>
