@@ -153,6 +153,14 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                 border-radius: 30px;
                 font-weight: 600;
             }
+            .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            }
+            .g-recaptcha {
+                display: inline-block;
+            }
         </style>
     </head>
     <body>
@@ -236,7 +244,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
             }
         </script>
         <script>
-    grecaptcha.ready(function() {
+        grecaptcha.ready(function() {
         grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
             const recaptchaResponseField = document.createElement('input');
             recaptchaResponseField.setAttribute('type', 'hidden');
