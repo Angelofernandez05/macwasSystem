@@ -16,5 +16,3 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # Rewrite to the PHP file internally
 RewriteRule ^(.*)$ $1.php [L]
-
-
