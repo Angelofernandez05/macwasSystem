@@ -260,6 +260,17 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
         });
     });
 </script>
+<script>
+    Swal.fire({
+        title: "Error!",
+        text: "' . addslashes($login_err) . '",
+        icon: "error",
+        toast: true,
+        position: "top-right",
+        showConfirmButton: false,
+        timer: 3000
+    });
+    </script>
 
     </body>
     </html>
