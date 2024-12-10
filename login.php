@@ -9,47 +9,49 @@ require_once 'config.php';
 $email = $password = "";
 $email_err = $password_err = $login_err = "";
 
-// Set maximum login attempts and lockout time (in seconds)
-define('MAX_ATTEMPTS', 3);
-define('LOCKOUT_TIME', 900); // 15 minutes
-
-// Initialize session variables if not set
-if (!isset($_SESSION['login_attempts'])) {
-    $_SESSION['login_attempts'] = 0;
-    $_SESSION['lockout_time'] = null;
-}
-
-// Check if the user is locked out
-if ($_SESSION['login_attempts'] >= MAX_ATTEMPTS) {
-    if (time() < $_SESSION['lockout_time']) {
-        $lockout_remaining = $_SESSION['lockout_time'] - time();
-        $login_err = "Too many failed login attempts. Please try again after " . ceil($lockout_remaining / 60) . " minutes.";
-    } else {
-        // Reset lockout after timeout
-        $_SESSION['login_attempts'] = 0;
-        $_SESSION['lockout_time'] = null;
-    }
-}
-
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
-    if (empty($login_err)) { // Proceed only if not locked out
-        // Validate email
-        if (empty(trim($_POST["email"]))) {
-            $email_err = "Please enter your email.";
-        } else {
-            $email = trim($_POST["email"]);
-        }
+    // Check if email is empty
+    if (empty(trim($_POST["email"]))) {
+        $email_err = "Please enter your email.";
+    } else {
+        $email = trim($_POST["email"]);
+    }
 
-        // Validate password
-        if (empty(trim($_POST["password"]))) {
-            $password_err = "Please enter your password.";
-        } else {
-            $password = trim($_POST["password"]);
-        }
+    // Check if password is empty
+    if (empty(trim($_POST["password"]))) {
+        $password_err = "Please enter your password.";
+    } else {
+        $password = trim($_POST["password"]);
+    }
 
-        // Proceed if no validation errors
-        if (empty($email_err) && empty($password_err)) {
+    // Verify reCAPTCHA
+    if (empty($email_err) && empty($password_err)) {
+        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
+        $recaptcha_response = $_POST['recaptcha_response'];
+
+        // Verify the reCAPTCHA response
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+        $data = [
+            'secret' => $recaptcha_secret,
+            'response' => $recaptcha_response,
+            'remoteip' => $_SERVER['REMOTE_ADDR']
+        ];
+
+        $options = [
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($data),
+            ],
+        ];
+        $context = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
+        $response_keys = json_decode($response, true);
+
+        if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
+            $login_err = "CAPTCHA verification failed. Please try again.";
+        } else {
             // Prepare a select statement
             $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
             if ($stmt = mysqli_prepare($link, $sql)) {
@@ -60,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                 if (mysqli_stmt_execute($stmt)) {
                     mysqli_stmt_store_result($stmt);
 
-                    // Check if email exists, then verify password
+                    // Check if email exists, if yes then verify password
                     if (mysqli_stmt_num_rows($stmt) == 1) {
                         mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
                         if (mysqli_stmt_fetch($stmt)) {
@@ -70,9 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                 } elseif ($status === 'inactive') {
                                     $login_err = "Your account is inactive. Please contact the system administrator.";
                                 } else {
-                                    // Reset login attempts on successful login
-                                    $_SESSION['login_attempts'] = 0;
-
                                     // Regenerate session ID for security
                                     session_regenerate_id();
 
@@ -93,18 +92,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         $login_err = "Invalid email or password.";
                     }
                 } else {
-                    $login_err = "Oops! Something went wrong. Please try again later.";
+                    echo '<script>
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Oops! Something went wrong. Please try again later.",
+                        icon: "error",
+                        toast: true,
+                        position: "top-right",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    </script>';
                 }
                 mysqli_stmt_close($stmt);
-            }
-        }
-
-        // Increment login attempts on failure
-        if (!empty($login_err)) {
-            $_SESSION['login_attempts']++;
-            if ($_SESSION['login_attempts'] >= MAX_ATTEMPTS) {
-                $_SESSION['lockout_time'] = time() + LOCKOUT_TIME;
-                $login_err = "Too many failed login attempts. Please try again after 15 minutes.";
             }
         }
     }
@@ -119,17 +119,20 @@ header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Permissions-Policy: geolocation=(self), microphone=()");
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consumer Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style2.css">
-    <link rel="icon" href="logo.png" type="image/icon type">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Consumer Login</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="style2.css">
+        <link rel="icon" href="logo.png" type="image/icon type">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <style>
             body {
                 background-image: url("tank.jpg");
                 background-repeat: no-repeat;
@@ -157,28 +160,29 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                 border-radius: 30px;
                 font-weight: 600;
             }
-     </style>
-</head>
-<body>
-    <section class="vh-100 d-flex align-items-center justify-content-center">
-        <div class="container">
-            <div class="card">
-                <div class="card-body text-center">
-                    <?php 
-                    if (!empty($login_err)) {
-                        echo '<script>
-                        Swal.fire({
-                            title: "Error!",
-                            text: "' . addslashes($login_err) . '",
-                            icon: "error",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                        </script>';
-                    }        
-                    ?>
+        
+        </style>
+    </head>
+    <body>
+        <section class="vh-100 d-flex align-items-center justify-content-center">
+            <div class="container">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <?php 
+                        if (!empty($login_err)) {
+                            echo '<script>
+                            Swal.fire({
+                                title: "Error!",
+                                text: "' . htmlspecialchars($login_err) . '",
+                                icon: "error",
+                                toast: true,
+                                position: "top-right",
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                            </script>';
+                        }        
+                        ?>
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                             <p class="text-center mb-4">
                                 <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;">
@@ -240,7 +244,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
             }
         </script>
         <script>
-        grecaptcha.ready(function() {
+    grecaptcha.ready(function() {
         grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
             const recaptchaResponseField = document.createElement('input');
             recaptchaResponseField.setAttribute('type', 'hidden');
