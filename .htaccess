@@ -3,16 +3,7 @@
 php_value display_errors 1
 # DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:23422420:
 
-# Enable mod_rewrite
-RewriteEngine On
-
-# Redirect requests with .php extension to the same URL without it
-RewriteCond %{THE_REQUEST} \s([^.]+)\.php [NC]
-RewriteRule ^ %1 [R=301,L]
-
-# Check if the requested file or directory exists
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-
-# Rewrite to the PHP file internally
+RewriteEngine On RewriteCond
+%{REQUEST_FILENAME} !-d
+RewriteCond % %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ $1.php [L]
