@@ -117,7 +117,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -267,21 +266,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         this.classList.toggle("fa-eye-slash");
     });
 </script>
-<script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL" async defer></script>
-
-<script>
-    // reCAPTCHA v3
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
-            const recaptchaResponseField = document.createElement('input');
-            recaptchaResponseField.setAttribute('type', 'hidden');
-            recaptchaResponseField.setAttribute('name', 'g-recaptcha-response');
-            recaptchaResponseField.setAttribute('value', token);
-            document.querySelector('form').appendChild(recaptchaResponseField);
-        });
-    });
-</script>
-
 
 </body>
 </html>
