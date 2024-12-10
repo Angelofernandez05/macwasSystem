@@ -262,9 +262,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         this.classList.toggle("fa-eye-slash");
     });
 </script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL" async defer></script>
+
 <script>
-            grecaptcha.ready(function() {
-            grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
+    // reCAPTCHA v3
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
             const recaptchaResponseField = document.createElement('input');
             recaptchaResponseField.setAttribute('type', 'hidden');
             recaptchaResponseField.setAttribute('name', 'recaptcha_response');
@@ -273,6 +276,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         });
     });
 </script>
+
 
 </body>
 </html>
