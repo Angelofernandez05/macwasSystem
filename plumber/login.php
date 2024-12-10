@@ -231,7 +231,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                         <div class="form-outline mb-4">
                             <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i> <strong>Password</strong></label>
                             <input type="password" id="password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" style="border-radius:25px ;">
-                            <i class="fa fa-eye-slash" id="togglePassword"></i>
+                            <i class="fa fa-eye-slash" id="togglePassword" onclick="togglePasswordVisibility()"></i>
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
                         </div>
 
@@ -257,18 +257,17 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    // Password visibility toggle
-    const togglePassword = document.querySelector("#togglePassword");
-    const password = document.querySelector("#password");
-
-    togglePassword.addEventListener("click", function (e) {
-        // Toggle the type attribute
-        const type = password.getAttribute("type") === "password" ? "text" : "password";
-        password.setAttribute("type", type);
-        // Toggle the eye icon
-        this.classList.toggle("fa-eye");
-        this.classList.toggle("fa-eye-slash");
-    });
+    function togglePasswordVisibility() {
+            var passwordField = document.getElementById("password"); // Corrected ID
+            var toggleIcon = document.getElementById("togglePassword"); // Corrected ID
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
+            }
+        }
 </script>
 
     <script>
