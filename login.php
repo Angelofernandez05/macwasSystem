@@ -11,7 +11,7 @@ $email_err = $password_err = $login_err = "";
 
 // Set maximum login attempts and lockout time (in seconds)
 define('MAX_ATTEMPTS', 3);
-define('LOCKOUT_TIME', 900); // 15 minutes
+define('LOCKOUT_TIME', 300); // 15 minutes
 
 // Initialize session variables if not set
 if (!isset($_SESSION['login_attempts'])) {
