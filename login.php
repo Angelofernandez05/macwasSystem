@@ -9,18 +9,6 @@ require_once 'config.php';
 $email = $password = "";
 $email_err = $password_err = $login_err = "";
 
-// Check if the user is locked out
-if (isset($_SESSION['login_attempts']) && $_SESSION['login_attempts'] >= 3) {
-    $remaining_time = $_SESSION['lockout_time'] - time();
-    if ($remaining_time > 0) {
-        $login_err = "Too many failed attempts. Please try again in " . ceil($remaining_time / 60) . " minutes.";
-    } else {
-        // Reset the login attempts and lockout time after lockout period
-        unset($_SESSION['login_attempts']);
-        unset($_SESSION['lockout_time']);
-    }
-}
-
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     // Check if email is empty
@@ -38,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     }
 
     // Verify reCAPTCHA
-    if (empty($email_err) && empty($password_err) && empty($login_err)) {
+    if (empty($email_err) && empty($password_err)) {
         $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
         $recaptcha_response = $_POST['recaptcha_response'];
 
@@ -84,10 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                 } elseif ($status === 'inactive') {
                                     $login_err = "Your account is inactive. Please contact the system administrator.";
                                 } else {
-                                    // Reset login attempts on successful login
-                                    unset($_SESSION['login_attempts']);
-                                    unset($_SESSION['lockout_time']);
-
                                     // Regenerate session ID for security
                                     session_regenerate_id();
 
@@ -120,19 +104,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     });
                     </script>';
                 }
-
-                // Increment the failed attempts
-                if (!isset($_SESSION['login_attempts'])) {
-                    $_SESSION['login_attempts'] = 0;
-                }
-                $_SESSION['login_attempts']++;
-
-                // Lockout the user after 3 failed attempts
-                if ($_SESSION['login_attempts'] >= 3) {
-                    $_SESSION['lockout_time'] = time() + 15 * 60; // 15-minute lockout
-                    $login_err = "Too many failed attempts. Please try again in 15 minutes.";
-                }
-
                 mysqli_stmt_close($stmt);
             }
         }
@@ -147,7 +118,6 @@ header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Permissions-Policy: geolocation=(self), microphone=()");
 ?>
-
 
 
     <!DOCTYPE html>
@@ -190,7 +160,14 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                 border-radius: 30px;
                 font-weight: 600;
             }
-        
+            .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            }
+            .g-recaptcha {
+                display: inline-block;
+            }
         </style>
     </head>
     <body>
