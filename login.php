@@ -281,8 +281,8 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
             }
         </script>
         <script>
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
+            grecaptcha.ready(function() {
+            grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
             const recaptchaResponseField = document.createElement('input');
             recaptchaResponseField.setAttribute('type', 'hidden');
             recaptchaResponseField.setAttribute('name', 'recaptcha_response');
