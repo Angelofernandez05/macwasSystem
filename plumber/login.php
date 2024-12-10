@@ -232,9 +232,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
 
                         <!-- Google reCAPTCHA -->
-                        <div class="form-outline mb-4">
+                        <!-- <div class="form-outline mb-4">
                             <div class="g-recaptcha" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
-                        </div>
+                        </div> -->
 
                         <!-- Submit button -->
                         <div class="d-flex justify-content-center">
@@ -266,6 +266,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         this.classList.toggle("fa-eye-slash");
     });
 </script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
+            const recaptchaResponseField = document.createElement('input');
+            recaptchaResponseField.setAttribute('type', 'hidden');
+            recaptchaResponseField.setAttribute('name', 'recaptcha_response');
+            recaptchaResponseField.setAttribute('value', token);
+            document.querySelector('form').appendChild(recaptchaResponseField);
+        });
+    });
+</script>
+
 
 </body>
 </html>
