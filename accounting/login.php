@@ -25,10 +25,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_POST['recaptcha_response'])){
         $recaptcha_response = $_POST['recaptcha_response'];
 
-        // Verify reCAPTCHA response with Google API
         $verify_recaptcha = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$recaptcha_response");
-        $recaptcha_response_keys = json_decode($verify_recaptcha);
-
+            $recaptcha_response_keys = json_decode($verify_recaptcha);
+            var_dump($recaptcha_response_keys); // Debugging line
+            
         // If reCAPTCHA is not successful
         if(intval($recaptcha_response_keys->success) !== 1) {
             $captcha_err = "Please verify that you are not a robot.";
