@@ -132,26 +132,48 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL"></script>
-    <style>
+     <style>
         body {
-            background-image: url("tank.jpg");
+            background-image: url("plumber.jpg");
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
-            background-size: cover;
-            font-family: 'Georgia', serif;
+            background-size: 200vh;
+        }
+        .alert {
+            font-size: 14px;
+            padding: 8px 12px;
+            text-align: center;
+            margin: 10px;
+            max-width: 600px;
+            position: fixed;
+            top: 40px;
+            right: 10px;
+            z-index: 9999;
+        }
+        .form-outline {
+            position: relative;
+        }
+        .form-outline .fa-eye, .form-outline .fa-eye-slash {
+            position: absolute;
+            right: 20px;
+            top: 45px;
+            cursor: pointer;
+            margin-top: 10px;
         }
         .card {
             border-radius: 25px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(173, 216, 230, 0.2);
-            padding: 20px;
-            backdrop-filter: blur(3px);
+            background-color: rgba(173, 216, 230, 0.0); /* Light blue with some transparency */
+            padding: 20px; /* Add padding for content inside the card */
+            backdrop-filter: blur(3px); /* Optional: Adds a blur effect to the background of the card */
+        }
+        .card-body {
+            padding: 1rem;
         }
         .container {
             max-width: 550px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-left: 50px; /* Adjust this value to move the form further left */
         }
         .form-control {
             border-radius: 20px;
@@ -159,6 +181,14 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
         .btn {
             border-radius: 30px;
             font-weight: 600;
+        }
+        .recaptcha-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+        .g-recaptcha {
+            display: inline-block;
         }
     </style>
 </head>
