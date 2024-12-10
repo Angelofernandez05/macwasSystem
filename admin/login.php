@@ -2,8 +2,12 @@
 // Start the session at the very beginning
 session_start();
 
+// Debug: Log session start and check if logged in
+error_log("Session started: ".session_id());
+
 // Check if the user is already logged in, if yes then redirect to welcome page
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+    error_log("User already logged in, redirecting...");
     header("location: index.php");
     exit;
 }
@@ -17,7 +21,6 @@ $username_err = $password_err = $login_err = "";
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     // Check if username is empty
     if (empty(trim($_POST["username"]))) {
         $username_err = "Please enter username.";
@@ -62,18 +65,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["username"] = $username;                      
 
                             // Redirect user to welcome page
+                            error_log("Login successful, redirecting to index.php...");
                             header("location: index.php");
                             exit;  // Make sure to exit after redirect
                         } else {
                             // Password is not valid, display a generic error message
                             $login_err = "Invalid username or password.";
+                            error_log("Password verification failed.");
                         }
                     }
                 } else {
                     // Username doesn't exist, display a generic error message
                     $login_err = "Invalid username or password.";
+                    error_log("Username not found.");
                 }
             } else {
+                // If query fails, log the error
+                error_log("Database query failed: ".mysqli_error($link));
                 echo '<script>
                     Swal.fire({
                     title: "Error!",
@@ -211,9 +219,10 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                         <!-- Password input -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i><strong> Password </strong></label>
-                            <input type="password" id="password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password">
-                            <i class="fa fa-eye-slash" id="togglePassword"></i>
+                            <input type="password" id="password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter password">
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
+
+                            <i id="togglePassword" class="bi bi-eye-slash position-absolute" style="top: 50%; right: 20px;"></i>
                         </div>
 
                         <!-- Submit button -->
@@ -241,8 +250,8 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
             password.setAttribute("type", type);
 
             // Toggle the icon
-            this.classList.toggle("fa-eye");
-            this.classList.toggle("fa-eye-slash");
+            this.classList.toggle("bi-eye");
+            this.classList.toggle("bi-eye-slash");
         });
     </script>
 </body>
