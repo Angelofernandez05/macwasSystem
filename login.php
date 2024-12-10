@@ -20,9 +20,15 @@ if (!isset($_SESSION['login_attempts'])) {
 }
 
 // Check if the user is locked out
-if ($_SESSION['login_attempts'] >= MAX_ATTEMPTS && time() < $_SESSION['lockout_time']) {
-    $lockout_remaining = $_SESSION['lockout_time'] - time();
-    $login_err = "Too many failed login attempts. Please try again after " . ceil($lockout_remaining / 60) . " minutes.";
+if ($_SESSION['login_attempts'] >= MAX_ATTEMPTS) {
+    if (time() < $_SESSION['lockout_time']) {
+        $lockout_remaining = $_SESSION['lockout_time'] - time();
+        $login_err = "Too many failed login attempts. Please try again after " . ceil($lockout_remaining / 60) . " minutes.";
+    } else {
+        // Reset lockout after timeout
+        $_SESSION['login_attempts'] = 0;
+        $_SESSION['lockout_time'] = null;
+    }
 }
 
 // Process form submission
