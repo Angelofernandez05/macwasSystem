@@ -91,7 +91,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Close statement
             mysqli_stmt_close($stmt);
         }
-    }   
+    }
     
     // Close connection
     mysqli_close($link);
@@ -102,7 +102,6 @@ header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Permissions-Policy: geolocation=(self), microphone=()");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -220,7 +219,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                         <div class="d-flex justify-content-center mx-2 mb-3 mb-lg-4">
                             <input type="submit" value="Sign in" name="login" class="btn btn-primary btn-lg text-light my-2 py-3 w-100" />
                         </div>
-                        <p align="center"><strong>Don't have an account? Sign up</strong><a href="register.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p>
+                        <!-- <p align="center"><strong>Don't have an account? Sign up</strong><a href="register.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p> -->
                     </form>
                 </div>
             </div>
