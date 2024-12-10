@@ -132,7 +132,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL"></script>
-     <style>
+    <style>
         body {
             background-image: url("plumber.jpg");
             background-repeat: no-repeat;
