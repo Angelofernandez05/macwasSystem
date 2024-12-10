@@ -15,9 +15,6 @@ require_once "config.php";
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
-<?php
-$request = $_SERVER['REQUEST_URI'];
-
 // Check if the URL ends with .php
 if (substr($request, -4) === '.php') {
     // Redirect to the same URL without .php
@@ -25,7 +22,6 @@ if (substr($request, -4) === '.php') {
     header("Location: $new_url", true, 301);
     exit();
 }
-?>
 
 
 // Processing form data when form is submitted
