@@ -6,13 +6,6 @@ php_value display_errors 1
 # Enable URL rewriting
 RewriteEngine On
 
-# Redirect requests for /login to login.php
-RewriteRule ^login$ login.php [L]
-
-# (Optional) Redirect other .php files to routes without .php extension
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.php [L]
-
 RewriteEngine On RewriteCond
 %{REQUEST_FILENAME} !-d
 RewriteCond % %{REQUEST_FILENAME} !-f
