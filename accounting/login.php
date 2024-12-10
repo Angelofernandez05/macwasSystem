@@ -16,7 +16,7 @@ $username = $password = "";
 $username_err = $password_err = $login_err = $captcha_err = "";
 
 // Google reCAPTCHA secret key
-// $secret_key = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
+$secret_key = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -231,9 +231,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
 
                         <!-- reCAPTCHA -->
-                        <!-- <div class="g-recaptcha" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
+                        <div class="g-recaptcha" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
                         <span class="invalid-feedback"><?php echo $captcha_err; ?></span>
-                        <br> -->
+                        <br>
 
                         <!-- Login button -->
                         <div class="d-grid gap-2">
@@ -260,20 +260,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Toggle the eye slash icon
         this.classList.toggle("fa-eye");
         this.classList.toggle("fa-eye-slash");
-    });
-</script>
-<script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL" async defer></script>
-
-<script>
-    // reCAPTCHA v3
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
-            const recaptchaResponseField = document.createElement('input');
-            recaptchaResponseField.setAttribute('type', 'hidden');
-            recaptchaResponseField.setAttribute('name', 'recaptcha_response');
-            recaptchaResponseField.setAttribute('value', token);
-            document.querySelector('form').appendChild(recaptchaResponseField);
-        });
     });
 </script>
 

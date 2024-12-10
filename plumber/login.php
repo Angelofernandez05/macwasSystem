@@ -16,7 +16,7 @@ $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
 // Google reCAPTCHA secret key
-// $secret_key = "6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y";
+$secret_key = "6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -116,6 +116,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($link);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -232,9 +233,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
 
                         <!-- Google reCAPTCHA -->
-                        <!-- <div class="form-outline mb-4">
+                        <div class="form-outline mb-4">
                             <div class="g-recaptcha" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
-                        </div> -->
+                        </div>
 
                         <!-- Submit button -->
                         <div class="d-flex justify-content-center">
@@ -274,11 +275,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
             const recaptchaResponseField = document.createElement('input');
             recaptchaResponseField.setAttribute('type', 'hidden');
-            recaptchaResponseField.setAttribute('name', 'recaptcha_response');
+            recaptchaResponseField.setAttribute('name', 'g-recaptcha-response');
             recaptchaResponseField.setAttribute('value', token);
             document.querySelector('form').appendChild(recaptchaResponseField);
         });
     });
 </script>
+
+
 </body>
 </html>
