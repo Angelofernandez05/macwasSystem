@@ -2,136 +2,130 @@
 // Initialize the session
 session_start();
 
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("location: index.php");
+    exit;
+}
+
 // Include config file
-require_once 'config.php';
+require_once "config.php";
 
 // Define variables and initialize with empty values
-$email = $password = "";
-$email_err = $password_err = $login_err = "";
+$username = $password = "";
+$username_err = $password_err = $login_err = $captcha_err = "";
 
-// Process form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
-    // Check if email is empty
-    if (empty(trim($_POST["email"]))) {
-        $email_err = "Please enter your email.";
+// Google reCAPTCHA secret key
+$secret_key = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
+
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    // Check if reCAPTCHA is checked
+    if(isset($_POST['g-recaptcha-response'])){
+        $recaptcha_response = $_POST['g-recaptcha-response'];
+        $verify_recaptcha = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$recaptcha_response");
+        $recaptcha_response_keys = json_decode($verify_recaptcha);
+
+        // If reCAPTCHA is not successful
+        if(intval($recaptcha_response_keys->success) !== 1) {
+            $captcha_err = "Please verify that you are not a robot.";
+        }
     } else {
-        $email = trim($_POST["email"]);
+        $captcha_err = "Please verify that you are not a robot.";
+    }
+
+    // Check if username is empty
+    if(empty(trim($_POST["username"]))){
+        $username_err = "Please enter username.";
+    } else{
+        $username = trim($_POST["username"]);
     }
 
     // Check if password is empty
-    if (empty(trim($_POST["password"]))) {
+    if(empty(trim($_POST["password"]))){
         $password_err = "Please enter your password.";
-    } else {
+    } else{
         $password = trim($_POST["password"]);
     }
 
-    // Verify reCAPTCHA v3
-    if (empty($email_err) && empty($password_err)) {
-        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
-        $recaptcha_response = $_POST['recaptcha_response'];
-
-        // Verify the reCAPTCHA response
-        $url = "https://www.google.com/recaptcha/api/siteverify";
-        $data = [
-            'secret' => $recaptcha_secret,
-            'response' => $recaptcha_response,
-            'remoteip' => $_SERVER['REMOTE_ADDR']
-        ];
-
-        $options = [
-            'http' => [
-                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method' => 'POST',
-                'content' => http_build_query($data),
-            ],
-        ];
-        $context = stream_context_create($options);
-        $response = file_get_contents($url, false, $context);
-        $response_keys = json_decode($response, true);
-
-        // Check reCAPTCHA score (default threshold is 0.5)
-        if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
-            $login_err = "CAPTCHA verification failed. Please try again.";
-        } else {
-            // Prepare a select statement
-            $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
-            if ($stmt = mysqli_prepare($link, $sql)) {
-                mysqli_stmt_bind_param($stmt, "s", $param_email);
-                $param_email = $email;
-
-                // Execute the prepared statement
-                if (mysqli_stmt_execute($stmt)) {
-                    mysqli_stmt_store_result($stmt);
-
-                    // Check if email exists, if yes then verify password
-                    if (mysqli_stmt_num_rows($stmt) == 1) {
-                        mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
-                        if (mysqli_stmt_fetch($stmt)) {
-                            if (password_verify($password, $hashed_password)) {
-                                if ($is_approved == 0) {
-                                    $login_err = "Your account is awaiting approval. Please contact the system administrator.";
-                                } elseif ($status === 'inactive') {
-                                    $login_err = "Your account is inactive. Please contact the system administrator.";
-                                } else {
-                                    // Regenerate session ID for security
-                                    session_regenerate_id();
-
-                                    // Set session variables
-                                    $_SESSION["loggedin"] = true;
-                                    $_SESSION["id"] = $id;
-                                    $_SESSION["email"] = $email;
-
-                                    // Redirect user to the dashboard
-                                    header("location: index.php");
-                                    exit;
-                                }
-                            } else {
-                                $login_err = "Invalid email or password.";
-                            }
+    // Validate credentials
+    if(empty($username_err) && empty($password_err) && empty($captcha_err)){
+        // Prepare a select statement
+        $sql = "SELECT id, username, password, name FROM accounting WHERE username = ?";
+        
+        if($stmt = mysqli_prepare($link, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_username);
+            
+            // Set parameters
+            $param_username = $username;
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                // Store result
+                mysqli_stmt_store_result($stmt);
+                
+                // Check if username exists, if yes then verify password
+                if(mysqli_stmt_num_rows($stmt) == 1){                    
+                    // Bind result variables
+                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password, $name);
+                    if(mysqli_stmt_fetch($stmt)){
+                        if(password_verify($password, $hashed_password)){
+                            // Password is correct, so start a new session
+                            session_start();
+                            
+                            // Store data in session variables
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["username"] = $username;
+                            $_SESSION["name"] = $name; // Store the user's name in session
+                            
+                            // Redirect user to welcome page
+                            header("location: index.php");
+                        } else{
+                            // Password is not valid, display a generic error message
+                            $login_err = "Invalid username or password.";
                         }
-                    } else {
-                        $login_err = "Invalid email or password.";
                     }
-                } else {
-                    echo '<script>
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Oops! Something went wrong. Please try again later.",
-                        icon: "error",
-                        toast: true,
-                        position: "top-right",
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                    </script>';
+                } else{
+                    // Username doesn't exist, display a generic error message
+                    $login_err = "Invalid username or password.";
                 }
-                mysqli_stmt_close($stmt);
+            } else{
+                echo '<script>
+                Swal.fire({
+                title: "Error!",
+                text: "Oops! Something went wrong. Please try again later.",
+                icon: "error",
+                toast: true,
+                position: "top-right",
+                showConfirmButton: false,
+                timer: 3000
+                })
+                </script>';
             }
+
+            // Close statement
+            mysqli_stmt_close($stmt);
         }
     }
+    
+    // Close connection
     mysqli_close($link);
 }
-
-// Security headers
-header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
-header("X-Frame-Options: SAMEORIGIN");
-header("X-Content-Type-Options: nosniff");
-header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Permissions-Policy: geolocation=(self), microphone=()");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accounting Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Accounting</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style2.css">
     <link rel="icon" href="logo.png" type="image/icon type">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         body {
             background-image: url("account.webp");
@@ -223,8 +217,8 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                         </p>
                         <!-- Username input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for=""> <i class="bi bi-person-circle"></i>  <strong>Username</strong></label>
-                            <input type="text" id="" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
+                            <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i>  <strong>Username</strong></label>
+                            <input type="text" id="form1Example13" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
                             <span class="invalid-feedback"><?php echo $username_err; ?></span>
                         </div>
 
@@ -232,7 +226,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                         <div class="form-outline mb-4">
                             <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i> <strong>Password</strong></label>
                             <input type="password" id="password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" style="border-radius:25px ;">
-                            <i class="fa fa-eye-slash" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                            <i class="fa fa-eye-slash" id="togglePassword"></i>
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
                         </div>
 
@@ -254,30 +248,20 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-            function togglePasswordVisibility() {
-            var passwordField = document.getElementById("password"); // Corrected ID
-            var toggleIcon = document.getElementById("togglePassword"); // Corrected ID
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
-            } else {
-                passwordField.type = "password";
-                toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
-            }
-        }
-    </script>
-    <script>
-        grecaptcha.ready(function() {
-            grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
-                const recaptchaResponseField = document.createElement('input');
-                recaptchaResponseField.setAttribute('type', 'hidden');
-                recaptchaResponseField.setAttribute('name', 'recaptcha_response');
-                recaptchaResponseField.setAttribute('value', token);
-                document.querySelector('form').appendChild(recaptchaResponseField);
-            });
-        });
-    </script>
+<script>
+    const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("#password");
+
+    togglePassword.addEventListener("click", function (e) {
+        // Toggle the type attribute
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        // Toggle the eye slash icon
+        this.classList.toggle("fa-eye");
+        this.classList.toggle("fa-eye-slash");
+    });
+</script>
+
 </body>
 </html>
