@@ -134,24 +134,46 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
     <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL"></script>
     <style>
         body {
-            background-image: url("tank.jpg");
+            background-image: url("account.webp");
             background-repeat: no-repeat;
             background-position: center;
             background-attachment: fixed;
-            background-size: cover;
-            font-family: 'Georgia', serif;
+            background-size: 200vh;
+        }
+        .alert {
+            font-size: 14px;
+            padding: 8px 12px;
+            text-align: center;
+            margin: 10px;
+            max-width: 600px;
+            position: fixed;
+            top: 40px;
+            right: 10px;
+            z-index: 9999;
+        }
+        .form-outline {
+            position: relative;
+        }
+        .form-outline .fa-eye, .form-outline .fa-eye-slash {
+            position: absolute;
+            right: 20px;
+            top: 45px;
+            cursor: pointer;
+            margin-top: 10px;
         }
         .card {
             border-radius: 25px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(173, 216, 230, 0.2);
-            padding: 20px;
-            backdrop-filter: blur(3px);
+            background-color: rgba(173, 216, 230, 0.0); /* Light blue with some transparency */
+            padding: 20px; /* Add padding for content inside the card */
+            backdrop-filter: blur(3px); /* Optional: Adds a blur effect to the background of the card */
+        }
+        .card-body {
+            padding: 1rem;
         }
         .container {
             max-width: 550px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-left: 50px; /* Adjust this value to move the form further left */
         }
         .form-control {
             border-radius: 20px;
@@ -160,59 +182,73 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
             border-radius: 30px;
             font-weight: 600;
         }
+        .recaptcha-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+        .g-recaptcha {
+            display: inline-block;
+        }
     </style>
 </head>
-<body>
-    <section class="vh-100 d-flex align-items-center justify-content-center">
+<body class="bg-light">
+
+<section class="vh-100 d-flex align-items-center justify-content-center">
         <div class="container">
             <div class="card">
                 <div class="card-body text-center">
                     <?php 
-                    if (!empty($login_err)) {
+                    if(!empty($login_err)){
                         echo '<script>
                         Swal.fire({
-                            title: "Error!",
-                            text: "' . htmlspecialchars($login_err) . '",
-                            icon: "error",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
+                        title: "Error!",
+                        text: "' . $login_err . '",
+                        icon: "error",
+                        toast: true,
+                        position: "top-right",
+                        showConfirmButton: false,
+                        timer: 3000
+                        })
                         </script>';
                     }        
                     ?>
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                        <p class="text-center mb-4">
-                            <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;">
-                        </p>   
-                        <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
-                            <img src="users.png" alt="User Icon" style="width: 60px; height: 60px;">
-                        </p>
 
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                    <p class="text-center mb-3">
+                            <img src="logo.png" alt="Admin-Icon" style="width: 250px; height: 200px;">
+                        </p>   
+                    <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
+                                <img src="accountant.png" alt="Accountant Icon" style="width: 55px; height: 55px;">
+                        </p>
+                        <!-- Username input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="login_email"><strong>Email</strong></label>
-                            <input type="email" id="login_email" class="form-control py-3 <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($email); ?>" name="email" autocomplete="off" placeholder="Enter your email" required>
-                            <span class="invalid-feedback"><?php echo $email_err; ?></span>
+                            <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i>  <strong>Username</strong></label>
+                            <input type="text" id="form1Example13" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
+                            <span class="invalid-feedback"><?php echo $username_err; ?></span>
                         </div>
 
+                        <!-- Password input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="login_password"><strong>Password</strong></label>
-                            <div class="input-group">
-                                <input type="password" id="login_password" class="form-control py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" required>
-                                <span class="input-group-text" onclick="togglePasswordVisibility()">
-                                    <i class="fas fa-eye" id="toggle-icon"></i>
-                                </span>
-                            </div>
+                            <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i> <strong>Password</strong></label>
+                            <input type="password" id="password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" style="border-radius:25px ;">
+                            <i class="fa fa-eye-slash" id="togglePassword"></i>
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
                         </div>
 
-                        <div class="d-grid mb-3">
-                            <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
+                        <!-- reCAPTCHA -->
+                        <div class="g-recaptcha" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
+                        <span class="invalid-feedback"><?php echo $captcha_err; ?></span>
+                        <br>
+
+                        <!-- Login button -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Login</button>
                         </div>
                     </form>
-                    <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary">Sign up here</a></strong></p>
-                    <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary">Click here</a></strong></p>
+
+                    <br>
+                    <p>Don't have an account? <a href="signup.php" class="text-primary">Sign up</a></p>
                 </div>
             </div>
         </div>
