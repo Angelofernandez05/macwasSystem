@@ -192,76 +192,85 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
         }
     </style>
 </head>
-<body>
-    <section class="vh-100 d-flex align-items-center justify-content-center">
+<body class="bg-light">
+<section class="vh-100 d-flex align-items-center justify-content-center">
         <div class="container">
             <div class="card">
                 <div class="card-body text-center">
                     <?php 
-                    if (!empty($login_err)) {
+                    if(!empty($login_err)){
                         echo '<script>
                         Swal.fire({
-                            title: "Error!",
-                            text: "' . htmlspecialchars($login_err) . '",
-                            icon: "error",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
+                        title: "Error!",
+                        text: "' . $login_err . '",
+                        icon: "error",
+                        toast: true,
+                        position: "top-right",
+                        showConfirmButton: false,
+                        timer: 3000
+                        })
                         </script>';
                     }        
                     ?>
+
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                        <p class="text-center mb-4">
-                            <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;">
+                    <p class="text-center mb-3">
+                            <img src="logo.png" alt="Admin-Icon" style="width: 250px; height: 200px;">
                         </p>   
                         <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
-                            <img src="users.png" alt="User Icon" style="width: 60px; height: 60px;">
+                                <img src="plumber.png" alt="plumber Icon" style="width: 55px; height: 55px;">
                         </p>
-
+                        <!-- Username input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="login_email"><strong>Email</strong></label>
-                            <input type="email" id="login_email" class="form-control py-3 <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($email); ?>" name="email" autocomplete="off" placeholder="Enter your email" required>
-                            <span class="invalid-feedback"><?php echo $email_err; ?></span>
+                            <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i><strong> Username</strong></label>
+                            <input type="text" id="form1Example13" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
+                            <span class="invalid-feedback"><?php echo $username_err; ?></span>
                         </div>
 
+                        <!-- Password input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="login_password"><strong>Password</strong></label>
-                            <div class="input-group">
-                                <input type="password" id="login_password" class="form-control py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" required>
-                                <span class="input-group-text" onclick="togglePasswordVisibility()">
-                                    <i class="fas fa-eye" id="toggle-icon"></i>
-                                </span>
-                            </div>
+                            <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i> <strong>Password</strong></label>
+                            <input type="password" id="password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" style="border-radius:25px ;">
+                            <i class="fa fa-eye-slash" id="togglePassword"></i>
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
                         </div>
 
-                        <div class="d-grid mb-3">
-                            <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
+                        <!-- Google reCAPTCHA -->
+                        <!-- <div class="form-outline mb-4">
+                            <div class="g-recaptcha" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
+                        </div> -->
+
+                        <!-- Submit button -->
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary btn-lg" style="width: 600px; height: 50px;">Login</button>
+                        </div>
+
+                        <!-- Register buttons -->
+                        <div class="text-center mt-3">
+                            <p>Don't have an account? <a href="signup.php">Sign up</a></p>
                         </div>
                     </form>
-                    <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary">Sign up here</a></strong></p>
-                    <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary">Click here</a></strong></p>
                 </div>
             </div>
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function togglePasswordVisibility() {
-            var passwordField = document.getElementById("login_password");
-            var toggleIcon = document.getElementById("toggle-icon");
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
-            } else {
-                passwordField.type = "password";
-                toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
-            }
-        }
-    </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    // Password visibility toggle
+    const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("#password");
+
+    togglePassword.addEventListener("click", function (e) {
+        // Toggle the type attribute
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+        // Toggle the eye icon
+        this.classList.toggle("fa-eye");
+        this.classList.toggle("fa-eye-slash");
+    });
+</script>
+
     <script>
         grecaptcha.ready(function() {
             grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
