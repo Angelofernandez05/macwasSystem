@@ -16,18 +16,20 @@ $username = $password = "";
 $username_err = $password_err = $login_err = $captcha_err = "";
 
 // Google reCAPTCHA secret key
-$secret_key = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
+$secret_key = 'YOUR_SECRET_KEY'; // Replace with your secret key
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    // Check if reCAPTCHA is checked
+    // Check if reCAPTCHA response exists
     if(isset($_POST['g-recaptcha-response'])){
         $recaptcha_response = $_POST['g-recaptcha-response'];
+
+        // Verify the reCAPTCHA response
         $verify_recaptcha = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$recaptcha_response");
         $recaptcha_response_keys = json_decode($verify_recaptcha);
 
-        // If reCAPTCHA is not successful
+        // Check if reCAPTCHA verification is successful
         if(intval($recaptcha_response_keys->success) !== 1) {
             $captcha_err = "Please verify that you are not a robot.";
         }
@@ -74,14 +76,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
                             session_start();
-                            
-                            // Store data in session variables
+                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
                             $_SESSION["name"] = $name; // Store the user's name in session
-                            
-                            // Redirect user to welcome page
+                             // Redirect user to welcome page
                             header("location: index.php");
                         } else{
                             // Password is not valid, display a generic error message
@@ -115,6 +115,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($link);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
