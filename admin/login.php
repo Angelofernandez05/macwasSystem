@@ -2,15 +2,10 @@
 // Initialize the session
 session_start();
 
-// Generate CSRF token if not already present
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
-// Redirect logged-in users to the home page
+// Check if the user is already logged in, if yes then redirect to the home page
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location: index.php");
-    exit;
+    header("Location: index");
+    exit();
 }
 
 // Include config file
@@ -20,29 +15,25 @@ require_once "config.php";
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
-// Get the current request URL for .php extension handling
+// Check if the URL ends with .php
 $request = $_SERVER['REQUEST_URI'];
 if (substr($request, -4) === '.php') {
+    // Redirect to the same URL without .php
     $new_url = substr($request, 0, -4);
     header("Location: $new_url", true, 301);
     exit();
 }
 
-// Process form data when the form is submitted
+// Processing form data when the form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Validate CSRF token
-    if (empty($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-        die("Invalid CSRF token.");
-    }
-
-    // Validate username
+    // Check if username is empty
     if (empty(trim($_POST["username"]))) {
         $username_err = "Please enter your username.";
     } else {
         $username = trim($_POST["username"]);
     }
 
-    // Validate password
+    // Check if password is empty
     if (empty(trim($_POST["password"]))) {
         $password_err = "Please enter your password.";
     } else {
@@ -54,28 +45,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Prepare a select statement
         $sql = "SELECT id, username, password FROM users WHERE username = ?";
         if ($stmt = mysqli_prepare($link, $sql)) {
-            // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $param_username);
             $param_username = $username;
 
-            // Execute the statement
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
 
-                // Check if username exists, and verify password
-                if (mysqli_stmt_num_rows($stmt) === 1) {
+                if (mysqli_stmt_num_rows($stmt) == 1) {
                     mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
                     if (mysqli_stmt_fetch($stmt)) {
                         if (password_verify($password, $hashed_password)) {
-                            // Start a new session and save user data
-                            session_regenerate_id(true);
+                            // Password is correct, start a session
+                            session_start();
+
+                            // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
 
-                            // Redirect to the welcome page
-                            header("location: index.php");
-                            exit;
+                            // Redirect to the home page
+                            header("Location: index");
                         } else {
                             $login_err = "Invalid username or password.";
                         }
@@ -84,15 +73,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $login_err = "Invalid username or password.";
                 }
             } else {
-                $login_err = "Something went wrong. Please try again later.";
+                echo "Oops! Something went wrong. Please try again later.";
             }
 
-            // Close the statement
             mysqli_stmt_close($stmt);
         }
     }
 
-    // Close the connection
+    // Close the database connection
     mysqli_close($link);
 }
 
@@ -102,7 +90,7 @@ header("X-Frame-Options: SAMEORIGIN");
 header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Permissions-Policy: geolocation=(self), microphone=()");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: https://cdn.jsdelivr.net;");
+
 ?>
 
 <!DOCTYPE html>
