@@ -11,7 +11,7 @@ $email_err = $password_err = $login_err = "";
 
 // Set maximum login attempts and lockout time (in seconds)
 define('MAX_ATTEMPTS', 3);
-define('LOCKOUT_TIME', 900);
+define('LOCKOUT_TIME', 900); // 15 minutes
 
 // Initialize session variables if not set
 if (!isset($_SESSION['login_attempts'])) {
@@ -129,9 +129,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
     <link rel="stylesheet" href="style2.css">
     <link rel="icon" href="logo.png" type="image/icon type">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        <style>
+    <style>
             body {
                 background-image: url("tank.jpg");
                 background-repeat: no-repeat;
@@ -159,36 +157,28 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                 border-radius: 30px;
                 font-weight: 600;
             }
-            .recaptcha-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            }
-            .g-recaptcha {
-                display: inline-block;
-            }
-        </style>
-    </head>
-    <body>
-        <section class="vh-100 d-flex align-items-center justify-content-center">
-            <div class="container">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <?php 
-                        if (!empty($login_err)) {
-                            echo '<script>
-                            Swal.fire({
-                                title: "Error!",
-                                text: "' . htmlspecialchars($login_err) . '",
-                                icon: "error",
-                                toast: true,
-                                position: "top-right",
-                                showConfirmButton: false,
-                                timer: 3000
-                            });
-                            </script>';
-                        }        
-                        ?>
+     </style>
+</head>
+<body>
+    <section class="vh-100 d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="card">
+                <div class="card-body text-center">
+                    <?php 
+                    if (!empty($login_err)) {
+                        echo '<script>
+                        Swal.fire({
+                            title: "Error!",
+                            text: "' . addslashes($login_err) . '",
+                            icon: "error",
+                            toast: true,
+                            position: "top-right",
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                        </script>';
+                    }        
+                    ?>
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                             <p class="text-center mb-4">
                                 <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;">
