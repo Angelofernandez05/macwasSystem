@@ -6,9 +6,13 @@ php_value display_errors 1
 # Enable mod_rewrite
 RewriteEngine On
 
+# Redirect requests with .php extension to the same URL without it
+RewriteCond %{THE_REQUEST} \s([^.]+)\.php [NC]
+RewriteRule ^ %1 [R=301,L]
+
 # Check if the requested file or directory exists
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Rewrite to the PHP file
+# Rewrite to the PHP file internally
 RewriteRule ^(.*)$ $1.php [L]
