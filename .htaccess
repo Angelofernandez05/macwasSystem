@@ -13,3 +13,4 @@ RewriteRule ^login$ login.php [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [L]
 
+            
