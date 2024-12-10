@@ -41,34 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         } else {
             $password = trim($_POST["password"]);
         }
-        // Verify reCAPTCHA
-        if (empty($email_err) && empty($password_err)) {
-            $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
-            $recaptcha_response = $_POST['recaptcha_response'];
 
-            // Verify the reCAPTCHA response
-            $url = "https://www.google.com/recaptcha/api/siteverify";
-            $data = [
-                'secret' => $recaptcha_secret,
-                'response' => $recaptcha_response,
-                'remoteip' => $_SERVER['REMOTE_ADDR']
-            ];
-
-            $options = [
-                'http' => [
-                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method' => 'POST',
-                    'content' => http_build_query($data),
-                ],
-            ];
-            $context = stream_context_create($options);
-            $response = file_get_contents($url, false, $context);
-            $response_keys = json_decode($response, true);
-
-            if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
-                $login_err = "CAPTCHA verification failed. Please try again.";
-            } else {
-                
         // Proceed if no validation errors
         if (empty($email_err) && empty($password_err)) {
             // Prepare a select statement
@@ -145,7 +118,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consumer 1Login</title>
+    <title>Consumer Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style2.css">
     <link rel="icon" href="logo.png" type="image/icon type">
