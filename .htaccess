@@ -3,16 +3,13 @@
 php_value display_errors 1
 # DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:23422420:
 
-# Enable mod_rewrite
+# Enable URL rewriting
 RewriteEngine On
 
-# Redirect requests with .php extension to the same URL without it
-RewriteCond %{THE_REQUEST} \s([^.]+)\.php [NC]
-RewriteRule ^ %1 [R=301,L]
+# Redirect requests for /login to login.php
+RewriteRule ^login$ login.php [L]
 
-# Check if the requested file or directory exists
+# (Optional) Redirect other .php files to routes without .php extension
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.php [L]
 
-# Rewrite to the PHP file internally
-RewriteRule ^(.*)$ $1.php [L]
