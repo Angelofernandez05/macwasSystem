@@ -223,9 +223,10 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                         </p>
                         <!-- Username input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i>  <strong>Username</strong></label>
-                            <input type="text" id="form1Example13" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
-                            <span class="invalid-feedback"><?php echo $username_err; ?></span>
+                            <label class="form-label" for="form1Example23"><i class="bi bi-chat-left-dots-fill"></i> <strong>Password</strong></label>
+                            <input type="password" id="password" class="form-control form-control-lg py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" style="border-radius:25px ;">
+                            <i class="fa fa-eye-slash" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+                            <span class="invalid-feedback"><?php echo $password_err; ?></span>
                         </div>
 
                         <!-- Password input -->
@@ -256,15 +257,15 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function togglePasswordVisibility() {
-            var passwordField = document.getElementById("login_password");
-            var toggleIcon = document.getElementById("toggle-icon");
+            function togglePasswordVisibility() {
+            var passwordField = document.getElementById("password"); // Corrected ID
+            var toggleIcon = document.getElementById("togglePassword"); // Corrected ID
             if (passwordField.type === "password") {
                 passwordField.type = "text";
-                toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
+                toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
             } else {
                 passwordField.type = "password";
-                toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
+                toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
             }
         }
     </script>
