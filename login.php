@@ -5,24 +5,26 @@ session_start();
 // Include config file
 require_once 'config.php';
 
+// Define constants
+define('MAX_ATTEMPTS', 3); // Max login attempts
+define('LOCKOUT_TIME', 300); // Lockout time in seconds (5 minutes)
+
 // Define variables and initialize with empty values
 $email = $password = "";
 $email_err = $password_err = $login_err = "";
 
-// Set maximum login attempts and lockout time (in seconds)
-define('MAX_ATTEMPTS', 3);
-define('LOCKOUT_TIME', 300); // 15 minutes
-
-// Initialize session variables if not set
+// Initialize session variables for login attempts
 if (!isset($_SESSION['login_attempts'])) {
     $_SESSION['login_attempts'] = 0;
-    $_SESSION['lockout_time'] = null;
+}
+if (!isset($_SESSION['lockout_time'])) {
+    $_SESSION['lockout_time'] = 0;
 }
 
-// Check if the user is locked out
-if ($_SESSION['login_attempts'] >= MAX_ATTEMPTS && time() < $_SESSION['lockout_time']) {
-    $lockout_remaining = $_SESSION['lockout_time'] - time();
-    $login_err = "Too many failed login attempts. Please try again after " . ceil($lockout_remaining / 60) . " minutes.";
+// Check lockout status
+if (time() < $_SESSION['lockout_time']) {
+    $login_err = "Too many failed login attempts. Please try again after " . 
+                 ceil(($_SESSION['lockout_time'] - time()) / 60) . " minutes.";
 }
 
 // Process form submission
@@ -59,28 +61,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
                         if (mysqli_stmt_fetch($stmt)) {
                             if (password_verify($password, $hashed_password)) {
-                                if ($is_approved == 0) {
-                                    $login_err = "Your account is awaiting approval. Please contact the system administrator.";
-                                } elseif ($status === 'inactive') {
-                                    $login_err = "Your account is inactive. Please contact the system administrator.";
-                                } else {
-                                    // Reset login attempts on successful login
-                                    $_SESSION['login_attempts'] = 0;
+                                // Reset login attempts on successful login
+                                $_SESSION['login_attempts'] = 0;
+                                $_SESSION['lockout_time'] = 0;
 
-                                    // Regenerate session ID for security
-                                    session_regenerate_id();
+                                // Regenerate session ID for security
+                                session_regenerate_id();
 
-                                    // Set session variables
-                                    $_SESSION["loggedin"] = true;
-                                    $_SESSION["id"] = $id;
-                                    $_SESSION["email"] = $email;
+                                // Set session variables
+                                $_SESSION["loggedin"] = true;
+                                $_SESSION["id"] = $id;
+                                $_SESSION["email"] = $email;
 
-                                    // Redirect user to the dashboard
-                                    header("location: index.php");
-                                    exit;
-                                }
+                                // Redirect user to the dashboard
+                                header("location: index.php");
+                                exit;
                             } else {
-                                $login_err = "Invalid email or password.";
+                                // Increment login attempts
+                                $_SESSION['login_attempts']++;
+                                $remaining_attempts = MAX_ATTEMPTS - $_SESSION['login_attempts'];
+                                if ($_SESSION['login_attempts'] >= MAX_ATTEMPTS) {
+                                    $_SESSION['lockout_time'] = time() + LOCKOUT_TIME;
+                                    $login_err = "Too many failed login attempts. Please try again after 5 minutes.";
+                                } else {
+                                    $login_err = "Invalid password. You have $remaining_attempts attempts left.";
+                                }
                             }
                         }
                     } else {
@@ -90,15 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     $login_err = "Oops! Something went wrong. Please try again later.";
                 }
                 mysqli_stmt_close($stmt);
-            }
-        }
-
-        // Increment login attempts on failure
-        if (!empty($login_err)) {
-            $_SESSION['login_attempts']++;
-            if ($_SESSION['login_attempts'] >= MAX_ATTEMPTS) {
-                $_SESSION['lockout_time'] = time() + LOCKOUT_TIME;
-                $login_err = "Too many failed login attempts. Please try again after 15 minutes.";
             }
         }
     }
