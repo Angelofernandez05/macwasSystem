@@ -14,6 +14,28 @@ require_once "config.php";
 // Define variables and initialize with empty values
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
+
+// Google reCAPTCHA secret key
+$secret_key = "6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y";
+
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    // Check if reCAPTCHA is valid
+    if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
+        $captcha = $_POST['g-recaptcha-response'];
+
+        // Verify CAPTCHA with Google
+        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$captcha");
+        $response_keys = json_decode($response, true);
+
+        // If CAPTCHA is valid
+        if(intval($response_keys["success"]) !== 1) {
+            $login_err = "Please verify that you are not a robot.";
+        }
+    } else {
+        $login_err = "Please verify that you are not a robot.";
+    }
     
     // Check if username and password are empty
     if(empty(trim($_POST["username"]))){
@@ -27,33 +49,6 @@ $username_err = $password_err = $login_err = "";
     } else{
         $password = trim($_POST["password"]);
     }
-// Verify reCAPTCHA
-if (empty($email_err) && empty($password_err)) 
-    $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
-    $recaptcha_response = $_POST['recaptcha_response'];
-
-    // Verify the reCAPTCHA response
-    $url = "https://www.google.com/recaptcha/api/siteverify";
-    $data = [
-        'secret' => $recaptcha_secret,
-        'response' => $recaptcha_response,
-        'remoteip' => $_SERVER['REMOTE_ADDR']
-    ];
-
-    $options = [
-        'http' => [
-            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method' => 'POST',
-            'content' => http_build_query($data),
-        ],
-    ];
-    $context = stream_context_create($options);
-    $response = file_get_contents($url, false, $context);
-    $response_keys = json_decode($response, true);
-
-    if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
-        $login_err = "CAPTCHA verification failed. Please try again.";
-    } else {
 
     // Validate credentials
     if(empty($username_err) && empty($password_err) && empty($login_err)){
@@ -237,9 +232,9 @@ if (empty($email_err) && empty($password_err))
                         </div>
 
                         <!-- Google reCAPTCHA -->
-                        <!-- <div class="form-outline mb-4">
+                        <div class="form-outline mb-4">
                             <div class="g-recaptcha" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
-                        </div> -->
+                        </div>
 
                         <!-- Submit button -->
                         <div class="d-flex justify-content-center">
@@ -271,18 +266,6 @@ if (empty($email_err) && empty($password_err))
         this.classList.toggle("fa-eye-slash");
     });
 </script>
-<script>
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
-            const recaptchaResponseField = document.createElement('input');
-            recaptchaResponseField.setAttribute('type', 'hidden');
-            recaptchaResponseField.setAttribute('name', 'recaptcha_response');
-            recaptchaResponseField.setAttribute('value', token);
-            document.querySelector('form').appendChild(recaptchaResponseField);
-        });
-    });
-</script>
-
 
 </body>
 </html>
