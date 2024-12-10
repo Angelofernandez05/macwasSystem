@@ -125,84 +125,94 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <style>
-        body {
-            background-image: url("tank.jpg");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-attachment: fixed;
-            background-size: cover;
-            font-family: 'Georgia', serif;
-        }
-        .card {
-            border-radius: 25px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(173, 216, 230, 0.2);
-            padding: 20px;
-            backdrop-filter: blur(3px);
-        }
-        .container {
-            max-width: 550px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .form-control {
-            border-radius: 20px;
-        }
-        .btn {
-            border-radius: 30px;
-            font-weight: 600;
-        }
-    </style>
-</head>
-<body>
-    <section class="vh-100 d-flex align-items-center justify-content-center">
-        <div class="container">
-            <div class="card">
-                <div class="card-body text-center">
-                    <?php 
-                    if (!empty($login_err)) {
-                        echo '<script>
-                        Swal.fire({
-                            title: "Error!",
-                            text: "' . htmlspecialchars($login_err) . '",
-                            icon: "error",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                        </script>';
-                    }        
-                    ?>
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                        <p class="text-center mb-4">
-                            <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;">
-                        </p>   
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="login_email"><strong>Email</strong></label>
-                            <input type="email" id="login_email" class="form-control py-3 <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($email); ?>" name="email" autocomplete="off" placeholder="Enter your email" required>
-                            <span class="invalid-feedback"><?php echo $email_err; ?></span>
-                        </div>
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="login_password"><strong>Password</strong></label>
-                            <input type="password" id="login_password" class="form-control py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" required>
-                            <span class="invalid-feedback"><?php echo $password_err; ?></span>
-                        </div>
-                        <div class="d-grid mb-3">
-                            <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
-                        </div>
-                    </form>
-                    <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary">Sign up here</a></strong></p>
+        <style>
+            body {
+                background-image: url("tank.jpg");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-attachment: fixed;
+                background-size: cover;
+                font-family: 'Georgia', serif;
+            }
+            .card {
+                border-radius: 25px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                background-color: rgba(173, 216, 230, 0.2);
+                padding: 20px;
+                backdrop-filter: blur(3px);
+            }
+            .container {
+                max-width: 550px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .form-control {
+                border-radius: 20px;
+            }
+            .btn {
+                border-radius: 30px;
+                font-weight: 600;
+            }
+        </style>
+    </head>
+    <body>
+        <section class="vh-100 d-flex align-items-center justify-content-center">
+            <div class="container">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <?php 
+                        if (!empty($login_err)) {
+                            echo '<script>
+                            Swal.fire({
+                                title: "Error!",
+                                text: "' . htmlspecialchars($login_err) . '",
+                                icon: "error",
+                                toast: true,
+                                position: "top-right",
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                            </script>';
+                        }        
+                        ?>
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                            <p class="text-center mb-4">
+                                <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;">
+                            </p>   
+                            <p class="text-center h1 fw-bold mb-4 mx-1 mx-md-3 mt-3">
+                                <img src="users.png" alt="User Icon" style="width: 60px; height: 60px;">
+                            </p>
+
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="login_email"><strong>Email</strong></label>
+                                <input type="email" id="login_email" class="form-control py-3 <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($email); ?>" name="email" autocomplete="off" placeholder="Enter your email" required>
+                                <span class="invalid-feedback"><?php echo $email_err; ?></span>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="login_password"><strong>Password</strong></label>
+                                <div class="input-group">
+                                    <input type="password" id="login_password" class="form-control py-3 <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" name="password" autocomplete="off" placeholder="Enter your password" required>
+                                    <span class="input-group-text" onclick="togglePasswordVisibility()">
+                                        <i class="fas fa-eye" id="toggle-icon"></i>
+                                    </span>
+                                </div>
+                                <span class="invalid-feedback"><?php echo $password_err; ?></span>
+                            </div>
+
+                            <!-- Add reCAPTCHA widget -->
+                            <!--<div class="g-recaptcha mb-3" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>-->
+
+                            <div class="d-grid mb-3">
+                                <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
+                            </div>
+                        </form>
+                        <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary">Sign up here</a></strong></p>
                         <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary">Click here</a></strong></p>
                     </div>
                 </div>
-                    
-
-                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
