@@ -223,8 +223,8 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                         </p>
                         <!-- Username input -->
                         <div class="form-outline mb-4">
-                            <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i>  <strong>Username</strong></label>
-                            <input type="text" id="form1Example13" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
+                            <label class="form-label" for=""> <i class="bi bi-person-circle"></i>  <strong>Username</strong></label>
+                            <input type="text" id="" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
                             <span class="invalid-feedback"><?php echo $username_err; ?></span>
                         </div>
 
