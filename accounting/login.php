@@ -16,14 +16,16 @@ $username = $password = "";
 $username_err = $password_err = $login_err = $captcha_err = "";
 
 // Google reCAPTCHA secret key
-// $secret_key = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
+$secret_key = '6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL';  // Replace with your secret key
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    // Check if reCAPTCHA is checked
-    if(isset($_POST['g-recaptcha-response'])){
-        $recaptcha_response = $_POST['g-recaptcha-response'];
+    // Check if reCAPTCHA response is received
+    if(isset($_POST['recaptcha_response'])){
+        $recaptcha_response = $_POST['recaptcha_response'];
+
+        // Verify reCAPTCHA response with Google API
         $verify_recaptcha = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$recaptcha_response");
         $recaptcha_response_keys = json_decode($verify_recaptcha);
 
@@ -125,7 +127,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link rel="stylesheet" href="style2.css">
     <link rel="icon" href="logo.png" type="image/icon type">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL" async defer></script>
     <style>
         body {
             background-image: url("account.webp");
@@ -230,11 +232,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
                         </div>
 
-                        <!-- reCAPTCHA -->
-                        <!-- <div class="g-recaptcha" data-sitekey="6LeNVYIqAAAAAD8moza5cF_4G7YsCSUZjy4ZMzZi"></div>
-                        <span class="invalid-feedback"><?php echo $captcha_err; ?></span>
-                        <br> -->
-
                         <!-- Login button -->
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">Login</button>
@@ -262,7 +259,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         this.classList.toggle("fa-eye-slash");
     });
 </script>
-<script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL" async defer></script>
 
 <script>
     // reCAPTCHA v3
@@ -276,7 +272,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         });
     });
 </script>
-
 
 </body>
 </html>
