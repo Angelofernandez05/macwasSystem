@@ -193,6 +193,12 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                             <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
                         </div>
                     </form>
+                    <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary">Sign up here</a></strong></p>
+                        <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary">Click here</a></strong></p>
+                    </div>
+                </div>
+                    
+
                 </div>
             </div>
         </div>
