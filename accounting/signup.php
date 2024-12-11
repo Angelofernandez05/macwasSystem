@@ -117,6 +117,14 @@
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary btn-lg py-3 px-5" style="border-radius:25px; width:100%;">Signup</button>
                         </div>
+                        <br>
+                        <div class="form-group">
+                        <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            I agree to the <a href="terms_and_conditions.html" target="_blank">Terms and Conditions</a>
+                        </label>
+                    </div>
 
                         <!-- Login link -->
                         <p class="text-center mt-4">Already have an account? <a href="login.php">Login</a></p>
