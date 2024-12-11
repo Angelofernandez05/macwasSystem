@@ -13,10 +13,3 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # Rewrite URL to use .php files without showing the .php extension
 RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
-
-/project-root/
-   .htaccess
-   login.php
-   signup.php
-   forgot_password.php
-   config.php
