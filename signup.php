@@ -7,24 +7,34 @@ $alert_type = '';
 $error_msg = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Fetch the data from the form and escape it
-    $name = mysqli_real_escape_string($link, $_POST['name']);
-    $barangay = mysqli_real_escape_string($link, $_POST['barangay']);
-    $account_num = mysqli_real_escape_string($link, $_POST['account_num']);
-    $registration_num = mysqli_real_escape_string($link, $_POST['registration_num']);
-    $meter_num = mysqli_real_escape_string($link, $_POST['meter_num']);
-    $type = mysqli_real_escape_string($link, $_POST['type']);
-    $email = mysqli_real_escape_string($link, $_POST['email']);
-    $phone = mysqli_real_escape_string($link, $_POST['phone']);
-    $password = mysqli_real_escape_string($link, $_POST['password']);
-    $status = mysqli_real_escape_string($link, $_POST['status']);
+    // Check if terms are agreed
+    if (!isset($_POST['terms'])) {
+        $error_msg = "You must agree to the Terms and Conditions.";
+        $alert_type = 'error';
+    } else {
+        // Existing code for form processing
+        $name = mysqli_real_escape_string($link, $_POST['name']);
+        $barangay = mysqli_real_escape_string($link, $_POST['barangay']);
+        $account_num = mysqli_real_escape_string($link, $_POST['account_num']);
+        $registration_num = mysqli_real_escape_string($link, $_POST['registration_num']);
+        $meter_num = mysqli_real_escape_string($link, $_POST['meter_num']);
+        $type = mysqli_real_escape_string($link, $_POST['type']);
+        $email = mysqli_real_escape_string($link, $_POST['email']);
+        $phone = mysqli_real_escape_string($link, $_POST['phone']);
+        $password = mysqli_real_escape_string($link, $_POST['password']);
+        $status = mysqli_real_escape_string($link, $_POST['status']);
 
-    // Handle empty meter_num
-    if (empty($meter_num) && empty($account_num) && empty($registration_num)) {
-        $meter_num = NULL;
-        $account_num = NULL;
-        $registration_num = NULL;
+        // Handle empty meter_num
+        if (empty($meter_num) && empty($account_num) && empty($registration_num)) {
+            $meter_num = NULL;
+            $account_num = NULL;
+            $registration_num = NULL;
+        }
+
+        // Other validation logic...
     }
+}
+
 
     // Validate phone number format
     if (!preg_match('/^\d{1,11}$/', $phone)) {
@@ -60,6 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_close($link);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -115,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 30px;
             font-weight: 600;
         }
-        
+       
         @media (max-width: 768px) {
             .container {
                 margin-top: 500px;
@@ -148,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="text" class="form-control" id="name" name="name" required>
                             </div>
                             <div class="form-group">
-                            <label class="icon">📍<strong>Barangay:</strong></label>
+                            <label class="icon">📍</span><strong>Barangay:</strong></label>
                                 <select class="form-control" id="barangay" name="barangay" required>
                                     <option value="">Select Brgy</option>
                                     <option value="Poblacion">Poblacion</option>
@@ -185,8 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="form-group position-relative">
                             <label class="icon">🏷️ <strong>Type:</strong></label>
                                 <select class="form-control" id="type" name="type" required>
-                                <option value="commercial">🏢Commercial</option>
-
+                                <option value="commercial">🏢 Commercial</option>
                                 <option value="residential">🏠 Residential</option>
                                 <option value="institution">🏛️ Institution</option>
                                 </select>
@@ -221,6 +231,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block mt-3">Register</button>
+                    <div class="form-group">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            I agree to the <a href="terms_and_conditions.html" target="_blank">Terms and Conditions</a>.
+                        </label>
+                    </div>
+                </div>
+
                 </form>
             </div>
         </div>
