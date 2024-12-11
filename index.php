@@ -8,7 +8,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-require_once "config";
+require_once "config.php";
 $id = intval($_SESSION["id"]); // Ensure $id is an integer
 
 // Fetch user-specific data

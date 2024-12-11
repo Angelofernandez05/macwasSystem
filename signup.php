@@ -1,7 +1,7 @@
 <?php
 // Database connection
 session_start();
-include 'config';
+include 'config.php';
 
 $alert_type = '';
 $error_msg = '';
