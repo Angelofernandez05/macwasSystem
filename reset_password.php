@@ -4,12 +4,12 @@
 
     // Check if the user is logged in
     if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-        header("location: login");
+        header("location: login.php");
         exit;
     }
 
     // Include config file
-    require_once "config";
+    require_once "config.php";
 
     // Define variables and initialize with empty values
     $new_password = $confirm_password = "";
@@ -65,7 +65,7 @@
                             showConfirmButton: false,
                             timer: 3000
                         }).then(() => {
-                            window.location.href = "login";
+                            window.location.href = "login.php";
                         });
                         </script>';
                     } else {
@@ -93,7 +93,7 @@
             $link->close();
         } elseif (isset($_POST['cancel'])) {
             // Redirect to index page on cancel
-            header("location: index");
+            header("location: index.php");
             exit;
         }
     }

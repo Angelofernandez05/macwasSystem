@@ -228,7 +228,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 showConfirmButton: false,
                 timer: 3000
             }).then(() => {
-                window.location.href = "my_profile"; // Redirect to profile page after showing the alert
+                window.location.href = "my_profile.php"; // Redirect to profile page after showing the alert
             });
         }
         document.addEventListener('keydown', function (e) {

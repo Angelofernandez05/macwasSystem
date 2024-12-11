@@ -1,6 +1,6 @@
 
 <?php 
-require_once ('db');
+require_once ('db.php');
 
 if(isset($_POST['image']))
 {
@@ -24,11 +24,11 @@ $conn->exec($sql);
 $query_run = mysqli_query($conn, $sql);
 if($query_run)
     {
-        header('Location: reading');
+        header('Location: reading.php');
     }
     else
     {
-        header('Location: reading');        
+        header('Location: reading.php');        
     }
 
 }

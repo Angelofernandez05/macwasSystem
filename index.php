@@ -4,7 +4,7 @@ session_start();
 
 // Check if the user is logged in, if not then redirect them to login page
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: login");
+    header("location: login.php");
     exit;
 }
 
@@ -48,7 +48,7 @@ $user_row = mysqli_fetch_assoc($user_result);
 <head>
     <meta charset="UTF-8">
     <title>Consumer Dashboard</title>
-    <?php include 'includes/links'; ?>
+    <?php include 'includes/links.php'; ?>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>
         body {
@@ -148,7 +148,7 @@ $user_row = mysqli_fetch_assoc($user_result);
     </style>
 </head>
 <body>
-    <?php include 'includes/sidebar'; ?>
+    <?php include 'includes/sidebar.php'; ?>
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
@@ -160,7 +160,7 @@ $user_row = mysqli_fetch_assoc($user_result);
                     </div>
                 </span>
             </div>
-            <?php include 'includes/userMenu'; ?>
+            <?php include 'includes/userMenu.php'; ?>
         </nav>
         <div class="clock" id="clock"></div>
         <div class="content">
@@ -202,7 +202,7 @@ $user_row = mysqli_fetch_assoc($user_result);
             </div>
         </div>
     </section>  
-    <?php include 'includes/scripts'; ?>
+    <?php include 'includes/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('keydown', function (e) {
