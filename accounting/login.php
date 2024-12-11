@@ -11,29 +11,29 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 // Include config file
 require_once "config.php";
 
-// Define variables and initialize with empty values
-$username = $password = "";
-$username_err = $password_err = $login_err = $captcha_err = "";
+// // Define variables and initialize with empty values
+// $username = $password = "";
+// $username_err = $password_err = $login_err = $captcha_err = "";
 
-// Google reCAPTCHA secret key
-$secret_key = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
+// // Google reCAPTCHA secret key
+// $secret_key = '6LeNVYIqAAAAAFKB4J4PHK5M3GDRb0mjkHlpxe4Y';
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    // Check if reCAPTCHA is checked
-    if(isset($_POST['g-recaptcha-response'])){
-        $recaptcha_response = $_POST['g-recaptcha-response'];
-        $verify_recaptcha = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$recaptcha_response");
-        $recaptcha_response_keys = json_decode($verify_recaptcha);
+    // // Check if reCAPTCHA is checked
+    // if(isset($_POST['g-recaptcha-response'])){
+    //     $recaptcha_response = $_POST['g-recaptcha-response'];
+    //     $verify_recaptcha = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$recaptcha_response");
+    //     $recaptcha_response_keys = json_decode($verify_recaptcha);
 
-        // If reCAPTCHA is not successful
-        if(intval($recaptcha_response_keys->success) !== 1) {
-            $captcha_err = "Please verify that you are not a robot.";
-        }
-    } else {
-        $captcha_err = "Please verify that you are not a robot.";
-    }
+    //     // If reCAPTCHA is not successful
+    //     if(intval($recaptcha_response_keys->success) !== 1) {
+    //         $captcha_err = "Please verify that you are not a robot.";
+    //     }
+    // } else {
+    //     $captcha_err = "Please verify that you are not a robot.";
+    // }
 
     // Check if username is empty
     if(empty(trim($_POST["username"]))){
@@ -51,6 +51,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     // Validate credentials
     if(empty($username_err) && empty($password_err) && empty($captcha_err)){
+        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
+        $recaptcha_response = $_POST['recaptcha_response'];
+
+        // Verify the reCAPTCHA response
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+        $data = [
+            'secret' => $recaptcha_secret,
+            'response' => $recaptcha_response,
+            'remoteip' => $_SERVER['REMOTE_ADDR']
+        ];
+
+        $options = [
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($data),
+            ],
+        ];
         // Prepare a select statement
         $sql = "SELECT id, username, password, name FROM accounting WHERE username = ?";
         
@@ -247,6 +265,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
         </div>
     </section>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL"></script>
 
 <script>
     const togglePassword = document.querySelector("#togglePassword");
@@ -262,6 +281,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         this.classList.toggle("fa-eye-slash");
     });
 </script>
-
+<script>
+            grecaptcha.ready(function() {
+            grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
+            const recaptchaResponseField = document.createElement('input');
+            recaptchaResponseField.setAttribute('type', 'hidden');
+            recaptchaResponseField.setAttribute('name', 'recaptcha_response');
+            recaptchaResponseField.setAttribute('value', token);
+            document.querySelector('form').appendChild(recaptchaResponseField);
+        });
+    });
+</script>
 </body>
 </html>
