@@ -61,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 30px;
             font-weight: 600;
         }
-       
+        
         @media (max-width: 768px) {
             .container {
                 margin-top: 500px;
@@ -149,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <input type="text" class="form-control" id="name" name="name" required>
                             </div>
                             <div class="form-group">
-                            <label class="icon">📍</span><strong>Barangay:</strong></label>
+                            <label class="icon">📍<strong>Barangay:</strong></label>
                                 <select class="form-control" id="barangay" name="barangay" required>
                                     <option value="">Select Brgy</option>
                                     <option value="Poblacion">Poblacion</option>
@@ -186,7 +185,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="form-group position-relative">
                             <label class="icon">🏷️ <strong>Type:</strong></label>
                                 <select class="form-control" id="type" name="type" required>
-                                <option value="commercial">🏢 Commercial</option>
+                                <option value="commercial">🏢Commercial</option>
+
                                 <option value="residential">🏠 Residential</option>
                                 <option value="institution">🏛️ Institution</option>
                                 </select>
