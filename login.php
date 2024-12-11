@@ -15,6 +15,7 @@ if (isset($_SESSION['login_attempts']) && $_SESSION['login_attempts'] >= 3) {
     if ($remaining_time > 0) {
         $login_err = "Too many failed attempts. Please try again in " . ceil($remaining_time / 60) . " minutes.";
     } else {
+        // Reset the login attempts and lockout time after lockout period
         unset($_SESSION['login_attempts']);
         unset($_SESSION['lockout_time']);
     }
@@ -38,9 +39,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
     // Verify reCAPTCHA
     if (empty($email_err) && empty($password_err) && empty($login_err)) {
-        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA secret key
+        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
         $recaptcha_response = $_POST['recaptcha_response'];
 
+        // Verify the reCAPTCHA response
         $url = "https://www.google.com/recaptcha/api/siteverify";
         $data = [
             'secret' => $recaptcha_secret,
@@ -62,14 +64,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
             $login_err = "CAPTCHA verification failed. Please try again.";
         } else {
+            // Prepare a select statement
             $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
             if ($stmt = mysqli_prepare($link, $sql)) {
                 mysqli_stmt_bind_param($stmt, "s", $param_email);
                 $param_email = $email;
 
+                // Execute the prepared statement
                 if (mysqli_stmt_execute($stmt)) {
                     mysqli_stmt_store_result($stmt);
 
+                    // Check if email exists, if yes then verify password
                     if (mysqli_stmt_num_rows($stmt) == 1) {
                         mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
                         if (mysqli_stmt_fetch($stmt)) {
@@ -79,29 +84,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                 } elseif ($status === 'inactive') {
                                     $login_err = "Your account is inactive. Please contact the system administrator.";
                                 } else {
+                                    // Reset login attempts on successful login
                                     unset($_SESSION['login_attempts']);
                                     unset($_SESSION['lockout_time']);
 
+                                    // Regenerate session ID for security
                                     session_regenerate_id();
 
+                                    // Set session variables
                                     $_SESSION["loggedin"] = true;
                                     $_SESSION["id"] = $id;
                                     $_SESSION["email"] = $email;
 
-                                    // SweetAlert for successful login
-                                    echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-                                    echo '<script>
-                                        Swal.fire({
-                                            title: "Welcome!",
-                                            text: "Login successful. Redirecting to the dashboard...",
-                                            icon: "success",
-                                            timer: 2000,
-                                            showConfirmButton: false,
-                                            willClose: () => {
-                                                window.location.href = "index.php";
-                                            }
-                                        });
-                                    </script>';
+                                    // Redirect user to the dashboard
+                                    header("location: index.php");
                                     exit;
                                 }
                             } else {
@@ -113,25 +109,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     }
                 } else {
                     echo '<script>
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Oops! Something went wrong. Please try again later.",
-                            icon: "error",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Oops! Something went wrong. Please try again later.",
+                        icon: "error",
+                        toast: true,
+                        position: "top-right",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
                     </script>';
                 }
 
+                // Increment the failed attempts
                 if (!isset($_SESSION['login_attempts'])) {
                     $_SESSION['login_attempts'] = 0;
                 }
                 $_SESSION['login_attempts']++;
 
+                // Lockout the user after 3 failed attempts
                 if ($_SESSION['login_attempts'] >= 3) {
-                    $_SESSION['lockout_time'] = time() + 15 * 60;
+                    $_SESSION['lockout_time'] = time() + 15 * 60; // 15-minute lockout
                     $login_err = "Too many failed attempts. Please try again in 15 minutes.";
                 }
 
@@ -142,13 +140,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     mysqli_close($link);
 }
 
-        // Security headers
-        header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
-        header("X-Frame-Options: SAMEORIGIN");
-        header("X-Content-Type-Options: nosniff");
-        header("Referrer-Policy: strict-origin-when-cross-origin");
-        header("Permissions-Policy: geolocation=(self), microphone=()");
-        ?>
+    // Security headers
+    header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+    header("X-Frame-Options: SAMEORIGIN");
+    header("X-Content-Type-Options: nosniff");
+    header("Referrer-Policy: strict-origin-when-cross-origin");
+    header("Permissions-Policy: geolocation=(self), microphone=()");
+    ?>
+
 
 
     <!DOCTYPE html>
