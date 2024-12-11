@@ -36,6 +36,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     } else {
         $password = trim($_POST["password"]);
     }
+    $request = $_SERVER['REQUEST_URI'];
+if (substr($request, -4) == '.php') {
+    $new_url = substr($request, 0, -4);
+    header("Location: $new_url", true, 301);
+    exit();
+}
 
     // Verify reCAPTCHA
     if (empty($email_err) && empty($password_err) && empty($login_err)) {

@@ -221,8 +221,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block mt-3">Register</button>
-                    <div>
-                        <div>
+                    <br>
+                    <br>
 
                     <div class="form-group">
                     <div class="form-check">
