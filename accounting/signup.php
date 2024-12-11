@@ -119,11 +119,12 @@
                         </div>
                         <br>
                         <div class="form-group text-center mt-3">
-                        <div class="form-check">
-                        <input type="checkbox text-center mt-3" class="form-check-input" id="terms" name="terms" required>
-                        <label class="form-check-label" for="terms">
+                    <div class="form-check d-flex justify-content-center align-items-center">
+                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                        <label class="form-check-label ms-2" for="terms">
                             I agree to the <a href="terms_and_conditions.html" target="_blank">Terms and Conditions</a>
                         </label>
+                    </div>
                     </div>
 
                         <!-- Login link -->
