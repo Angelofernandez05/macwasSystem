@@ -119,8 +119,8 @@
                         </div>
                         <br>
                         <div class="form-group text-center mt-3">
-                        <div class="form-check text-center mt-3">
-                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                        <div class="form-check">
+                        <input type="checkbox text-center mt-3" class="form-check-input" id="terms" name="terms" required>
                         <label class="form-check-label" for="terms">
                             I agree to the <a href="terms_and_conditions.html" target="_blank">Terms and Conditions</a>
                         </label>
