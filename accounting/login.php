@@ -51,7 +51,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     // Validate credentials
     if(empty($username_err) && empty($password_err) && empty($captcha_err)){
-        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
+         $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
         $recaptcha_response = $_POST['recaptcha_response'];
 
         // Verify the reCAPTCHA response
@@ -236,7 +236,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <!-- Username input -->
                         <div class="form-outline mb-4">
                             <label class="form-label" for="form1Example13"> <i class="bi bi-person-circle"></i>  <strong>Username</strong></label>
-                            <input type="text" id="form1Example13" class="form-control form-control-lg py-3 <?php echo () ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
+                            <input type="text" id="form1Example13" class="form-control form-control-lg py-3 <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($username); ?>" name="username" autocomplete="off" placeholder="Enter username" style="border-radius:25px ;" >
                             <span class="invalid-feedback"><?php echo $username_err; ?></span>
                         </div>
 
