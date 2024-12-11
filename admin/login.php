@@ -34,6 +34,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
+        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
+        $recaptcha_response = $_POST['recaptcha_response'];
+
+        // Verify the reCAPTCHA response
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+        $data = [
+            'secret' => $recaptcha_secret,
+            'response' => $recaptcha_response,
+            'remoteip' => $_SERVER['REMOTE_ADDR']
+        ];
+
+        $options = [
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($data),
+            ],
+        ];
         // Prepare a select statement
         $sql = "SELECT id, username, password FROM users WHERE username = ?";
         
@@ -230,6 +248,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL"></script>
     <script>
         // Hide the alert after 3 seconds
         setTimeout(function(){
@@ -272,5 +291,16 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
             }
         });
     </script>
+      <script>
+            grecaptcha.ready(function() {
+            grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
+            const recaptchaResponseField = document.createElement('input');
+            recaptchaResponseField.setAttribute('type', 'hidden');
+            recaptchaResponseField.setAttribute('name', 'recaptcha_response');
+            recaptchaResponseField.setAttribute('value', token);
+            document.querySelector('form').appendChild(recaptchaResponseField);
+        });
+    });
+</script>
 </body>
 </html>
