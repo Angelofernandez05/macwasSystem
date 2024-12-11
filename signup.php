@@ -7,34 +7,24 @@ $alert_type = '';
 $error_msg = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if terms are agreed
-    if (!isset($_POST['terms'])) {
-        $error_msg = "You must agree to the Terms and Conditions.";
-        $alert_type = 'error';
-    } else {
-        // Existing code for form processing
-        $name = mysqli_real_escape_string($link, $_POST['name']);
-        $barangay = mysqli_real_escape_string($link, $_POST['barangay']);
-        $account_num = mysqli_real_escape_string($link, $_POST['account_num']);
-        $registration_num = mysqli_real_escape_string($link, $_POST['registration_num']);
-        $meter_num = mysqli_real_escape_string($link, $_POST['meter_num']);
-        $type = mysqli_real_escape_string($link, $_POST['type']);
-        $email = mysqli_real_escape_string($link, $_POST['email']);
-        $phone = mysqli_real_escape_string($link, $_POST['phone']);
-        $password = mysqli_real_escape_string($link, $_POST['password']);
-        $status = mysqli_real_escape_string($link, $_POST['status']);
+    // Fetch the data from the form and escape it
+    $name = mysqli_real_escape_string($link, $_POST['name']);
+    $barangay = mysqli_real_escape_string($link, $_POST['barangay']);
+    $account_num = mysqli_real_escape_string($link, $_POST['account_num']);
+    $registration_num = mysqli_real_escape_string($link, $_POST['registration_num']);
+    $meter_num = mysqli_real_escape_string($link, $_POST['meter_num']);
+    $type = mysqli_real_escape_string($link, $_POST['type']);
+    $email = mysqli_real_escape_string($link, $_POST['email']);
+    $phone = mysqli_real_escape_string($link, $_POST['phone']);
+    $password = mysqli_real_escape_string($link, $_POST['password']);
+    $status = mysqli_real_escape_string($link, $_POST['status']);
 
-        // Handle empty meter_num
-        if (empty($meter_num) && empty($account_num) && empty($registration_num)) {
-            $meter_num = NULL;
-            $account_num = NULL;
-            $registration_num = NULL;
-        }
-
-        // Other validation logic...
+    // Handle empty meter_num
+    if (empty($meter_num) && empty($account_num) && empty($registration_num)) {
+        $meter_num = NULL;
+        $account_num = NULL;
+        $registration_num = NULL;
     }
-}
-
 
     // Validate phone number format
     if (!preg_match('/^\d{1,11}$/', $phone)) {
@@ -231,14 +221,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block mt-3">Register</button>
+
                     <div class="form-group">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
-                        <label class="form-check-label" for="terms">
-                            I agree to the <a href="terms_and_conditions.html" target="_blank">Terms and Conditions</a>.
-                        </label>
-                    </div>
-                </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+        <label class="form-check-label" for="terms">
+            I agree to the <a href="terms_and_conditions.html" target="_blank">Terms and Conditions</a>.
+        </label>
+    </div>
+</div>
 
                 </form>
             </div>
