@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                     $_SESSION["email"] = $email;
 
                                     // Redirect user to the dashboard
-                                    header("location: index.php");
+                                    header("location: index");
                                     exit;
                                 }
                             } else {
@@ -250,7 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                 <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
                             </div>
                         </form>
-                        <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary">Sign up here</a></strong></p>
+                        <p class="text-center"><strong>Don't have an account? <a href="signup" class="text-primary">Sign up here</a></strong></p>
                         <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary">Click here</a></strong></p>
                     </div>
                 </div>
