@@ -12,4 +12,3 @@ RewriteEngine On
 # # (Optional) Redirect other .php files to routes without .php extension
 # RewriteCond %{REQUEST_FILENAME} !-f
 # RewriteRule ^([^\.]+)$ $1.php [L]
-
