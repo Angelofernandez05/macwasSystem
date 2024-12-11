@@ -143,7 +143,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link rel="stylesheet" href="style2.css">
     <link rel="icon" href="logo.png" type="image/icon type">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         body {
             background-image: url("account.webp");
