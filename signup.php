@@ -222,8 +222,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <button type="submit" class="btn btn-primary btn-block mt-3">Register</button>
                     <br>
-                    <br>
-
                     <div class="form-group">
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
