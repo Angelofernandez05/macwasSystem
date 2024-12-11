@@ -3,11 +3,15 @@
 php_value display_errors 1
 # DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:23422420:
 
+# Enable mod_rewrite
 RewriteEngine On
 
-# Do not rewrite existing files or directories
+# Prevent rewriting existing files or directories
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Only rewrite URLs without a file extension
+# Rewrite URLs without file extensions to include `.php`
 RewriteRule ^([^/.]+)$ $1.php [L]
+
+# Display PHP errors for debugging (remove in production)
+php_value display_errors 1
