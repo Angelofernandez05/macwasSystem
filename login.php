@@ -37,12 +37,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         $password = trim($_POST["password"]);
     }
     $request = $_SERVER['REQUEST_URI'];
-if (substr($request, -4) == '.php') {
-    $new_url = substr($request, 0, -4);
-    header("Location: $new_url", true, 301);
-    exit();
-}
-
+    if (substr($request, -4) == '.php') {
+        $new_url = substr($request, 0, -4);
+        header("Location: $new_url", true, 301);
+        exit();
+    }
+    
     // Verify reCAPTCHA
     if (empty($email_err) && empty($password_err) && empty($login_err)) {
         $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key

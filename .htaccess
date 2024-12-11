@@ -3,12 +3,11 @@
 php_value display_errors 1
 # DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:23422420:
 
-# Enable mod_rewrite
 RewriteEngine On
 
-# Check if the requested file or directory exists
+# Do not rewrite existing files or directories
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Rewrite to the PHP file
-RewriteRule ^(.*)$ $1.php [L]
+# Only rewrite URLs without a file extension
+RewriteRule ^([^/.]+)$ $1.php [L]
