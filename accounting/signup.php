@@ -118,7 +118,7 @@
                             <button type="submit" class="btn btn-primary btn-lg py-3 px-5" style="border-radius:25px; width:100%;">Signup</button>
                         </div>
                         <br>
-                        <div class="form-group">
+                        <div class="form-group text-center mt-3">
                         <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
                         <label class="form-check-label" for="terms">
