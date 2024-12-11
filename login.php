@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         $password = trim($_POST["password"]);
     }
 
-    // Verify reCAPTCHA (optional, ensure reCAPTCHA integration works)
+    // Verify reCAPTCHA
     if (empty($email_err) && empty($password_err) && empty($login_err)) {
         $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
         $recaptcha_response = $_POST['recaptcha_response'];
@@ -64,25 +64,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         if (!$response_keys['success'] || $response_keys['score'] < 0.5) {
             $login_err = "CAPTCHA verification failed. Please try again.";
         } else {
-            // SQL query to check the user in the database
+            // Prepare a select statement
             $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
             if ($stmt = mysqli_prepare($link, $sql)) {
                 mysqli_stmt_bind_param($stmt, "s", $param_email);
                 $param_email = $email;
 
-                // Execute the query
+                // Execute the prepared statement
                 if (mysqli_stmt_execute($stmt)) {
                     mysqli_stmt_store_result($stmt);
 
-                    // If email exists, check password
+                    // Check if email exists, if yes then verify password
                     if (mysqli_stmt_num_rows($stmt) == 1) {
                         mysqli_stmt_bind_result($stmt, $id, $status, $hashed_password, $is_approved);
                         if (mysqli_stmt_fetch($stmt)) {
                             if (password_verify($password, $hashed_password)) {
                                 if ($is_approved == 0) {
-                                    $login_err = "Your account is awaiting approval.";
+                                    $login_err = "Your account is awaiting approval. Please contact the system administrator.";
                                 } elseif ($status === 'inactive') {
-                                    $login_err = "Your account is inactive.";
+                                    $login_err = "Your account is inactive. Please contact the system administrator.";
                                 } else {
                                     // Reset login attempts on successful login
                                     unset($_SESSION['login_attempts']);
@@ -96,20 +96,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                     $_SESSION["id"] = $id;
                                     $_SESSION["email"] = $email;
 
-                                    // SweetAlert success message with redirect
-                                    echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-                                    echo '<script>
-                                        Swal.fire({
-                                            title: "Login Successful",
-                                            text: "Welcome to your dashboard!",
-                                            icon: "success",
-                                            showConfirmButton: false,
-                                            timer: 2000
-                                        }).then(() => {
-                                            window.location.href = "index.php";
-                                        });
-                                    </script>';
-                                    exit; // Prevent further processing after success
+                                    // Redirect user to the dashboard
+                                    header("location: index.php");
+                                    exit;
                                 }
                             } else {
                                 $login_err = "Invalid email or password.";
@@ -120,25 +109,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                     }
                 } else {
                     echo '<script>
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Something went wrong. Please try again later.",
-                            icon: "error",
-                            toast: true,
-                            position: "top-right",
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Oops! Something went wrong. Please try again later.",
+                        icon: "error",
+                        toast: true,
+                        position: "top-right",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
                     </script>';
                 }
 
-                // Increment failed attempts
+                // Increment the failed attempts
                 if (!isset($_SESSION['login_attempts'])) {
                     $_SESSION['login_attempts'] = 0;
                 }
                 $_SESSION['login_attempts']++;
 
-                // Lockout user after 3 failed attempts
+                // Lockout the user after 3 failed attempts
                 if ($_SESSION['login_attempts'] >= 3) {
                     $_SESSION['lockout_time'] = time() + 15 * 60; // 15-minute lockout
                     $login_err = "Too many failed attempts. Please try again in 15 minutes.";
@@ -148,8 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             }
         }
     }
-
-    mysqli_close($link); // Close the connection
+    mysqli_close($link);
 }
 
         // Security headers
