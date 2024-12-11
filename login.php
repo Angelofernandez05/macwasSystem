@@ -139,50 +139,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     }
     mysqli_close($link);
 }
-if (password_verify($password, $hashed_password)) {
-    if ($is_approved == 0) {
-        $login_err = "Your account is awaiting approval. Please contact the system administrator.";
-    } elseif ($status === 'inactive') {
-        $login_err = "Your account is inactive. Please contact the system administrator.";
-    } else {
-        // Reset login attempts on successful login
-        unset($_SESSION['login_attempts']);
-        unset($_SESSION['lockout_time']);
 
-        // Regenerate session ID for security
-        session_regenerate_id();
-
-        // Set session variables
-        $_SESSION["loggedin"] = true;
-        $_SESSION["id"] = $id;
-        $_SESSION["email"] = $email;
-
-        // SweetAlert for successful login
-        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
-        echo '<script>
-            Swal.fire({
-                title: "Welcome!",
-                text: "Login successful. Redirecting to the dashboard...",
-                icon: "success",
-                timer: 2000,
-                showConfirmButton: false
-            }).then(() => {
-                window.location.href = "index.php";
-            });
-        </script>';
-        exit; // Important to stop further PHP execution
-    }
-}
-
-    // Security headers
-    header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
-    header("X-Frame-Options: SAMEORIGIN");
-    header("X-Content-Type-Options: nosniff");
-    header("Referrer-Policy: strict-origin-when-cross-origin");
-    header("Permissions-Policy: geolocation=(self), microphone=()");
-    ?>
-
-
+        // Security headers
+        header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+        header("X-Frame-Options: SAMEORIGIN");
+        header("X-Content-Type-Options: nosniff");
+        header("Referrer-Policy: strict-origin-when-cross-origin");
+        header("Permissions-Policy: geolocation=(self), microphone=()");
+        ?>
 
     <!DOCTYPE html>
     <html lang="en">
