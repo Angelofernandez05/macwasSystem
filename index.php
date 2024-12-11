@@ -8,7 +8,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-require_once "config.php";
+require_once "config";
 $id = intval($_SESSION["id"]); // Ensure $id is an integer
 
 // Fetch user-specific data
@@ -48,7 +48,7 @@ $user_row = mysqli_fetch_assoc($user_result);
 <head>
     <meta charset="UTF-8">
     <title>Consumer Dashboard</title>
-    <?php include 'includes/links.php'; ?>
+    <?php include 'includes/links'; ?>
     <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <style>
         body {
@@ -148,7 +148,7 @@ $user_row = mysqli_fetch_assoc($user_result);
     </style>
 </head>
 <body>
-    <?php include 'includes/sidebar.php'; ?>
+    <?php include 'includes/sidebar'; ?>
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
@@ -160,7 +160,7 @@ $user_row = mysqli_fetch_assoc($user_result);
                     </div>
                 </span>
             </div>
-            <?php include 'includes/userMenu.php'; ?>
+            <?php include 'includes/userMenu'; ?>
         </nav>
         <div class="clock" id="clock"></div>
         <div class="content">
@@ -202,7 +202,7 @@ $user_row = mysqli_fetch_assoc($user_result);
             </div>
         </div>
     </section>  
-    <?php include 'includes/scripts.php'; ?>
+    <?php include 'includes/scripts'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('keydown', function (e) {

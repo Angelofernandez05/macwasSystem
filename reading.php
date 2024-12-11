@@ -6,12 +6,12 @@ session_start();
  
 // Check if the user is logged in, if not then redirect to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
+    header("location: login");
     exit;
 }
 
 // Include config file
-require_once "config.php";
+require_once "config";
 
 // Fetch the user ID from the session
 $id = $_SESSION["id"];
@@ -30,7 +30,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
 <head>
     <meta charset="UTF-8">
     <title>Consumer Bill</title>
-    <?php include 'includes/links.php'; ?>
+    <?php include 'includes/links'; ?>
     <style>
         body {
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
@@ -81,7 +81,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
     </style>
 </head>
 <body>
-    <?php include 'includes/sidebar.php'; ?>
+    <?php include 'includes/sidebar'; ?>
 
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
@@ -89,7 +89,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
                 <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
                 Bill
             </span>
-            <?php include 'includes/userMenu.php'; ?>
+            <?php include 'includes/userMenu'; ?>
         </nav>
 
         <div class="container-fluid py-5">
@@ -142,8 +142,8 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
                             <?php
                             echo "<td>" . $status . "</td>";
                             echo "<td>";
-                            echo '<a target="_blank" href="print-reading.php?id=' . $row['id'] . '" class="mr-2" title="bill" data-toggle="tooltip"><i class="bx bxs-file btn btn-danger btn-sm mb-3 rounded-circle"></i></a>';
-                            echo '<a target="_blank" href="att_payment.php?id=' . $row['id'] . '" class="mr-2" title="Attach Payment" data-toggle="tooltip"><i class="bx bxs-wallet btn btn-primary btn-sm mb-3 ml-2 rounded-circle"></i></a>';                            
+                            echo '<a target="_blank" href="print-reading?id=' . $row['id'] . '" class="mr-2" title="bill" data-toggle="tooltip"><i class="bx bxs-file btn btn-danger btn-sm mb-3 rounded-circle"></i></a>';
+                            echo '<a target="_blank" href="att_payment?id=' . $row['id'] . '" class="mr-2" title="Attach Payment" data-toggle="tooltip"><i class="bx bxs-wallet btn btn-primary btn-sm mb-3 ml-2 rounded-circle"></i></a>';                            
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -194,7 +194,7 @@ if ($stmt = mysqli_prepare($link, $user_sql)) {
         });
     </script>
 
-    <?php include 'includes/scripts.php'; ?>
+    <?php include 'includes/scripts'; ?>
 </body>
 </html>
 <?php

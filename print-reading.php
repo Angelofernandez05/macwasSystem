@@ -2,11 +2,11 @@
     session_start();
 
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-        header("location: login.php");
+        header("location: login");
         exit;
     }
 
-    include_once "config.php";
+    include_once "config";
 
     if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
         $id = trim($_GET["id"]);
@@ -26,7 +26,7 @@
                     $myObj = getMinimumRates($link, $row['type']);
                     
                 } else{
-                    header("location: reading.php?consumer_id=$consumer_id");
+                    header("location: reading?consumer_id=$consumer_id");
                     exit();
                 }
                 
@@ -37,7 +37,7 @@
         mysqli_stmt_close($stmt);
 
     } else {
-        header("location: consumer.php");
+        header("location: consumer");
         exit();
     }
 
@@ -68,7 +68,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Bill</title>
-        <?php include 'includes/links.php'; ?>
+        <?php include 'includes/links'; ?>
     </head>
     <body>
         <div class="container pt-5">

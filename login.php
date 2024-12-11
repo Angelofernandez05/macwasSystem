@@ -3,7 +3,7 @@
 session_start();
 
 // Include config file
-require_once 'config.php';
+require_once 'config';
 
 // Define variables and initialize with empty values
 $email = $password = "";
@@ -251,7 +251,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                             </div>
                         </form>
                         <p class="text-center"><strong>Don't have an account? <a href="signup" class="text-primary">Sign up here</a></strong></p>
-                        <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary">Click here</a></strong></p>
+                        <p class="text-center"><strong>Forgot your password? <a href="forgot_password" class="text-primary">Click here</a></strong></p>
                     </div>
                 </div>
             </div>

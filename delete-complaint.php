@@ -2,7 +2,7 @@
 // Process delete operation after confirmation
 if(isset($_GET["id"]) && !empty($_GET["id"])){
     // Include config file
-    require_once "config.php";
+    require_once "config";
     
     // Prepare a delete statement
     $sql = "DELETE FROM complaints WHERE id = ?";
@@ -17,7 +17,7 @@ if(isset($_GET["id"]) && !empty($_GET["id"])){
         // Attempt to execute the prepared statement
         if(mysqli_stmt_execute($stmt)){
             // Records deleted successfully. Redirect to landing page
-            header("location: complaint.php");
+            header("location: complaint");
             exit();
         } else{
             echo "Oops! Something went wrong. Please try again later.";
@@ -33,7 +33,7 @@ if(isset($_GET["id"]) && !empty($_GET["id"])){
     // Check existence of id parameter
     if(empty(trim($_GET["id"]))){
         // URL doesn't contain id parameter. Redirect to error page
-        header("location: complaint.php");
+        header("location: complaint");
         exit();
     }
 }

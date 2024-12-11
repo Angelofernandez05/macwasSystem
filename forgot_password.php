@@ -1,6 +1,6 @@
 <?php
 // Include config file
-require_once 'config.php';
+require_once 'config';
 
 // Define variables and initialize with empty values
 $email = "";
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         if (mysqli_stmt_execute($stmt2)) {
                             // Send reset email
-                            $reset_link = "http://yourdomain.com/reset_password.php?token=" . $token;
+                            $reset_link = "http://yourdomain.com/reset_password?token=" . $token;
 
                             $subject = "Password Reset Request";
                             $message = "Hi,\n\nPlease click the following link to reset your password: \n" . $reset_link;
@@ -195,7 +195,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="submit" value="Request Reset Link" class="btn btn-primary btn-lg text-light my-2 py-3" style="width:100%; border-radius: 30px; font-weight:600;">
                         </div>
                     </form>
-                    <p align="center"><strong>Remembered your password?</strong> <a href="login.php" class="text-primary" style="font-weight:600;text-decoration:none;">Login here</a></p>
+                    <p align="center"><strong>Remembered your password?</strong> <a href="login" class="text-primary" style="font-weight:600;text-decoration:none;">Login here</a></p>
                 </div>
             </div>
         </div>

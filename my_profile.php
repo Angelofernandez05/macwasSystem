@@ -4,12 +4,12 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: login.php");
+    header("location: login");
     exit;
 }
 
 // Include config file
-require_once "config.php";
+require_once "config";
 
 // Fetch user information
 $sql = "SELECT name, barangay, email, phone, account_num, registration_num, meter_num FROM consumers WHERE id = ?";

@@ -1,7 +1,7 @@
 <?php
 // Database connection
 session_start();
-include 'config.php';
+include 'config';
 
 $alert_type = '';
 $error_msg = '';
@@ -140,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <img src="logo.png" alt="Admin-Icon" style="width: 200px; height: 150px;">
                 </p>
                 <h2 class="text-center mb-4 georgia-font"><strong>SIGN UP</strong></h2>
-                <form action="signup.php" method="post">
+                <form action="signup" method="post">
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
                             <!-- Personal Information -->
@@ -268,7 +268,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             confirmButtonText: 'OK',
             willClose: () => {
                 // Redirect to login.php after closing the SweetAlert
-                window.location.href = "login.php";
+                window.location.href = "login";
             }
         });
     <?php } elseif ($alert_type == 'error') { ?>
