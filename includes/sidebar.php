@@ -44,12 +44,12 @@
 
         <ul class="nav-links">
             <li>
-                <a href="index">
+                <a href="index.php">
                     <i class='bx bx-grid-alt' style="background: linear-gradient(45deg, #ff6f61, #f7b42c); -webkit-background-clip: text; color: green;"></i>   
                     <span class="link_name">Dashboard</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="index"></a></li>
+                    <li><a class="link_name" href="index.php"></a></li>
                 </ul>
             </li>
             <li>
