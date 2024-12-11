@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
     // Verify reCAPTCHA
     if (empty($email_err) && empty($password_err) && empty($login_err)) {
-        $recaptcha_secret = 'YOUR_RECAPTCHA_SECRET_KEY'; // Replace with your reCAPTCHA secret key
+        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
         $recaptcha_response = $_POST['recaptcha_response'];
 
         // Verify the reCAPTCHA response
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                     $_SESSION["email"] = $email;
 
                                     // Redirect user to the dashboard
-                                    header("location: index");
+                                    header("location: index.php");
                                     exit;
                                 }
                             } else {
@@ -108,7 +108,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         $login_err = "Invalid email or password.";
                     }
                 } else {
-                    $login_err = "Oops! Something went wrong. Please try again later.";
+                    echo '<script>
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Oops! Something went wrong. Please try again later.",
+                        icon: "error",
+                        toast: true,
+                        position: "top-right",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    </script>';
                 }
 
                 // Increment the failed attempts
@@ -137,6 +147,7 @@ header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Permissions-Policy: geolocation=(self), microphone=()");
 ?>
+
 
 
     <!DOCTYPE html>
