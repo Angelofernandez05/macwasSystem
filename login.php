@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                     $_SESSION["email"] = $email;
 
                                     // Redirect user to the dashboard
-                                    header("location: index");
+                                    header("location: index.php");
                                     exit;
                                 }
                             } else {
@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         title: "Error!",
                         text: "Oops! Something went wrong. Please try again later.",
                         icon: "error",
-                        toast: true,
+                        toast: true,        
                         position: "top-right",
                         showConfirmButton: false,
                         timer: 3000
@@ -252,7 +252,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                                 <input type="submit" value="Login" name="login" class="btn btn-primary text-light py-3">
                             </div>
                         </form>
-                        <p class="text-center"><strong>Don't have an account? <a href="signup" class="text-primary">Sign up here</a></strong></p>
+                        <p class="text-center"><strong>Don't have an account? <a href="signup.php" class="text-primary">Sign up here</a></strong></p>
                         <p class="text-center"><strong>Forgot your password? <a href="forgot_password.php" class="text-primary">Click here</a></strong></p>
                     </div>
                 </div>

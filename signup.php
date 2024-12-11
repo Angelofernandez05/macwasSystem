@@ -140,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <img src="logo.png" alt="Admin-Icon" style="width: 200px; height: 150px;">
                 </p>
                 <h2 class="text-center mb-4 georgia-font"><strong>SIGN UP</strong></h2>
-                <form action="signup" method="post">
+                <form action="signup.php" method="post">
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
                             <!-- Personal Information -->
@@ -223,14 +223,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <button type="submit" class="btn btn-primary btn-block mt-3">Register</button>
 
                     <div class="form-group">
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
-        <label class="form-check-label" for="terms">
-            I agree to the <a href="terms_and_conditions.html" target="_blank">Terms and Conditions</a>.
-        </label>
-    </div>
-</div>
-
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            I agree to the <a href="terms_and_conditions.html" target="_blank">Terms and Conditions</a>.
+                        </label>
+                    </div>
+                </div>
                 </form>
             </div>
         </div>
@@ -269,7 +268,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             confirmButtonText: 'OK',
             willClose: () => {
                 // Redirect to login.php after closing the SweetAlert
-                window.location.href = "login";
+                window.location.href = "login.php";
             }
         });
     <?php } elseif ($alert_type == 'error') { ?>
