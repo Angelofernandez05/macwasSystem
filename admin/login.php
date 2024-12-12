@@ -15,22 +15,20 @@ require_once "config.php";
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+/// Check if username is empty
+if (!isset($_POST["username"]) || empty(trim($_POST["username"]))) {
+    $username_err = "Please enter username.";
+} else {
+    $username = trim($_POST["username"]);
+}
 
-    // Check if username is empty
-    if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter username.";
-    } else{
-        $username = trim($_POST["username"]);
-    }
-    
-    // Check if password is empty
-    if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter your password.";
-    } else{
-        $password = trim($_POST["password"]);
-    }
+// Check if password is empty
+if (!isset($_POST["password"]) || empty(trim($_POST["password"]))) {
+    $password_err = "Please enter your password.";
+} else {
+    $password = trim($_POST["password"]);
+}
+
     
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
