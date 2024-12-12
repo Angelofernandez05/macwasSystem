@@ -78,13 +78,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+       body {
+            background-image: url("tank.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .card {
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(173, 216, 230, 0.2);
+            padding: 20px;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            max-width: 500px;
+            margin: auto;
+            top: 130px;
         }
         .wrapper {
             width: 360px;
