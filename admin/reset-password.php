@@ -1,98 +1,76 @@
 <?php
 // Initialize the session
 session_start();
- 
-// Check if the user is logged in, otherwise redirect to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
-    exit;
-}
- 
+
 // Include config file
 require_once "config.php";
- 
+
 // Define variables and initialize with empty values
-$new_password = $confirm_password = "";
-$new_password_err = $confirm_password_err = "";
- 
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Validate new password
-    if(empty(trim($_POST["new_password"]))){
-        $new_password_err = "Please enter the new password.";     
-    } elseif(strlen(trim($_POST["new_password"])) < 6){
-        $new_password_err = "Password must have atleast 6 characters.";
-    } else{
-        $new_password = trim($_POST["new_password"]);
+$username = $password = "";
+$username_err = $password_err = "";
+
+// Process login form when submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
+    // Validate username
+    if (empty(trim($_POST["username"]))) {
+        $username_err = "Please enter your username.";
+    } else {
+        $username = trim($_POST["username"]);
     }
-    
-    // Validate confirm password
-    if(empty(trim($_POST["confirm_password"]))){
-        $confirm_password_err = "Please confirm the password.";
-    } else{
-        $confirm_password = trim($_POST["confirm_password"]);
-        if(empty($new_password_err) && ($new_password != $confirm_password)){
-            $confirm_password_err = "Password did not match.";
-        }
+
+    // Validate password
+    if (empty(trim($_POST["password"]))) {
+        $password_err = "Please enter your password.";
+    } else {
+        $password = trim($_POST["password"]);
     }
-        
-    // Check input errors before updating the database
-    if(empty($new_password_err) && empty($confirm_password_err)){
-        // Prepare an update statement
-        $sql = "UPDATE users SET password = ? WHERE id = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
+
+    // Validate credentials
+    if (empty($username_err) && empty($password_err)) {
+        // Prepare a SELECT statement
+        $sql = "SELECT id, username, password FROM users WHERE username = ?";
+
+        if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "si", $param_password, $param_id);
-            
-            // Set parameters
-            $param_password = password_hash($new_password, PASSWORD_DEFAULT);
-            $param_id = $_SESSION["id"];
-            
+            mysqli_stmt_bind_param($stmt, "s", $param_username);
+            $param_username = $username;
+
             // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Password updated successfully. Destroy the session, and redirect to login page
-                // echo `<div class="alert alert-success" role="alert">Password updated successfully.</div>`;
-                session_destroy();
-                include('login.php');
-                echo '<script>
-                Swal.fire({
-                title: "Success!",
-                text: "Password updated successfully.",
-                icon: "success",
-                toast: true,
-                position: "top-right",
-                showConfirmButton: false,
-                timer: 3000
-                })
-                </script>';
-                exit();
-            } else{
-                echo `<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>`;
-                echo '<script>
-                Swal.fire({
-                title: "Error!",
-                text: "Oops! Something went wrong. Please try again later.",
-                icon: "error",
-                toast: true,
-                position: "top-right",
-                showConfirmButton: false,
-                timer: 3000
-                })
-                </script>';
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+
+                // Check if username exists, then verify password
+                if (mysqli_stmt_num_rows($stmt) == 1) {
+                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+                    if (mysqli_stmt_fetch($stmt)) {
+                        if (password_verify($password, $hashed_password)) {
+                            // Start a new session and save user data
+                            session_start();
+                            $_SESSION["loggedin"] = true;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["username"] = $username;
+                            header("location: reset_password.php");
+                        } else {
+                            $password_err = "The password you entered was not valid.";
+                        }
+                    }
+                } else {
+                    $username_err = "No account found with that username.";
+                }
+            } else {
+                echo "Oops! Something went wrong. Please try again later.";
             }
 
             // Close statement
             mysqli_stmt_close($stmt);
         }
     }
-    
+
     // Close connection
     mysqli_close($link);
 }
 ?>
- 
+
  <!DOCTYPE html>
 <html lang="en">
 <head>
