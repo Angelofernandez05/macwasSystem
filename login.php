@@ -218,7 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                             </script>';
                         }        
                         ?>
-                        <p class="text-center"><strong>Don't have an account </p>
+                        <p class="text-center"><strong>Call No. 09755319049 </p>
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                             <p class="text-center mb-4">
                                 <img src="logo.png" alt="Logo" style="max-width: 200px; height: auto;">
