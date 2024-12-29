@@ -96,6 +96,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_email = trim($_POST["email"]);
             $param_phone = trim($_POST["phone"]);
             $param_password = password_hash($meter_num, PASSWORD_DEFAULT); // Creates a password hash
+            $param_password = trim($_POST["password"]);
 
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
