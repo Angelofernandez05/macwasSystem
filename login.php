@@ -24,10 +24,10 @@ if (isset($_SESSION['login_attempts']) && $_SESSION['login_attempts'] >= 3) {
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     // Check if email is empty
-    if (empty(trim($_POST["email"]))) {
-        $email_err = "Please enter your email.";
+    if (empty(trim($_POST["meter_num"]))) {
+        $meter_num_err = "Please enter your email.";
     } else {
-        $email = trim($_POST["email"]);
+        $meter_num = trim($_POST["meter_num"]);
     }
 
     // Check if password is empty
@@ -65,10 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             $login_err = "CAPTCHA verification failed. Please try again.";
         } else {
             // Prepare a select statement
-            $sql = "SELECT id, status, password, is_approved FROM consumers WHERE email = ?";
+            $sql = "SELECT id, status, password, is_approved FROM consumers WHERE meter_num = ?";
             if ($stmt = mysqli_prepare($link, $sql)) {
-                mysqli_stmt_bind_param($stmt, "s", $param_email);
-                $param_email = $email;
+                mysqli_stmt_bind_param($stmt, "s", $param_meter_num);
+                $param_meter_num = $meter_num;
 
                 // Execute the prepared statement
                 if (mysqli_stmt_execute($stmt)) {
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                     // Set session variables
                                     $_SESSION["loggedin"] = true;
                                     $_SESSION["id"] = $id;
-                                    $_SESSION["email"] = $email;
+                                    $_SESSION["meter_num"] = $meter_num;
 
                                     // Redirect user to the dashboard
                                     header("location: index");
@@ -227,9 +227,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                             </p>
 
                             <div class="form-outline mb-4">
-                                <label class="form-label" for="login_email"><strong>Email</strong></label>
-                                <input type="email" id="login_email" class="form-control py-3 <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($email); ?>" name="email" autocomplete="off" placeholder="Enter your email" required>
-                                <span class="invalid-feedback"><?php echo $email_err; ?></span>
+                                <label class="form-label" for="login_meter_num"><strong>Meter Number</strong></label>
+                                <input type="meter-num" id="login_meter_num" class="form-control py-3 <?php echo (!empty($meter_num_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($meter_num); ?>" name="meter_num" autocomplete="off" placeholder="Enter your Meter Number" required>
+                                <span class="invalid-feedback"><?php echo $meter_num_err; ?></span>
                             </div>
 
                             <div class="form-outline mb-4">
