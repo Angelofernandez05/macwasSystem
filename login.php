@@ -252,7 +252,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                         </form>
                         <p class="text-center"><strong>Don't have an account? <a href="signup" class="text-primary">Sign up here</a></strong></p>
                         <p class="text-center"><strong>Forgot your password? <a href="forgot_password" class="text-primary">Click here</a></strong></p>
-                        <p class="text-center"style="color: white;"> <strong>Approval your account call this no. <a href="tel:09755319049"style="color: white;">09755319049</a></strong>
+                        <p class="text-center"style="color: white;"> <strong>Approval your account call this no. <a href="tel:09755319049"style="color: white;"font-size="30px;">09755319049</a></strong>
                     </div>
                 </div>
             </div>
