@@ -227,8 +227,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                             </p>
 
                             <div class="form-outline mb-4">
-                                <label class="form-label" for="login_meter_num"><strong>meter number</strong></label>
-                                <input type="meter-num" id="login_meter_num" class="form-control py-3 <?php echo (!empty($meter_num_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($meter_num); ?>" name="meter_num" autocomplete="off" placeholder="Enter your Meter Number" required>
+                                <label class="form-label" for="login_meter_num"><strong>M eter Number</strong></label>
+                                <input type="meter-num" id="login_meter_num" class="form-control py-3 <?php echo (!empty($meter_num_err)) ? 'is-invalid' : ''; ?>" value="<?php echo htmlspecialchars($meter_num); ?>" name="meter_num" autocomplete="off" placeholder="Enter your meter number" required>
                                 <span class="invalid-feedback"><?php echo $meter_num_err; ?></span>
                             </div>
 
