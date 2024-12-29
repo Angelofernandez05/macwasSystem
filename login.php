@@ -6,8 +6,8 @@ session_start();
 require_once 'config.php';
 
 // Define variables and initialize with empty values
-$email = $password = "";
-$email_err = $password_err = $login_err = "";
+$meter_num = $password = "";
+$meter_num_err = $password_err = $login_err = "";
 
 // Check if the user is locked out
 if (isset($_SESSION['login_attempts']) && $_SESSION['login_attempts'] >= 3) {
