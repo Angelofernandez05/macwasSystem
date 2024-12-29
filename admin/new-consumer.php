@@ -3,7 +3,7 @@
 session_start();
 
 // Check if the user is logged in, if not then redirect him to login page
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
@@ -25,77 +25,83 @@ $name = $barangay = $account_num = $registration_num = $meter_num = $type = $ema
 $name_err = $barangay_err = $account_num_err = $registration_num_err = $meter_num_err = $type_err = "";
 
 // Processing form data when form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate name
     $input_name = trim($_POST["name"]);
-    if (empty($input_name)) {
+    if(empty($input_name)){
         $name_err = "Please enter a name.";
-    } elseif (!filter_var($input_name, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^[a-zA-Z\s]+$/")))) {
+    } elseif(!filter_var($input_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
         $name_err = "Please enter a valid name.";
-    } else {
+    } else{
         $name = $input_name;
     }
 
     // Validate barangay
     $input_barangay = trim($_POST["barangay"]);
-    if (empty($input_barangay)) {
+    if(empty($input_barangay)){
         $barangay_err = "Please enter an barangay.";
-    } else {
+    } else{
         $barangay = $input_barangay;
     }
 
     // Validate account_num
     $input_account_num = trim($_POST["account_num"]);
-    if (empty($input_account_num)) {
+    if(empty($input_account_num)){
         $account_num_err = "Please enter an account_num.";
-    } else {
+    } else{
         $account_num = $input_account_num;
     }
 
     // Validate registration_num
     $input_registration_num = trim($_POST["registration_num"]);
-    if (empty($input_registration_num)) {
+    if(empty($input_registration_num)){
         $registration_num_err = "Please enter an registration_num.";
-    } else {
+    } else{
         $registration_num = $input_registration_num;
     }
 
     // Validate meter_num
     $input_meter_num = trim($_POST["meter_num"]);
-    if (empty($input_meter_num)) {
+    if(empty($input_meter_num)){
         $meter_num_err = "Please enter an meter_num.";
-    } else {
+    } else{
         $meter_num = $input_meter_num;
     }
 
     // Validate type
     $input_type = trim($_POST["type"]);
-    if (empty($input_type)) {
+    if(empty($input_type)){
         $type_err = "Please enter an type.";
-    } else {
+    } else{
         $type = $input_type;
     }
 
-    // Generate a random password
-    $temp_password = bin2hex(random_bytes(4)); // Generate an 8-character random password
-    $hashed_password = password_hash($temp_password, PASSWORD_DEFAULT); // Hash the password
-
     // Check input errors before inserting in database
-    if (empty($name_err) && empty($barangay_err) && empty($account_num_err) && empty($registration_num_err) && empty($meter_num_err) && empty($type_err)) {
+    if(empty($name_err) && empty($barangay_err) && empty($account_num_err) && empty($registration_num_err) && empty($meter_num_err) && empty($type_err)){
         // Prepare an insert statement
         $sql = "INSERT INTO consumers (name, barangay, account_num, registration_num, meter_num, type, status, email, phone, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        if ($stmt = mysqli_prepare($link, $sql)) {
+        if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ssssssssss", $name, $barangay, $account_num, $registration_num, $meter_num, $type, $status, $email, $phone, $hashed_password);
+            mysqli_stmt_bind_param($stmt, "ssssssssss", $param_name, $param_barangay, $param_account_num, $param_registration_num, $param_meter_num, $param_type, $param_status, $param_email, $param_phone, $param_password);
 
             // Set parameters
-            $status = 1;
+            $param_name = $name;
+            $param_barangay = $barangay;
+            $param_account_num = $account_num;
+            $param_registration_num = $registration_num;
+            $param_meter_num = $meter_num;
+            $param_type = $type;
+            $param_status = 1;
+            $param_email = trim($_POST["email"]);
+            $param_phone = trim($_POST["phone"]);
+            $param_password = password_hash($meter_num, PASSWORD_DEFAULT); // Creates a password hash
 
             // Attempt to execute the prepared statement
-            if (mysqli_stmt_execute($stmt)) {
-                // Send email with the temporary password
-                if (!empty($email)) {
+            if(mysqli_stmt_execute($stmt)){
+                // Records created successfully. Redirect to landing page
+                //send email
+                if(!empty($param_email)){
                     $mail = new PHPMailer(true);
 
                     try {
@@ -110,19 +116,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         // Sender and recipient settings
                         $mail->setFrom('your-email@gmail.com', 'MACWAS');
-                        $mail->addAddress($email, $name); // Add a recipient
+                        $mail->addAddress($param_email, $param_name); // Add a recipient
 
                         // Content
                         $mail->isHTML(true);
                         $mail->Subject = 'MACWAS Registration';
-                        $mail->Body = "Hi $name,<br><br>
-                        Thank you for signing up for MACWAS Online Billing.<br><br>
-                        Your temporary login credentials are:<br>
-                        <b>Username:</b> $email<br>
-                        <b>Password:</b> $temp_password<br><br>
-                        Please <a href='https://localhost/macwas/login.php'>click here to log in</a> and change your password for security.<br><br>
-                        Thank you for trusting MACWAS.";
+                        $mail->Body    = "Hi $param_name, Thank you for signing up to MACWAS Online Billing.
+                                          This is your temporary username and password: $meter_num 
 
+                                          To verify your account, please login through the link below:
+                                          <a href='https://localhost/macwas/login.php'>https://localhost/macwas/login.php</a>
+
+                                          REMINDER:
+                                          You can only verify your account by using the link above
+                                          For the security of the account, you are required to change
+                                          your password according to your preference
+
+                                          Thank you for trusting MACWAS";
+
+                        // Send email
                         $mail->send();
 
                         // Success message
@@ -155,7 +167,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </script>';
                         exit();
                     }
-                } else {
+                }else{
+                    // echo `<div class="alert alert-danger" role="alert">Email parameter is empty!</div>`;
                     include('consumer.php');
                     echo '<script>
                     Swal.fire({
@@ -170,8 +183,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </script>';
                     exit();
                 }
-            } else {
+            } else{
                 include('consumer.php');
+                // echo `<div class="alert alert-danger" role="alert">Oops! Something went wrong. Please try again later.</div>`;
                 echo '<script>
                 Swal.fire({
                     title: "Error!",
@@ -197,12 +211,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <style>
     .navbar-light-gradient {
-        background: linear-gradient(135deg, #36d1dc, #5b86e5);
-        color: white;
-        border-bottom: 2px solid black !important;
-        margin-left: 10px;
-    }
-</style>
+                background: linear-gradient(135deg, #36d1dc, #5b86e5);
+                color: white;
+                border-bottom: 2px solid black !important;
+                margin-left: 10px;
+            }
+    </style>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -217,7 +231,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <section class="home-section">
         <nav class="navbar navbar-light-gradient bg-white border-bottom">
             <span class="navbar-brand mb-0 h1 d-flex align-items-center">
-                <i class='bx bx-menu mr-3' style='color: black; cursor: pointer; font-size: 2rem'></i>
+                <i class='bx bx-menu mr-3' style='color: black; ursor: pointer; font-size: 2rem'></i>
                 New Consumer
             </span>
             <?php include 'includes/userMenu.php'; ?>
