@@ -1,22 +1,4 @@
+
 # HTID:23422420: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
 php_value display_errors 1
 # DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:23422420:
-
-RewriteEngine On
-
-# Rewrite only for .php files in specific routes
-# Ensure the requested file isn't a physical file
-RewriteCond %{REQUEST_FILENAME} !-f
-
-# Ensure the requested file isn't a directory
-RewriteCond %{REQUEST_FILENAME} !-d
-
-# Ensure the request does not already have a file extension
-RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,4}$
-
-# Rewrite the URL to add .php for certain routes
-RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
-
-# Redirect .php URLs to hide the extension (only for matching routes)
-RewriteCond %{THE_REQUEST} "\s/([^\s]+)\.php[\s?]"
-RewriteRule ^ /%1 [R=301,L]
