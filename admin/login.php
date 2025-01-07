@@ -2,8 +2,8 @@
 // Initialize the session
 session_start();
 
-// Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+// Redirect logged-in users
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     header("location: index.php");
     exit;
 }
@@ -15,111 +15,89 @@ require_once "config.php";
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+// Process form data when the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Check if username is empty
-    if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter username.";
-    } else{
-        $username = trim($_POST["username"]);
+    // Sanitize and validate username
+    if (empty(trim($_POST["username"]))) {
+        $username_err = "Please enter your username.";
+    } else {
+        $username = htmlspecialchars(trim($_POST["username"]));
     }
-    
-    // Check if password is empty
-    if(empty(trim($_POST["password"]))){
+
+    // Sanitize and validate password
+    if (empty(trim($_POST["password"]))) {
         $password_err = "Please enter your password.";
-    } else{
-        $password = trim($_POST["password"]);
+    } else {
+        $password = htmlspecialchars(trim($_POST["password"]));
     }
-    
-    // Validate credentials
-    if(empty($username_err) && empty($password_err)){
-        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
+
+    // Validate reCAPTCHA
+    if (empty($_POST['recaptcha_response'])) {
+        $login_err = "Captcha validation failed.";
+    } else {
+        $recaptcha_secret = 'YOUR_SECRET_KEY'; // Replace with your reCAPTCHA secret key
         $recaptcha_response = $_POST['recaptcha_response'];
+        
+        // Verify with Google reCAPTCHA API
+        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$recaptcha_secret&response=$recaptcha_response&remoteip=" . $_SERVER['REMOTE_ADDR']);
+        $response_data = json_decode($response);
+        
+        if (!$response_data->success || $response_data->score < 0.5) {
+            $login_err = "Captcha verification failed.";
+        }
+    }
 
-        // Verify the reCAPTCHA response
-        $url = "https://www.google.com/recaptcha/api/siteverify";
-        $data = [
-            'secret' => $recaptcha_secret,
-            'response' => $recaptcha_response,
-            'remoteip' => $_SERVER['REMOTE_ADDR']
-        ];
-
-        $options = [
-            'http' => [
-                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method' => 'POST',
-                'content' => http_build_query($data),
-            ],
-        ];
-        // Prepare a select statement
+    // If no errors, validate credentials
+    if (empty($username_err) && empty($password_err) && empty($login_err)) {
         $sql = "SELECT id, username, password FROM users WHERE username = ?";
         
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_username);
+        if ($stmt = mysqli_prepare($link, $sql)) {
+            mysqli_stmt_bind_param($stmt, "s", $username);
             
-            // Set parameters
-            $param_username = $username;
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Store result
+            if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
                 
-                // Check if username exists, if yes then verify password
-                if(mysqli_stmt_num_rows($stmt) == 1){                    
-                    // Bind result variables
+                if (mysqli_stmt_num_rows($stmt) == 1) {
                     mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
-                    if(mysqli_stmt_fetch($stmt)){
-                        if(password_verify($password, $hashed_password)){
-                            // Password is correct, so start a new session
-                            session_start();
-                            
-                            // Store data in session variables
+                    
+                    if (mysqli_stmt_fetch($stmt)) {
+                        if (password_verify($password, $hashed_password)) {
+                            // Start a new session securely
+                            session_regenerate_id(true);
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;                      
+                            $_SESSION["username"] = $username;
                             
-                            // Redirect user to welcome page
                             header("location: index.php");
-                        } else{
-                            // Password is not valid, display a generic error message
+                            exit;
+                        } else {
                             $login_err = "Invalid username or password.";
                         }
                     }
-                } else{
-                    // Username doesn't exist, display a generic error message
+                } else {
                     $login_err = "Invalid username or password.";
                 }
-            } else{
-                echo '<script>
-                Swal.fire({
-                title: "Error!",
-                text: "Oops! Something went wrong. Please try again later.",
-                icon: "error",
-                toast: true,
-                position: "top-right",
-                showConfirmButton: false,
-                timer: 3000
-                })
-                </script>';
+            } else {
+                echo "Oops! Something went wrong. Please try again later.";
             }
-
-            // Close statement
+            
             mysqli_stmt_close($stmt);
         }
-    }   
+    }
     
-    // Close connection
+    // Close database connection
     mysqli_close($link);
 }
+
+// Security headers
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 header("X-Frame-Options: SAMEORIGIN");
 header("X-Content-Type-Options: nosniff");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Permissions-Policy: geolocation=(self), microphone=()");
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
