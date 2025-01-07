@@ -2,9 +2,30 @@
 // Initialize the session
 session_start();
 
-// Check if the user is already logged in, if yes then redirect him to welcome page
+// URL Rewriting Logic
+$request_uri = $_SERVER['REQUEST_URI'];
+$script_name = $_SERVER['SCRIPT_NAME'];
+$script_path = dirname($script_name);
+
+// Remove the script path from the request URI
+$path = substr($request_uri, strlen($script_path));
+$path = trim($path, '/');
+
+// Remove query string if present
+if(($pos = strpos($path, '?')) !== false) {
+    $path = substr($path, 0, $pos);
+}
+
+// Map clean URLs to PHP files
+$routes = [
+    '' => 'index.php',
+    'login' => 'login.php',
+    'dashboard' => 'index.php'
+];
+
+// Check if the user is already logged in, if yes then redirect to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: index.php");
+    header("location: dashboard");
     exit;
 }
 
@@ -17,7 +38,6 @@ $username_err = $password_err = $login_err = "";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-
     // Check if username is empty
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter username.";
@@ -34,7 +54,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
-        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j'; // Replace with your reCAPTCHA v3 secret key
+        $recaptcha_secret = '6LfCwZYqAAAAAEbhh9M53gxnfqgwP2-Rkg7rnD5j';
         $recaptcha_response = $_POST['recaptcha_response'];
 
         // Verify the reCAPTCHA response
@@ -52,6 +72,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 'content' => http_build_query($data),
             ],
         ];
+        
         // Prepare a select statement
         $sql = "SELECT id, username, password FROM users WHERE username = ?";
         
@@ -82,7 +103,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["username"] = $username;                      
                             
                             // Redirect user to welcome page
-                            header("location: index.php");
+                            header("location: dashboard");
+                            exit;
                         } else{
                             // Password is not valid, display a generic error message
                             $login_err = "Invalid username or password.";
@@ -114,6 +136,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Close connection
     mysqli_close($link);
 }
+
+// Security Headers
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 header("X-Frame-Options: SAMEORIGIN");
 header("X-Content-Type-Options: nosniff");
@@ -166,9 +190,9 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
         .card {
             border-radius: 25px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(173, 216, 230, 0.0); /* Light blue with some transparency */
-            padding: 20px; /* Add padding for content inside the card */
-            backdrop-filter: blur(5px); /* Optional: Adds a blur effect to the background of the card */
+            background-color: rgba(173, 216, 230, 0.0);
+            padding: 20px;
+            backdrop-filter: blur(5px);
         }
 
         .card-body {
@@ -177,7 +201,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
 
         .container {
             max-width: 550px;
-            margin-left: 30px; /* Adjust this value to move the form further left */
+            margin-left: 30px;
         }
         .form-control {
             border-radius: 20px;
@@ -210,7 +234,7 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                     }        
                     ?>
 
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                    <form action="" method="post">
                         <!-- Logo -->
                         <p class="text-center mb-4">
                             <img src="logo.png" alt="Admin-Icon" style="width: 250px; height: 200px;">
@@ -238,7 +262,6 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
                         <div class="d-flex justify-content-center mx-2 mb-3 mb-lg-4">
                             <input type="submit" value="Sign in" name="login" class="btn btn-primary btn-lg text-light my-2 py-3 w-100" />
                         </div>
-                        <!-- <p align="center"><strong>Don't have an account? Sign up</strong><a href="register.php" class="text-primary" style="font-weight:600;text-decoration:none;"> here</a></p> -->
                     </form>
                 </div>
             </div>
@@ -263,16 +286,13 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
         const password = document.querySelector("#password");
 
         togglePassword.addEventListener("click", function () {
-            // Toggle the type attribute
             const type = password.getAttribute("type") === "password" ? "text" : "password";
             password.setAttribute("type", type);
-
-            // Toggle the icon
             this.classList.toggle("fa-eye");
             this.classList.toggle("fa-eye-slash");
         });
     </script>
-      <script>
+    <script>
         // Disable right-click
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
@@ -280,27 +300,27 @@ header("Permissions-Policy: geolocation=(self), microphone=()");
 
         // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, and Ctrl+U
         document.addEventListener('keydown', function(e) {
-            if (e.keyCode == 123) { // F12
+            if (e.keyCode == 123) {
                 e.preventDefault();
             }
-            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) { // Ctrl+Shift+I or J
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) {
                 e.preventDefault();
             }
-            if (e.ctrlKey && e.keyCode == 85) { // Ctrl+U
+            if (e.ctrlKey && e.keyCode == 85) {
                 e.preventDefault();
             }
         });
     </script>
-      <script>
-            grecaptcha.ready(function() {
+    <script>
+        grecaptcha.ready(function() {
             grecaptcha.execute('6LfCwZYqAAAAAJ8wBxWCzCwsgeFpTdSYTagAmnwL', { action: 'login' }).then(function(token) {
-            const recaptchaResponseField = document.createElement('input');
-            recaptchaResponseField.setAttribute('type', 'hidden');
-            recaptchaResponseField.setAttribute('name', 'recaptcha_response');
-            recaptchaResponseField.setAttribute('value', token);
-            document.querySelector('form').appendChild(recaptchaResponseField);
+                const recaptchaResponseField = document.createElement('input');
+                recaptchaResponseField.setAttribute('type', 'hidden');
+                recaptchaResponseField.setAttribute('name', 'recaptcha_response');
+                recaptchaResponseField.setAttribute('value', token);
+                document.querySelector('form').appendChild(recaptchaResponseField);
+            });
         });
-    });
-</script>
+    </script>
 </body>
 </html>
