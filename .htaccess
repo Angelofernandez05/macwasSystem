@@ -1,19 +1,15 @@
+
 # HTID:23422420: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
 php_value display_errors 1
 # DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:23422420:
 
 RewriteEngine On
 
-# First redirect from actual PHP file to pretty URL
-RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.php
-RewriteRule (.+)\.php$ /$1 [L,R=301]
-
-# Then internally redirect from pretty URL to PHP file
-RewriteCond %{REQUEST_FILENAME} !-d
+# If the requested file doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^/]+)/?$ $1.php [L]
 
-# Handle subfolders like /admin/
+# If the requested directory doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^/]+)/([^/]+)/?$ $1/$2.php [L]
+
+# Rewrite URL to use .php files without showing the .php extension
+RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
